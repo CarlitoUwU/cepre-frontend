@@ -6,7 +6,7 @@
 
 /* .logo */
 .logo {
-  @apply h-24 p-6 transition-all duration-300 ease-in-out will-change-filter;
+  @apply h-24 p-6 transition-all duration-300 ease-in-out;
 }
 
 .logo:hover {
