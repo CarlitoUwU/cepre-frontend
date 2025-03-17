@@ -1,8 +1,5 @@
 @import "tailwindcss";
 
-/* Archivo de estilo (index.css o tu archivo CSS personalizado) */
-
-/* #root */
 #root {
   @apply max-w-screen-xl mx-auto p-8 text-center;
 }
