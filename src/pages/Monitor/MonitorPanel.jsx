@@ -6,7 +6,7 @@ export const MonitorPanel = () => {
   const [cursos, setCursos] = useState([]);
 
   useEffect(() => {
-    fetch("/cursos.json") // Asegúrate de que la ruta sea correcta
+    fetch("/cursos.json")
       .then((response) => response.json())
       .then((data) => setCursos(data))
       .catch((error) => console.error("Error cargando cursos:", error));
