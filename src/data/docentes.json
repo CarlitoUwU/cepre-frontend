@@ -1,0 +1,25 @@
+[
+    {
+      "docente": "José Luis Suárez",
+      "curso": "Raz. Matemático",
+      "correo": "jsuareza@cepr.unsa.pe",
+      "numero": 987654321,
+      "salones_asignados": ["I-101", "B-101", "S-101" ]
+    },
+    {
+        "docente": "Joel Antonio Chino Pari",
+        "curso": "Raz. Verbal",
+        "correo": "jchinop@cepr.unsa.pe",
+        "numero": 987654321,
+        "salones_asignados": ["I-102", "B-102", "S-101" ]
+      },
+      {
+        "docente": "Carlo Joaquín Valdivia Luna",
+        "curso": "Física",
+        "correo": "cvaldivialu@cepr.unsa.pe",
+        "numero": 987654321,
+        "salones_asignados": ["I-101", "B-101", "S-101" ]
+      }
+
+  ]
+  

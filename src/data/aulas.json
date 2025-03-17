@@ -1,6 +1,6 @@
 [
     {
-      "aula": "B - 103",
+      "aula": "I-101",
       "monitor": "José Luis Cusilayme García",
       "area": "Biomédicas",
       "numHoras": 6,
@@ -16,7 +16,7 @@
       ]
     },
     {
-      "aula": "B - 104",
+      "aula": "B-101",
       "monitor": "Jorge Enrique Valdivia Luna",
       "area": "Sociales",
       "numHoras": 6,
@@ -32,7 +32,7 @@
       ]
     },
     {
-      "aula": "B - 105",
+      "aula": "S-101",
       "monitor": "Carlo Joaquin Valdivia Luna",
       "area": "Ingenierías",
       "numHoras": 6,

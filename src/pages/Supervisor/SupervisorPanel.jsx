@@ -1,32 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import data from "../../data/aulas.json"; // Ruta json
+import aulasData from "../../data/aulas.json";
+import docentesData from "../../data/docentes.json";
 
 export const SupervisorPanel = () => {
   const [selectedSalon, setSelectedSalon] = useState(null);
   const [directorio, setDirectorio] = useState([]);
   const navigate = useNavigate();
 
-  const aulas = data; // Ahora usa los datos de aulas.json
+  const handleVerDirectorio = (aulaSeleccionada) => {
+    setSelectedSalon(aulaSeleccionada);
 
-  const directorioEjemplo = {
-    1: [
-      { curso: "Matemáticas", nombre: "Pedro Ramirez", correo: "pedro@mail.com", numero: "987654321" },
-      { curso: "Historia", nombre: "Laura Fernández", correo: "laura@mail.com", numero: "912345678" },
-    ],
-    2: [
-      { curso: "Física", nombre: "Luis Torres", correo: "luis@mail.com", numero: "923456789" },
-      { curso: "Química", nombre: "Maria Herrera", correo: "maria@mail.com", numero: "956789123" },
-    ],
-    3: [
-      { curso: "Inglés", nombre: "Fernando Pérez", correo: "fernando@mail.com", numero: "934567890" },
-      { curso: "Biología", nombre: "Sofía Martínez", correo: "sofia@mail.com", numero: "987123456" },
-    ],
-  };
+    // Filtrar docentes que tienen este aula en "salones_asignados"
+    const docentesFiltrados = docentesData
+      .filter((docente) => docente.salones_asignados.includes(aulaSeleccionada))
+      .map((docente) => ({
+        curso: docente.curso,
+        nombre: docente.docente,
+        correo: docente.correo,
+        numero: docente.numero,
+      }));
 
-  const handleVerDirectorio = (id) => {
-    setSelectedSalon(id);
-    setDirectorio(directorioEjemplo[id] || []);
+    setDirectorio(docentesFiltrados);
   };
 
   const handleRegresar = () => {
@@ -50,7 +45,7 @@ export const SupervisorPanel = () => {
               </tr>
             </thead>
             <tbody>
-              {aulas.map((aula) => (
+              {aulasData.map((aula) => (
                 <tr key={aula.id} className="border-b">
                   <td className="py-2 px-4 text-center">{aula.id}</td>
                   <td className="py-2 px-4">{aula.aula}</td>
@@ -61,21 +56,16 @@ export const SupervisorPanel = () => {
                     </a>
                   </td>
                   <td className="py-2 px-4 flex space-x-2">
-                    {/* Botón actualizado para redirigir a la vista de horario */}
+                    {/* Botón de horario */}
                     <button
-                      onClick={() => {
-                        if (aula.id === 1) {
-                          window.location.href = "/supervisor/horario";
-                        } else {
-                          alert(`El horario para ${aula.aula} no está disponible.`);
-                        }
-                      }}
+                      onClick={() => navigate("/supervisor/horario")}
                       className="bg-green-500 text-black px-3 py-1 rounded hover:bg-green-600"
                     >
                       Visualizar Horario
                     </button>
+                    {/* Botón para ver directorio */}
                     <button
-                      onClick={() => handleVerDirectorio(aula.id)}
+                      onClick={() => handleVerDirectorio(aula.aula)}
                       className="bg-yellow-500 text-black px-3 py-1 rounded hover:bg-yellow-600"
                     >
                       Ver Directorio
@@ -88,7 +78,7 @@ export const SupervisorPanel = () => {
         </div>
       ) : (
         <div>
-          <h2 className="text-xl font-semibold text-center mb-4">Directorio de Aula</h2>
+          <h2 className="text-xl font-semibold text-center mb-4">Directorio del Aula {selectedSalon}</h2>
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white shadow-md rounded-lg">
               <thead>
@@ -101,15 +91,23 @@ export const SupervisorPanel = () => {
                 </tr>
               </thead>
               <tbody>
-                {directorio.map((item, index) => (
-                  <tr key={index} className="border-b">
-                    <td className="py-2 px-4 text-center">{index + 1}</td>
-                    <td className="py-2 px-4">{item.curso}</td>
-                    <td className="py-2 px-4">{item.nombre}</td>
-                    <td className="py-2 px-4">{item.correo}</td>
-                    <td className="py-2 px-4">{item.numero}</td>
+                {directorio.length > 0 ? (
+                  directorio.map((item, index) => (
+                    <tr key={index} className="border-b">
+                      <td className="py-2 px-4 text-center">{index + 1}</td>
+                      <td className="py-2 px-4">{item.curso}</td>
+                      <td className="py-2 px-4">{item.nombre}</td>
+                      <td className="py-2 px-4">{item.correo}</td>
+                      <td className="py-2 px-4">{item.numero}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center py-4 text-red-600">
+                      No hay docentes asignados a este aula.
+                    </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
@@ -117,7 +115,7 @@ export const SupervisorPanel = () => {
           <div className="text-center mt-4">
             <button
               onClick={handleRegresar}
-              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              className="bg-red-500 text-black px-4 py-2 rounded hover:bg-red-600"
             >
               Regresar
             </button>
