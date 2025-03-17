@@ -6,7 +6,7 @@ export const MainLayout = () => {
   return (
     <div>
       <Header />
-      <main className="p-4">
+      <main className="w-full mt-20">
         <Outlet /> {/* Aquí se renderizarán las demás vistas */}
       </main>
     </div>

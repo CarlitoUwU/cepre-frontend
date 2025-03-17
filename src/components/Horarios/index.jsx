@@ -33,13 +33,7 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
   };
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: `auto repeat(${dias.length}, 1fr)`,
-        gridTemplateRows: `auto repeat(${horasIni.length + 1}, auto)`
-      }}
-    >
+    <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4">
       {/* Espacio vacío en la esquina superior izquierda */}
       <div></div>
 
@@ -58,6 +52,7 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
         horasIni.slice(minIndex, maxIndex + 1).map((_, k) => (
           <div
             key={`${i}-${k}`}
+            className='rounded-lg'
             style={{
               backgroundColor: "#f4f0fb",
               borderRadius: ".2vw",
