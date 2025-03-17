@@ -1,3 +1,4 @@
+import React from "react"
 import { useState } from "react"
 import { AulaInfo } from "../../components/AulaInfo"
 import { ListaSalones } from "../../components/ListaSalones"
