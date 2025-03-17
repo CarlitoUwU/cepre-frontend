@@ -64,11 +64,30 @@ export const DocentePanel = () => {
   const [claseSeleccionada, setClaseSeleccionada] = useState(null)
 
   return (
-    <div>
-      <h1>Docente</h1>
-      <TablaHorario listaSalones={listaSalones} setClaseSeleccionada={setClaseSeleccionada} />
-      <AulaInfo {...(claseSeleccionada) || {}} />
-      <ListaSalones items={listaSalones} />
+    <div className="p-5">
+
+      <div className="grid grid-cols-3 gap-4">
+        {/* Horario General */}
+        <div className="col-span-2 bg-gray-100 p-4 rounded-lg shadow-md">
+          <div className="col-span-3 bg-gray-100 p-4">
+            {/*font size mas grande*/}
+            <h2 className="text-5xl font-semibold ">Horario General</h2>
+          </div>
+          <TablaHorario listaSalones={listaSalones} setClaseSeleccionada={setClaseSeleccionada} />
+        </div>
+
+        {/* Información del Aula */}
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md flex justify-center items-center">
+          <AulaInfo {...(claseSeleccionada || {})} />
+        </div>
+
+
+        {/* Lista de Salones */}
+        <div className="col-span-3 bg-gray-100 p-4 rounded-lg shadow-md">
+          <ListaSalones items={listaSalones} />
+        </div>
+      </div>
     </div>
+
   )
 }

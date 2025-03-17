@@ -1,24 +1,18 @@
 import React from 'react';
 
 export const Curso = ({ clase, backgroundColor, gridColumn, gridRow, gridSpan, nombre, setClaseSeleccionada }) => {
-  const handleClick = () => {
-    setClaseSeleccionada(clase);
-  }
-
   return (
     <div
-      className={`curso`}
+      className="curso cursor-pointer text-center text-white font-semibold p-2 rounded-md shadow-md flex items-center justify-center"
       style={{
-        backgroundColor: backgroundColor,
-        gridColumn: gridColumn,
+        backgroundColor,
+        gridColumn,
         gridRow: `${gridRow} / span ${gridSpan}`,
-        display: 'block'
       }}
-      onClick={handleClick}
+      onClick={() => setClaseSeleccionada(clase)}
     >
-      <div className='div-curso-nombre'>
-        <div className='curso-nombre'><h3>{nombre}</h3></div>
-      </div>
+      <h3 className="text-lg">{nombre}</h3>
     </div>
+
   );
-}
+};
