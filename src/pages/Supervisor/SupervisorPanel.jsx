@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import data from "../../data/aulas.json"; // Ruta json
 
 export const SupervisorPanel = () => {
   const [selectedSalon, setSelectedSalon] = useState(null);
   const [directorio, setDirectorio] = useState([]);
   const navigate = useNavigate();
 
-  const aulas = [
-    { id: 1, aula: "Aula 101", monitor: "Juan Pérez", enlace: "/aula/101" },
-    { id: 2, aula: "Aula 102", monitor: "Ana Gómez", enlace: "/aula/102" },
-    { id: 3, aula: "Aula 103", monitor: "Carlos López", enlace: "/aula/103" },
-  ];
+  const aulas = data; // Ahora usa los datos de aulas.json
 
   const directorioEjemplo = {
     1: [
@@ -59,7 +56,7 @@ export const SupervisorPanel = () => {
                   <td className="py-2 px-4">{aula.aula}</td>
                   <td className="py-2 px-4">{aula.monitor}</td>
                   <td className="py-2 px-4 text-center">
-                    <a href={aula.enlace} className="text-blue-600 hover:underline">
+                    <a href={aula.enlace} target="_blank" className="text-blue-600 hover:underline">
                       Ir al aula
                     </a>
                   </td>
@@ -73,13 +70,13 @@ export const SupervisorPanel = () => {
                           alert(`El horario para ${aula.aula} no está disponible.`);
                         }
                       }}
-                      className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
+                      className="bg-green-500 text-black px-3 py-1 rounded hover:bg-green-600"
                     >
                       Visualizar Horario
                     </button>
                     <button
                       onClick={() => handleVerDirectorio(aula.id)}
-                      className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                      className="bg-yellow-500 text-black px-3 py-1 rounded hover:bg-yellow-600"
                     >
                       Ver Directorio
                     </button>
