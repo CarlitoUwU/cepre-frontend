@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { AulaInfo } from "../../components/AulaInfo"
 import { ListaSalones } from "../../components/ListaSalones"
 import { TablaHorario } from "../../components/Horarios"
@@ -67,7 +67,7 @@ export const DocentePanel = () => {
     <div>
       <h1>Docente</h1>
       <TablaHorario listaSalones={listaSalones} setClaseSeleccionada={setClaseSeleccionada} />
-      <AulaInfo {...claseSeleccionada} />
+      <AulaInfo {...(claseSeleccionada) || {}} />
       <ListaSalones items={listaSalones} />
     </div>
   )

@@ -1,6 +1,7 @@
 import { Dia } from './Dia';
 import { Hora } from './Hora';
 import { Curso } from './Curso';
+import React from 'react';
 
 const horasIni = [
   "07:00", "07:50", "08:50", "09:40", "10:40", "11:30", "12:20", "13:10", "14:00", "14:50", "15:50", "16:40", "17:40", "18:30", "19:20", "20:10"
@@ -12,7 +13,7 @@ const dias = [
   "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"
 ];
 
-export const TablaHorario = ({ listaSalones, setClaseSeleccionada = () => { } }) => {
+export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => { } }) => {
   // Obtener rango de horas basado en las clases disponibles
   const horas = listaSalones.flatMap(salon => salon.horas);
   const horaMinima = horas.length ? horas.map(h => h.hora_ini).sort()[0] : "07:00";

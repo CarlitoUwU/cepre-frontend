@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const AulaInfo = ({ aula, monitor, area, numHoras, enlace }) => {
   return (
     <div>
