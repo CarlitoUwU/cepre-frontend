@@ -1,0 +1,57 @@
+[
+    {
+      "aula": "I-101",
+      "monitor": "José Luis Cusilayme García",
+      "area": "Biomédicas",
+      "numHoras": 6,
+      "enlace": "https://meet.google.com/abc-123",
+      "id": 1,
+      "horas": [
+        {
+          "id": 2,
+          "dia": "VIERNES",
+          "hora_ini": "11:30",
+          "hora_fin": "13:10"
+        }
+      ]
+    },
+    {
+      "aula": "B-101",
+      "monitor": "Jorge Enrique Valdivia Luna",
+      "area": "Sociales",
+      "numHoras": 6,
+      "enlace": "https://meet.google.com/abc-123",
+      "id": 2,
+      "horas": [
+        {
+          "id": 4,
+          "dia": "JUEVES",
+          "hora_ini": "11:30",
+          "hora_fin": "13:10"
+        }
+      ]
+    },
+    {
+      "aula": "S-101",
+      "monitor": "Carlo Joaquin Valdivia Luna",
+      "area": "Ingenierías",
+      "numHoras": 6,
+      "enlace": "https://meet.google.com/abc-123",
+      "id": 3,
+      "horas": [
+        {
+          "id": 5,
+          "dia": "MIERCOLES",
+          "hora_ini": "07:00",
+          "hora_fin": "08:40"
+        },
+        {
+          "id": 6,
+          "dia": "VIERNES",
+          "hora_ini": "07:00",
+          "hora_fin": "08:40"
+        }
+      ]
+    }
+  ]
+  

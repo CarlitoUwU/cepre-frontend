@@ -3,10 +3,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Establecer el fondo blanco globalmente */
 html, body, #root {
   @apply bg-white text-black;
