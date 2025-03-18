@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { LoginPanel } from './pages/Login/LoginPanel';
+import  LoginPanel from './pages/Login/LoginPanel';
 import { AdminPanel } from './pages/Admin/AdminPanel';
 import { DocentePanel } from './pages/Docente/DocentePanel';
 import { MonitorPanel } from './pages/Monitor/MonitorPanel';
