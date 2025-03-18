@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LoginPanel from './pages/Login/LoginPanel';
+import { Routes, Route } from 'react-router-dom';
+import { LoginPanel } from './pages/Login/LoginPanel';
 import { AdminPanel } from './pages/Admin/AdminPanel';
 import { DocentePanel } from './pages/Docente/DocentePanel';
 import { MonitorPanel } from './pages/Monitor/MonitorPanel';
@@ -19,22 +19,20 @@ const NotFound = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Login sin header (fuera del layout) */}
-        <Route index element={<LoginPanel />} />
+    <Routes>
+      {/* Login sin header */}
+      <Route path="/" element={<LoginPanel />} />
 
-        {/* Todas las demás rutas dentro del layout */}
-        <Route path="/" element={<MainLayout />}>
-          <Route path="admin" element={<AdminPanel />} />
-          <Route path="docente" element={<DocentePanel />} />
-          <Route path="monitor" element={<MonitorPanel />} />
-          <Route path="supervisor" element={<SupervisorPanel />} />
-          <Route path="supervisor/horario" element={<HorarioMonitorPanel />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+      {/* Todas las demás rutas dentro del layout */}
+      <Route path="/" element={<MainLayout />}>
+        <Route path="/admin/*" element={<AdminPanel />} />
+        <Route path="/docente" element={<DocentePanel />} />
+        <Route path="/monitor" element={<MonitorPanel />} />
+        <Route path="/supervisor" element={<SupervisorPanel />} />
+        <Route path="/supervisor/horario" element={<HorarioMonitorPanel />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
   );
 }
 
