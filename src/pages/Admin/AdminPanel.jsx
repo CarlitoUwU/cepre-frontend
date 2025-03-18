@@ -8,7 +8,6 @@ import { Exportar } from './Exportar';
 import { Publicar } from './Publicar';
 import { Home } from './Home';
 
-
 export const AdminPanel = () => {
 
   return (
