@@ -5,7 +5,7 @@ import { TablaHorario } from "../../components/Horarios"
 
 const listaSalones = [
   {
-    aula: 'B - 103',
+    aula: 'B-103',
     monitor: 'Carlo Joaquin Valdivia Luna',
     area: 'Biomédicas',
     numHoras: 6,
@@ -15,13 +15,13 @@ const listaSalones = [
       {
         id: 2,
         dia: "VIERNES",
-        hora_ini: "11:30",
-        hora_fin: "13:10"
+        hora_ini: "10:40",
+        hora_fin: "12:20"
       }
     ]
   },
   {
-    aula: 'B - 104',
+    aula: 'B-104',
     monitor: 'Jorge Luis Valdivia Luna',
     area: 'Sociales',
     numHoras: 6,
@@ -31,13 +31,13 @@ const listaSalones = [
       {
         id: 4,
         dia: "JUEVES",
-        hora_ini: "11:30",
-        hora_fin: "13:10"
+        hora_ini: "10:40",
+        hora_fin: "12:20"
       }
     ]
   },
   {
-    aula: 'B - 105',
+    aula: 'B-105',
     monitor: 'Carlo Joaquin Valdivia Luna',
     area: 'Ingenierías',
     numHoras: 6,
@@ -46,7 +46,7 @@ const listaSalones = [
     horas: [
       {
         id: 5,
-        dia: "MIERCOLES",
+        dia: "JUEVES",
         hora_ini: "07:00",
         hora_fin: "08:40"
       },
