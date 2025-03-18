@@ -76,8 +76,8 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
               numHoras: salon.numHoras,
               enlace: salon.enlace,
             }}
-            nombre={salon.aula || "#000"}
-            backgroundColor={areaColors[salon.area]}
+            nombre={salon.aula}
+            backgroundColor={areaColors[salon.area] || "#000"}
             gridColumn={getColumn(hora.dia)}
             gridRow={getRow(hora.hora_ini)}
             gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
