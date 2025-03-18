@@ -1,6 +1,5 @@
 [
     {
-      "aula": "MATEMÁTICA",
       "curso": "MATEMÁTICA",
       "id": 1,
       "docente": "CATUMA QUISPE EDWIN WALTER",
@@ -15,7 +14,6 @@
       ]
     },
     {
-        "aula": "BIOLOGÍA",
         "curso": "BIOLOGÍA",
         "id": 2,
         "docente": "RAMOS COAGUILA PAULA RAQUEL",
