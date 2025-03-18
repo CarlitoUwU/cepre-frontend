@@ -1,6 +1,6 @@
 import React from "react";
 import Login from "../../components/Login";
-import background from "../../assets/ceprunsa.jpg"; // Fondo de pantalla
+import background from "../../assets/ceprunsa.jpg"; 
 
 const LoginPanel = () => {
   
