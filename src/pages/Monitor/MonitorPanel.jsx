@@ -15,7 +15,7 @@ export const MonitorPanel = () => {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {/* Tabla de Cursos */}
           <div className="col-span-2 overflow-x-auto">
-            <h2 className="text-2xl font-semibold mb-4">Cursos</h2>
+            <h2 className="text-2xl font-semibold mb-4">CURSOS</h2>
             <table className="min-w-full bg-white border border-gray-300">
               <thead>
                 <tr className="bg-blue-200">
@@ -38,7 +38,7 @@ export const MonitorPanel = () => {
 
           {/* Horario del Monitor */}
           <div className="col-span-3 overflow-x-auto">
-            <h2 className="text-2xl font-semibold mb-4">Horario de Monitores</h2>
+            <h2 className="text-2xl font-semibold mb-4">HORARIO I-102</h2>
             <TablaHorarioMonitor listaCursos={horario} />
           </div>
         </div>

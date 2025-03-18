@@ -1,30 +1,118 @@
 [
-    {
-      "curso": "MATEMÁTICA",
-      "id": 1,
-      "docente": "CATUMA QUISPE EDWIN WALTER",
-      "correo": "edwin.catuma@cepr.unsa.pe",
-      "horas": [
-        {
-          "id": 2,
-          "dia": "VIERNES",
-          "hora_ini": "07:00",
-          "hora_fin": "08:25"
-        }
-      ]
-    },
-    {
-        "curso": "BIOLOGÍA",
-        "id": 2,
-        "docente": "RAMOS COAGUILA PAULA RAQUEL",
-        "correo": "paula.ramos@cepr.unsa.pe",
-        "horas": [
-          {
-            "id": 2,
-            "dia": "MARTES",
-            "hora_ini": "08:30",
-            "hora_fin": "09:55" 
-          }
-        ]
-      }
+  {
+    "curso": "MATEMÁTICA",
+    "id": 1,
+    "docente": "CATUMA QUISPE EDWIN WALTER",
+    "correo": "edwin.catuma@cepr.unsa.pe",
+    "horas": [
+      { "id": 1, "dia": "LUNES", "hora_ini": "07:00", "hora_fin": "08:25" },
+      { "id": 2, "dia": "MIÉRCOLES", "hora_ini": "08:30", "hora_fin": "09:55" }
+    ]
+  },
+  {
+    "curso": "BIOLOGÍA",
+    "id": 2,
+    "docente": "RAMOS COAGUILA PAULA RAQUEL",
+    "correo": "paula.ramos@cepr.unsa.pe",
+    "horas": [
+      { "id": 3, "dia": "MARTES", "hora_ini": "07:00", "hora_fin": "08:25" },
+      { "id": 4, "dia": "JUEVES", "hora_ini": "08:30", "hora_fin": "09:55" }
+    ]
+  },
+  {
+    "curso": "HISTORIA",
+    "id": 3,
+    "docente": "PÉREZ SALAZAR JUAN MANUEL",
+    "correo": "juan.perez@cepr.unsa.pe",
+    "horas": [
+      { "id": 5, "dia": "MIÉRCOLES", "hora_ini": "07:00", "hora_fin": "08:25" },
+      { "id": 6, "dia": "VIERNES", "hora_ini": "08:30", "hora_fin": "09:55" }
+    ]
+  },
+  {
+    "curso": "FÍSICA",
+    "id": 4,
+    "docente": "QUINTANA LOAYZA CARLOS ALBERTO",
+    "correo": "carlos.quintana@cepr.unsa.pe",
+    "horas": [
+      { "id": 7, "dia": "LUNES", "hora_ini": "08:30", "hora_fin": "09:55" },
+      { "id": 8, "dia": "VIERNES", "hora_ini": "07:00", "hora_fin": "08:25" }
+    ]
+  },
+  {
+    "curso": "LENGUAJE",
+    "id": 5,
+    "docente": "FLORES CASTRO ANA MARÍA",
+    "correo": "ana.flores@cepr.unsa.pe",
+    "horas": [
+      { "id": 9, "dia": "MARTES", "hora_ini": "08:30", "hora_fin": "09:55" },
+      { "id": 10, "dia": "SÁBADO", "hora_ini": "07:00", "hora_fin": "08:25" }
+    ]
+  },
+  {
+    "curso": "GEOGRAFÍA",
+    "id": 6,
+    "docente": "SANDOVAL RÍOS JOSÉ MIGUEL",
+    "correo": "jose.sandoval@cepr.unsa.pe",
+    "horas": [
+      { "id": 11, "dia": "MIÉRCOLES", "hora_ini": "10:00", "hora_fin": "11:25" },
+      { "id": 12, "dia": "SÁBADO", "hora_ini": "09:15", "hora_fin": "10:40" }
+    ]
+  },
+  {
+    "curso": "RAZ. MATEMÁTICO",
+    "id": 7,
+    "docente": "CASTILLO VILLANUEVA MIGUEL ÁNGEL",
+    "correo": "miguel.castillo@cepr.unsa.pe",
+    "horas": [
+      { "id": 13, "dia": "JUEVES", "hora_ini": "10:00", "hora_fin": "11:25" },
+      { "id": 14, "dia": "VIERNES", "hora_ini": "11:30", "hora_fin": "12:10" }
+    ]
+  },
+  {
+    "curso": "RAZ. VERBAL",
+    "id": 8,
+    "docente": "LOZANO GUTIÉRREZ PATRICIA",
+    "correo": "patricia.lozano@cepr.unsa.pe",
+    "horas": [
+      { "id": 15, "dia": "MARTES", "hora_ini": "10:00", "hora_fin": "11:25" },
+      { "id": 16, "dia": "VIERNES", "hora_ini": "10:00", "hora_fin": "11:25" }
+    ]
+  },
+  {
+    "curso": "PSICOLOGÍA",
+    "id": 9,
+    "docente": "VALDEZ ARIAS MARÍA DEL CARMEN",
+    "correo": "maria.valdez@cepr.unsa.pe",
+    "horas": [
+      { "id": 17, "dia": "JUEVES", "hora_ini": "11:30", "hora_fin": "12:10" }
+    ]
+  },
+  {
+    "curso": "FILOSOFÍA",
+    "id": 10,
+    "docente": "TORRES MENDOZA JOSÉ LUIS",
+    "correo": "jose.torres@cepr.unsa.pe",
+    "horas": [
+      { "id": 18, "dia": "LUNES", "hora_ini": "10:00", "hora_fin": "11:25" }
+    ]
+  },
+  {
+    "curso": "CÍVICA",
+    "id": 11,
+    "docente": "FERNÁNDEZ LÓPEZ RAQUEL",
+    "correo": "raquel.fernandez@cepr.unsa.pe",
+    "horas": [
+      { "id": 19, "dia": "MARTES", "hora_ini": "11:30", "hora_fin": "12:10" }
+    ]
+  },
+  {
+    "curso": "INGLÉS",
+    "id": 12,
+    "docente": "RIVERA MARTÍNEZ ANDREA",
+    "correo": "andrea.rivera@cepr.unsa.pe",
+    "horas": [
+      { "id": 20, "dia": "MIÉRCOLES", "hora_ini": "11:30", "hora_fin": "12:10" }
+    ]
+  }
 ]
