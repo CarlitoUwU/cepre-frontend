@@ -65,7 +65,6 @@ export const DocentePanel = () => {
 
   return (
     <div className="p-5">
-
       <div className="grid grid-cols-3 gap-4">
         {/* Horario General */}
         <div className="col-span-2 bg-gray-100 p-4 rounded-lg shadow-md">
@@ -80,7 +79,6 @@ export const DocentePanel = () => {
         <div className="bg-gray-100 p-4 rounded-lg shadow-md flex justify-center items-center">
           <AulaInfo {...(claseSeleccionada || {})} />
         </div>
-
 
         {/* Lista de Salones */}
         <div className="col-span-3 bg-gray-100 p-4 rounded-lg shadow-md">
