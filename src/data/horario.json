@@ -1,0 +1,32 @@
+[
+    {
+      "aula": "MATEMÁTICA",
+      "curso": "MATEMÁTICA",
+      "id": 1,
+      "docente": "CATUMA QUISPE EDWIN WALTER",
+      "correo": "edwin.catuma@cepr.unsa.pe",
+      "horas": [
+        {
+          "id": 2,
+          "dia": "VIERNES",
+          "hora_ini": "07:00",
+          "hora_fin": "08:25"
+        }
+      ]
+    },
+    {
+        "aula": "BIOLOGÍA",
+        "curso": "BIOLOGÍA",
+        "id": 2,
+        "docente": "RAMOS COAGUILA PAULA RAQUEL",
+        "correo": "paula.ramos@cepr.unsa.pe",
+        "horas": [
+          {
+            "id": 2,
+            "dia": "MARTES",
+            "hora_ini": "08:30",
+            "hora_fin": "09:55" 
+          }
+        ]
+      }
+]

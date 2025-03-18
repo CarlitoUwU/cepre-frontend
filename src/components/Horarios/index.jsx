@@ -1,18 +1,19 @@
 import { Dia } from './Dia';
 import { Hora } from './Hora';
 import { Curso } from './Curso';
+import React from 'react';
 
 const horasIni = [
-  "07:00", "07:50", "08:50", "09:40", "10:40", "11:30", "12:20", "13:10", "14:00", "14:50", "15:50", "16:40", "17:40", "18:30", "19:20", "20:10"
+  "07:00", "07:45", "08:30", "09:15", "10:00", "10:45", "11:30", "12:15", "13:00", "13:45", "14:30", "15:15", "16:00", "16:45", "17:30", "18:15", "19:00", "19:45", "20:30"
 ];
 const horasFin = [
-  "07:50", "08:40", "09:40", "10:30", "11:30", "12:20", "13:10", "14:00", "14:50", "15:40", "16:40", "17:30", "18:30", "19:20", "20:10", "21:00"
+  "07:40", "08:25", "09:10", "09:55", "10:40", "11:25", "12:10", "12:55", "13:40", "14:25", "15:10", "15:55", "16:40", "17:25", "18:10", "18:55", "19:40", "20:25", "21:10" 
 ];
 const dias = [
   "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"
 ];
 
-export const TablaHorario = ({ listaSalones, setClaseSeleccionada = () => { } }) => {
+export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => { } }) => {
   // Obtener rango de horas basado en las clases disponibles
   const horas = listaSalones.flatMap(salon => salon.horas);
   const horaMinima = horas.length ? horas.map(h => h.hora_ini).sort()[0] : "07:00";
@@ -28,17 +29,11 @@ export const TablaHorario = ({ listaSalones, setClaseSeleccionada = () => { } })
   const areaColors = {
     "Ingenierías": "#31A8E3",
     "Sociales": "#E3C459",
-    "Biomédicas": "#50E372"
+    "Biomédicas": "#50E372",
   };
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: `auto repeat(${dias.length}, 1fr)`,
-        gridTemplateRows: `auto repeat(${horasIni.length + 1}, auto)`
-      }}
-    >
+    <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4">
       {/* Espacio vacío en la esquina superior izquierda */}
       <div></div>
 
@@ -57,6 +52,7 @@ export const TablaHorario = ({ listaSalones, setClaseSeleccionada = () => { } })
         horasIni.slice(minIndex, maxIndex + 1).map((_, k) => (
           <div
             key={`${i}-${k}`}
+            className='rounded-lg'
             style={{
               backgroundColor: "#f4f0fb",
               borderRadius: ".2vw",
@@ -80,8 +76,8 @@ export const TablaHorario = ({ listaSalones, setClaseSeleccionada = () => { } })
               numHoras: salon.numHoras,
               enlace: salon.enlace,
             }}
-            nombre={salon.aula || "#000"}
-            backgroundColor={areaColors[salon.area]}
+            nombre={salon.aula }
+            backgroundColor={areaColors[salon.area] || "#f4351c"}
             gridColumn={getColumn(hora.dia)}
             gridRow={getRow(hora.hora_ini)}
             gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}

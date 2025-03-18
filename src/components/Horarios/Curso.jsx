@@ -1,3 +1,5 @@
+import React from 'react';
+
 export const Curso = ({ clase, backgroundColor, gridColumn, gridRow, gridSpan, nombre, setClaseSeleccionada }) => {
   const handleClick = () => {
     setClaseSeleccionada(clase);
