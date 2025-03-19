@@ -2,8 +2,11 @@ import React from 'react';
 
 export const Dia = ({ nombre }) => {
     return (
-        <div className="text-center font-semibold text-sm bg-gray-200 p-2 border border-radius rounded-lg border-gray-300">
-            {nombre}
-        </div>
+      <div
+        className="text-center font-semibold bg-[#F4F4F4] p-2 rounded-md"
+        style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        {nombre}
+      </div>
     );
-};
+  };

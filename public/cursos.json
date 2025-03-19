@@ -1,0 +1,23 @@
+[
+    {
+      "curso": "BIOLOGÍA",
+      "docente": "GUTIÉRREZ QUISPE JUAN CARLOS",
+      "correo": "juan.gutierrez@cepr.unsa.pe"
+    },
+    {
+      "curso": "CÍVICA",
+      "docente": "RAMIREZ MAMANI MAYRA",
+      "correo": "mayra.ramirez@cepr.unsa.pe"
+    },
+    {
+      "curso": "FÍSICA",
+      "docente": "BALDARRAGO VILCA ELVIS",
+      "correo": "elvis.baldarrago@cepr.unsa.pe"
+    },
+    {
+      "curso": "RAZ VERBAL",
+      "docente": "PEPITO ÑARLITO",
+      "correo": "pepito.ñarlito@cepr.unsa.pe"
+    }
+  ]
+  
