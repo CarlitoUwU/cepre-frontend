@@ -26,3 +26,4 @@ export const Curso = ({ clase, backgroundColor, gridColumn, gridRow, gridSpan, n
 
   );
 };
+}
