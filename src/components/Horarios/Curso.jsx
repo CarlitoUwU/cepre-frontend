@@ -4,24 +4,25 @@ export const Curso = ({ clase, backgroundColor, gridColumn, gridRow, gridSpan, n
   const handleClick = () => {
     setClaseSeleccionada(clase);
   };
-
+{
   return (
     <div
-      className="curso"
+      className="cursor-pointer text-center text-white font-semibold p-2 rounded-md shadow-md flex items-center justify-center"
       style={{
-        backgroundColor: backgroundColor,
-        gridColumn: gridColumn,
+        backgroundColor,
+        gridColumn,
         gridRow: `${gridRow} / span ${gridSpan}`,
         display: "flex", 
         alignItems: "center", 
         justifyContent: "center", 
         textAlign: "center", 
       }}
-      onClick={handleClick}
+      onClick={() => setClaseSeleccionada(clase)}
     >
       <div className="curso-nombre">
         <h3 style={{ color: "white", fontWeight: "bold" }}>{nombre}</h3>
       </div>
     </div>
+
   );
 };

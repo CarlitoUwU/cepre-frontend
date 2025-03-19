@@ -1,12 +1,11 @@
-import React from "react"
-import { useState } from "react"
+import React, { useState } from "react"
 import { AulaInfo } from "../../components/AulaInfo"
 import { ListaSalones } from "../../components/ListaSalones"
 import { TablaHorario } from "../../components/Horarios"
 
 const listaSalones = [
   {
-    aula: 'B - 103',
+    aula: 'B-103',
     monitor: 'Carlo Joaquin Valdivia Luna',
     area: 'Biomédicas',
     numHoras: 6,
@@ -16,13 +15,13 @@ const listaSalones = [
       {
         id: 2,
         dia: "VIERNES",
-        hora_ini: "11:30",
-        hora_fin: "13:10"
+        hora_ini: "10:40",
+        hora_fin: "12:20"
       }
     ]
   },
   {
-    aula: 'B - 104',
+    aula: 'B-104',
     monitor: 'Jorge Luis Valdivia Luna',
     area: 'Sociales',
     numHoras: 6,
@@ -32,13 +31,13 @@ const listaSalones = [
       {
         id: 4,
         dia: "JUEVES",
-        hora_ini: "11:30",
-        hora_fin: "13:10"
+        hora_ini: "10:40",
+        hora_fin: "12:20"
       }
     ]
   },
   {
-    aula: 'B - 105',
+    aula: 'B-105',
     monitor: 'Carlo Joaquin Valdivia Luna',
     area: 'Ingenierías',
     numHoras: 6,
@@ -47,7 +46,7 @@ const listaSalones = [
     horas: [
       {
         id: 5,
-        dia: "MIERCOLES",
+        dia: "JUEVES",
         hora_ini: "07:00",
         hora_fin: "08:40"
       },
@@ -65,11 +64,28 @@ export const DocentePanel = () => {
   const [claseSeleccionada, setClaseSeleccionada] = useState(null)
 
   return (
-    <div>
-      <h1>Docente</h1>
-      <TablaHorario listaSalones={listaSalones} setClaseSeleccionada={setClaseSeleccionada} />
-      <AulaInfo {...claseSeleccionada} />
-      <ListaSalones items={listaSalones} />
+    <div className="p-5">
+      <div className="grid grid-cols-3 gap-4">
+        {/* Horario General */}
+        <div className="col-span-2 bg-gray-100 p-4 rounded-lg shadow-md">
+          <div className="col-span-3 bg-gray-100 p-4">
+            {/*font size mas grande*/}
+            <h2 className="text-5xl font-semibold ">Horario General</h2>
+          </div>
+          <TablaHorario listaSalones={listaSalones} setClaseSeleccionada={setClaseSeleccionada} />
+        </div>
+
+        {/* Información del Aula */}
+        <div className="bg-gray-100 p-4 rounded-lg shadow-md flex justify-center items-center">
+          <AulaInfo {...(claseSeleccionada || {})} />
+        </div>
+
+        {/* Lista de Salones */}
+        <div className="col-span-3 bg-gray-100 p-4 rounded-lg shadow-md">
+          <ListaSalones items={listaSalones} />
+        </div>
+      </div>
     </div>
+
   )
 }

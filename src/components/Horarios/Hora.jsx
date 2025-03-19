@@ -9,4 +9,4 @@ export const Hora = ({ hora }) => {
           {hora}
         </div>
     );
-}
+};

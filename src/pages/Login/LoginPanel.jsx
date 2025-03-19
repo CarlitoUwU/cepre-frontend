@@ -1,9 +1,20 @@
-import {LoginForm} from '../../components/Login';
+import React from "react";
+import Login from "../../components/Login";
+import background from "../../assets/ceprunsa.jpg"; 
 
-export const LoginPanel = () => {
+const LoginPanel = () => {
+  
   return (
-    <div>
-      <LoginForm />
+    <div
+      className="h-screen w-full bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: `url(${background})` }}
+    >
+          <Login />
     </div>
-  )
-}
+    
+  );
+  // Verifica la ruta de la imagen en la consola
+
+};
+
+export default LoginPanel;

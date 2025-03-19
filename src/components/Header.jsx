@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 import { FaSignOutAlt } from "react-icons/fa";
 import unsaLogo from "../assets/Unsa_logo.png";
 
-export const Header = ({ nombreUsuario = "Christian", rol = "Administrador" }) => {
+export const Header = ({ nombreUsuario = "Christian", rol = "Supervisor" }) => {
   return (
-    <header className="w-full fixed top-0 left-0 bg-[#D6AD65] h-20 shadow-md flex items-center">
+    <header className="fixed top-0 left-0 w-full bg-[#D6AD65] h-20 shadow-md flex items-center z-50">
       {/* Sección izquierda: Logo + Texto alineados */}
-      <div className="flex items-center h-full">
+      <div className="flex items-center h-full pl-4">
         <img src={unsaLogo} alt="UNSA" className="h-full object-cover" />
         <p className="ml-4 text-white text-lg font-semibold">
           Bienvenido {rol}, {nombreUsuario}
