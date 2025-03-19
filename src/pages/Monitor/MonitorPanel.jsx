@@ -17,35 +17,37 @@ export const MonitorPanel = () => {
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {/* Tabla de Cursos */}
           <div className="col-span-2 overflow-x-auto">
-            <h2 className="text-2xl font-semibold mb-4">CURSOS</h2>
-            <table className="min-w-full bg-white border border-gray-300">
-              <thead>
-                <tr className="bg-[#78211E] text-white">
-                  <th className="py-2 px-4 border-b border-gray-300">Curso</th>
-                  <th className="py-2 px-4 border-b border-gray-300">Docente</th>
-                  <th className="py-2 px-4 border-b border-gray-300">Correo</th>
+            <h2 className="text-2xl font-bold mb-4">CURSOS</h2>
+            <table className="min-w-full bg-white border border-gray-300 font-[Calibri] ">
+            <thead>
+              <tr className="bg-[#78211E] text-white font-[Calibri] font-extrabold">
+                <th className="py-2 px-4 border-b border-gray-300">Curso</th>
+                <th className="py-2 px-4 border-b border-gray-300">Docente</th>
+                <th className="py-2 px-4 border-b border-gray-300">Correo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {horario.map((clase, index) => (
+                <tr
+                  key={clase.id}
+                  className={`${index % 2 === 0 ? "bg-[#F4F4F4]" : "bg-[#F6EDD8]"} font-[Calibri] font-medium`}
+                >
+                  <td className="py-2 px-4 border-b border-gray-300">{clase.curso}</td>
+                  <td className="py-2 px-4 border-b border-gray-300">{clase.docente}</td>
+                  <td className="py-2 px-4 border-b border-gray-300">{clase.correo}</td>
                 </tr>
-              </thead>
-              <tbody>
-                {horario.map((clase) => (
-                  <tr key={clase.id}>
-                    <td className="py-2 px-4 border-b border-gray-300">{clase.curso}</td>
-                    <td className="py-2 px-4 border-b border-gray-300">{clase.docente}</td>
-                    <td className="py-2 px-4 border-b border-gray-300">{clase.correo}</td>
-                  </tr>
-                ))}
-              </tbody>
+              ))}
+            </tbody>
             </table>
           </div>
 
           {/* Horario del Monitor */}
           <div className="col-span-3 overflow-x-auto">
-            <h2 className="text-2xl font-semibold mb-4">HORARIO I-102</h2>
+            <h2 className="text-2xl font-bold mb-4">HORARIO I-102</h2>
             <TablaHorarioMonitor listaCursos={horario} />
 
             {/* Funciones del Monitor */}
             <div className="col-span-5 mt-6">
-              <h2 className="text-2xl font-semibold mb-4">Funciones del Monitor</h2>
               <table className="min-w-full bg-white border border-gray-300">
                 <thead>
                   <tr className="bg-[#78211E] text-white">
@@ -62,12 +64,12 @@ export const MonitorPanel = () => {
                     <td className="py-2 px-4 border border-gray-300">Joel Antonio Chino Pari</td>
                     <td className="py-2 px-4 border border-gray-300 text-center">
                       <a href="https://meet.google.com/byk-mjbz-qij" target="_blank" rel="noopener noreferrer">
-                        <img src={meetIcon} alt="Meet" className="mx-auto" style={{ maxWidth: "110px", maxHeight: "55px" }} />
+                        <img src={meetIcon} alt="Meet" className="mx-auto" style={{ maxWidth: "100px", maxHeight: "50px" }} />
                       </a>
                     </td>
                     <td className="py-2 px-4 border border-gray-300 text-center">
                       <a href="https://classroom.google.com/c/NzA1MzczMDAwNzIz" target="_blank" rel="noopener noreferrer">
-                        <img src={classroomIcon} alt="Classroom" className="mx-auto" style={{ maxWidth: "70px", maxHeight: "70px" }} />
+                        <img src={classroomIcon} alt="Classroom" className="mx-auto" style={{ maxWidth: "50px", maxHeight: "50px" }} />
                       </a>
                     </td>
                   </tr>         
@@ -78,13 +80,13 @@ export const MonitorPanel = () => {
               <div className="grid grid-cols-5 mt-8">
                 <div></div> {/* Espacio 1 */}
                 <div className="flex justify-center"> {/* Espacio 2 */}
-                  <button className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition">
+                  <button className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition font-[Calibri]">
                     Añadir Enlace Meet
                   </button>
                 </div>
                 <div></div> {/* Espacio 3 */}
                 <div className="flex justify-center"> {/* Espacio 4 */}
-                  <button className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition">
+                  <button className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition font-[Calibri]">
                     Añadir Enlace Classroom
                   </button>
                 </div>

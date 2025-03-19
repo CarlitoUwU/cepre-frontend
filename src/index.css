@@ -5,5 +5,5 @@
 
 /* Establecer el fondo blanco globalmente */
 html, body, #root {
-  @apply bg-white text-black;
+  @apply bg-white text-black ;
 }
