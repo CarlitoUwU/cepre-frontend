@@ -17,7 +17,7 @@ export const Curso = ({ clase, backgroundColor, gridColumn, gridRow, gridSpan, n
         justifyContent: "center", 
         textAlign: "center", 
       }}
-      onClick={() => setClaseSeleccionada(clase)}
+      onClick={  handleClick}
     >
       <div className="curso-nombre">
         <h3 style={{ color: "white", fontWeight: "bold" }}>{nombre}</h3>

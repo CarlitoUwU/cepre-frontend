@@ -34,42 +34,45 @@ export const SupervisorPanel = () => {
 
       {selectedSalon === null ? (
         <div className="overflow-x-auto">
-          <table className="min-w-full bg-white shadow-md rounded-lg">
+          <table className="w-full border-collapse border border-gray-300 shadow-md rounded-lg">
             <thead>
-              <tr className="bg-blue-500 text-white">
-                <th className="py-2 px-4">#</th>
-                <th className="py-2 px-4">Aula</th>
-                <th className="py-2 px-4">Monitor</th>
-                <th className="py-2 px-4">Enlace</th>
-                <th className="py-2 px-4">Acciones</th>
+              <tr className="bg-[#78211E] text-white font-[Calibri] font-extrabold">
+                <th className="py-2 px-4 border-b border-gray-300">N°</th>
+                <th className="py-2 px-4 border-b border-gray-300">Aula</th>
+                <th className="py-2 px-4 border-b border-gray-300">Monitor</th>
+                <th className="py-2 px-4 border-b border-gray-300">Enlace</th>
+                <th className="py-2 px-4 border-b border-gray-300">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {aulasData.map((aula) => (
-                <tr key={aula.id} className="border-b">
-                  <td className="py-2 px-4 text-center">{aula.id}</td>
-                  <td className="py-2 px-4">{aula.aula}</td>
-                  <td className="py-2 px-4">{aula.monitor}</td>
-                  <td className="py-2 px-4 text-center">
+              {aulasData.map((aula, index) => (
+                <tr key={index}
+                  className={`${index % 2 === 0 ? "bg-[#F4F4F4]" : "bg-[#F6EDD8]"} font-[Calibri] font-medium`}>
+                  <td className="py-2 px-4 border-b border-gray-300" >{index + 1}</td>
+                  <td className="py-2 px-4 border-b border-gray-300" >{aula.aula}</td>
+                  <td className="py-2 px-4 border-b border-gray-300" >{aula.monitor}</td>
+                  <td className="py-2 px-4 border-b border-gray-300" >
                     <a href={aula.enlace} target="_blank" className="text-blue-600 hover:underline">
                       Ir al aula
                     </a>
                   </td>
-                  <td className="py-2 px-4 flex space-x-2">
-                    {/* Botón de horario */}
-                    <button
-                      onClick={() => navigate("/supervisor/horario")}
-                      className="bg-green-500 text-black px-3 py-1 rounded hover:bg-green-600"
-                    >
-                      Visualizar Horario
-                    </button>
-                    {/* Botón para ver directorio */}
-                    <button
-                      onClick={() => handleVerDirectorio(aula.aula)}
-                      className="bg-yellow-500 text-black px-3 py-1 rounded hover:bg-yellow-600"
-                    >
-                      Ver Directorio
-                    </button>
+                  <td className="py-2 px-4 border-b border-gray-300 text-center" >
+                    <div className="inline-flex gap-4">
+                      {/* Botón de horario */}
+                      <button
+                        onClick={() => navigate("/supervisor/horario")}
+                        className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
+                      >
+                        Visualizar Horario
+                      </button>
+                      {/* Botón para ver directorio */}
+                      <button
+                        onClick={() => handleVerDirectorio(aula.aula)}
+                        className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
+                      >
+                        Ver Directorio
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
