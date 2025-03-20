@@ -14,8 +14,8 @@ const horasFin = [
 const dias = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"];
 
 const cursoColors = {
-    "RAZ. MATEMÁTICO": "#E35050",
-    "RAZ. VERBAL": "#9D00FF",
+    "RAZ. MATEMÁTICO": "#D50000",
+    "RAZ. VERBAL": "#F4511E",
     "MATEMÁTICA": "#32b779",
     "HISTORIA": "#039ae4",
     "GEOGRAFÍA": "#7887cb",

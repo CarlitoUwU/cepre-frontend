@@ -12,7 +12,7 @@
   { "id": 11, "nombre": "Psicología", "color": "#8f24ab" },
   { "id": 12, "nombre": "Química", "color": "#f7be26" },
   { "id": 13, "nombre": "Raz. Lógico", "color": "#7887cb" },
-  { "id": 14, "nombre": "Raz. Matemático", "color": "#E35050" },
-  { "id": 15, "nombre": "Raz. Verbal", "color": "#9D00FF" }
+  { "id": 14, "nombre": "Raz. Matemático", "color": "#D50000" },
+  { "id": 15, "nombre": "Raz. Verbal", "color": "#F4511E" }
 ]
 

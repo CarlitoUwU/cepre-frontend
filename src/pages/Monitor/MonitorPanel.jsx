@@ -73,7 +73,7 @@ export const MonitorPanel = () => {
             <TablaHorarioMonitor listaCursos={horario} />
 
             {/* Funciones del Monitor */}
-            <div className="col-span-5 mt-6">
+            <div className="col-span-5 mt-8">
               <table className="min-w-full bg-white border border-gray-300">
                 <thead>
                   <tr className="bg-[#78211E] text-white">
@@ -102,7 +102,7 @@ export const MonitorPanel = () => {
               </table>
 
               {/* Botones para agregar enlaces */}
-              <div className="grid grid-cols-5 mt-4">
+              <div className="grid grid-cols-5 mt-6">
                 <div></div> {/* Espacio 1 */}
                 <div className="flex justify-center"> {/* Espacio 2 */}
                   <button onClick={() => openModal("meet")} className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition font-[Calibri]">
