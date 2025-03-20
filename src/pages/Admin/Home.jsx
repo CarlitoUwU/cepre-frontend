@@ -7,7 +7,7 @@ const Button = ({ path, title, img, handleClick }) => {
       onClick={() => handleClick(path)}
       className="flex flex-col items-center justify-center w-60 h-60 bg-gray-200 rounded-xl shadow-lg hover:bg-gray-300 transition-all cursor-pointer"
     >
-      <img src={img} alt={title} className="w-20 h-20 mb-3" />
+      <img src={img} alt={title} className="w-16 h-16 mb-3" />
       <p className="text-lg font-semibold">{title}</p>
     </button>
   );
@@ -29,7 +29,7 @@ export const Home = () => {
   };
 
   return (
-    <div className=" flex flex-col items-center justify-center bg-[#F4F4F4] py-30">
+    <div className=" flex flex-col items-center justify-center bg-[#F4F4F4] py-10">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-16 gap-y-16">
         {options.map((option, index) => (
           <Button

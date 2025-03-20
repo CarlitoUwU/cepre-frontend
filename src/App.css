@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 #root {
-  @apply mx-auto p-5 text-center mt-2;
+  @apply mx-auto pl-5 pr-5 pb-5 text-center mt-25 ;
 }
 
 /* .logo */
