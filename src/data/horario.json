@@ -1,118 +1,147 @@
 [
   {
-    "curso": "MATEMÁTICA",
-    "id": 1,
-    "docente": "CATUMA QUISPE EDWIN WALTER",
-    "correo": "edwin.catuma@cepr.unsa.pe",
-    "horas": [
-      { "id": 1, "dia": "LUNES", "hora_ini": "07:00", "hora_fin": "07:40" },
-      { "id": 2, "dia": "MIÉRCOLES", "hora_ini": "08:30", "hora_fin": "09:55" }
-    ]
-  },
-  {
     "curso": "BIOLOGÍA",
     "id": 2,
-    "docente": "RAMOS COAGUILA PAULA RAQUEL",
-    "correo": "paula.ramos@cepr.unsa.pe",
+    "docente": "VIVEROS FLORES PATRICIA",
+    "correo": "patricia.viveros@cepr.unsa.pe",
     "horas": [
-      { "id": 3, "dia": "MARTES", "hora_ini": "07:00", "hora_fin": "08:25" },
-      { "id": 4, "dia": "JUEVES", "hora_ini": "08:30", "hora_fin": "09:55" }
-    ]
-  },
-  {
-    "curso": "HISTORIA",
-    "id": 3,
-    "docente": "PÉREZ SALAZAR JUAN MANUEL",
-    "correo": "juan.perez@cepr.unsa.pe",
-    "horas": [
-      { "id": 5, "dia": "MIÉRCOLES", "hora_ini": "07:00", "hora_fin": "08:25" },
-      { "id": 6, "dia": "VIERNES", "hora_ini": "08:30", "hora_fin": "09:55" }
-    ]
-  },
-  {
-    "curso": "FÍSICA",
-    "id": 4,
-    "docente": "QUINTANA LOAYZA CARLOS ALBERTO",
-    "correo": "carlos.quintana@cepr.unsa.pe",
-    "horas": [
-      { "id": 7, "dia": "LUNES", "hora_ini": "08:30", "hora_fin": "09:55" },
-      { "id": 8, "dia": "VIERNES", "hora_ini": "07:00", "hora_fin": "08:25" }
-    ]
-  },
-  {
-    "curso": "LENGUAJE",
-    "id": 5,
-    "docente": "FLORES CASTRO ANA MARÍA",
-    "correo": "ana.flores@cepr.unsa.pe",
-    "horas": [
-      { "id": 9, "dia": "MARTES", "hora_ini": "08:30", "hora_fin": "09:55" },
-      { "id": 10, "dia": "SÁBADO", "hora_ini": "07:00", "hora_fin": "08:25" }
-    ]
-  },
-  {
-    "curso": "GEOGRAFÍA",
-    "id": 6,
-    "docente": "SANDOVAL RÍOS JOSÉ MIGUEL",
-    "correo": "jose.sandoval@cepr.unsa.pe",
-    "horas": [
-      { "id": 11, "dia": "MIÉRCOLES", "hora_ini": "10:00", "hora_fin": "11:25" },
-      { "id": 12, "dia": "SÁBADO", "hora_ini": "09:15", "hora_fin": "10:40" }
-    ]
-  },
-  {
-    "curso": "RAZ. MATEMÁTICO",
-    "id": 7,
-    "docente": "CASTILLO VILLANUEVA MIGUEL ÁNGEL",
-    "correo": "miguel.castillo@cepr.unsa.pe",
-    "horas": [
-      { "id": 13, "dia": "JUEVES", "hora_ini": "10:00", "hora_fin": "11:25" },
-      { "id": 14, "dia": "VIERNES", "hora_ini": "11:30", "hora_fin": "12:10" }
-    ]
-  },
-  {
-    "curso": "RAZ. VERBAL",
-    "id": 8,
-    "docente": "LOZANO GUTIÉRREZ PATRICIA",
-    "correo": "patricia.lozano@cepr.unsa.pe",
-    "horas": [
-      { "id": 15, "dia": "MARTES", "hora_ini": "10:00", "hora_fin": "11:25" },
-      { "id": 16, "dia": "VIERNES", "hora_ini": "10:00", "hora_fin": "11:25" }
-    ]
-  },
-  {
-    "curso": "PSICOLOGÍA",
-    "id": 9,
-    "docente": "VALDEZ ARIAS MARÍA DEL CARMEN",
-    "correo": "maria.valdez@cepr.unsa.pe",
-    "horas": [
-      { "id": 17, "dia": "JUEVES", "hora_ini": "11:30", "hora_fin": "12:10" }
-    ]
-  },
-  {
-    "curso": "FILOSOFÍA",
-    "id": 10,
-    "docente": "TORRES MENDOZA JOSÉ LUIS",
-    "correo": "jose.torres@cepr.unsa.pe",
-    "horas": [
-      { "id": 18, "dia": "LUNES", "hora_ini": "10:00", "hora_fin": "11:25" }
+      { "id": 1, "dia": "MARTES", "hora_ini": "10:45", "hora_fin": "12:10" },
+      { "id": 2, "dia": "JUEVES", "hora_ini": "10:45", "hora_fin": "12:10" },
+      { "id": 3, "dia": "SÁBADO", "hora_ini": "10:45", "hora_fin": "12:10" }
     ]
   },
   {
     "curso": "CÍVICA",
     "id": 11,
-    "docente": "FERNÁNDEZ LÓPEZ RAQUEL",
-    "correo": "raquel.fernandez@cepr.unsa.pe",
+    "docente": "VILCA TALANCHA EUGENIO LUIGI",
+    "correo": "eugenio.vilca@cepr.unsa.pe",
     "horas": [
-      { "id": 19, "dia": "MARTES", "hora_ini": "11:30", "hora_fin": "12:10" }
+      { "id": 4, "dia": "LUNES", "hora_ini": "08:30", "hora_fin": "09:10" }
+    ]
+  },
+  {
+    "curso": "FILOSOFÍA",
+    "id": 10,
+    "docente": "SOSA MAMANI HUGO EMILIO",
+    "correo": "hugo.sosa@cepr.unsa.pe",
+    "horas": [
+      { "id": 5, "dia": "JUEVES", "hora_ini": "08:30", "hora_fin": "09:10" }
+    ]
+  },
+  {
+    "curso": "FÍSICA",
+    "id": 4,
+    "docente": "FIGUEROA HUAMANI SILVIA OLINDA",
+    "correo": "silvia.figueroa@cepr.unsa.pe",
+    "horas": [
+      { "id": 6, "dia": "MARTES", "hora_ini": "07:00", "hora_fin": "08:25" },
+      { "id": 7, "dia": "VIERNES", "hora_ini": "08:30", "hora_fin": "09:10" }
+    ]
+  },
+  {
+    "curso": "GEOGRAFÍA",
+    "id": 6,
+    "docente": "MERCADO VILLAGRA ALICIA DEL PILAR",
+    "correo": "alicia.mercado@cepr.unsa.pe",
+    "horas": [
+      { "id": 8, "dia": "MIÉRCOLES", "hora_ini": "09:15", "hora_fin": "10:40" }
+    ]
+  },
+  {
+    "curso": "HISTORIA",
+    "id": 3,
+    "docente": "TRUJILLO MEDINA ERIN OLGA",
+    "correo": "erin.trujillo@cepr.unsa.pe",
+    "horas": [
+      { "id": 9, "dia": "MIÉRCOLES", "hora_ini": "07:00", "hora_fin": "08:25" },
+      { "id": 10, "dia": "SÁBADO", "hora_ini": "08:30", "hora_fin": "09:10" }
     ]
   },
   {
     "curso": "INGLÉS",
     "id": 12,
-    "docente": "RIVERA MARTÍNEZ ANDREA",
-    "correo": "andrea.rivera@cepr.unsa.pe",
+    "docente": "PORTUGAL VELASQUEZ NEIL EMILIANO",
+    "correo": "neil.portugal@cepr.unsa.pe",
     "horas": [
-      { "id": 20, "dia": "MIÉRCOLES", "hora_ini": "11:30", "hora_fin": "12:10" }
+      { "id": 11, "dia": "SÁBADO", "hora_ini": "09:15", "hora_fin": "10:40" }
+    ]
+  },
+  {
+    "curso": "LENGUAJE",
+    "id": 5,
+    "docente": "CHAMBI MAMANI MARIELA MAGALI",
+    "correo": "mariela.chambi@cepr.unsa.pe",
+    "horas": [
+      { "id": 12, "dia": "MIÉRCOLES", "hora_ini": "10:45", "hora_fin": "12:10" }
+    ]
+  },
+  {
+    "curso": "LITERATURA",
+    "id": 13,
+    "docente": "VELASQUEZ MASCA MARISOL GLORIA",
+    "correo": "marisol.velasquez@cepr.unsa.pe",
+    "horas": [
+      { "id": 13, "dia": "LUNES", "hora_ini": "11:30", "hora_fin": "12:10" }
+    ]
+  },
+  {
+    "curso": "MATEMÁTICA",
+    "id": 1,
+    "docente": "CAYANI DURAND ROSELL MOISES",
+    "correo": "rossel.cayani@cepr.unsa.pe",
+    "horas": [
+      { "id": 14, "dia": "MARTES", "hora_ini": "08:30", "hora_fin": "09:10" },
+      { "id": 15, "dia": "JUEVES", "hora_ini": "07:00", "hora_fin": "08:25" },
+      { "id": 16, "dia": "SÁBADO", "hora_ini": "07:00", "hora_fin": "08:25" }
+    ]
+  },
+  {
+    "curso": "PSICOLOGÍA",
+    "id": 9,
+    "docente": "VILLAMIL DELGADO PIO DAVID GONZALO",
+    "correo": "pio.villamil@cepr.unsa.pe",
+    "horas": [
+      { "id": 17, "dia": "LUNES", "hora_ini": "10:45", "hora_fin": "11:25" },
+      { "id": 18, "dia": "VIERNES", "hora_ini": "10:45", "hora_fin": "12:10" }
+    ]
+  },
+  {
+    "curso": "QUÍMICA",
+    "id": 14,
+    "docente": "MEDINA SAMAYANI FRANCISCO JUAN",
+    "correo": "francisco.medina@cepr.unsa.pe",
+    "horas": [
+      { "id": 19, "dia": "LUNES", "hora_ini": "07:00", "hora_fin": "08:25" },
+      { "id": 20, "dia": "MIÉRCOLES", "hora_ini": "08:30", "hora_fin": "09:10" },
+      { "id": 21, "dia": "VIERNES", "hora_ini": "07:00", "hora_fin": "08:25" }
+    ]
+  },
+  {
+    "curso": "RAZ. LÓGICO",
+    "id": 15,
+    "docente": "CÁCERES CAERO FELTZY",
+    "correo": "feltzy.caceres@cepr.unsa.pe",
+    "horas": [
+      { "id": 22, "dia": "VIERNES", "hora_ini": "09:15", "hora_fin": "10:40" }
+    ]
+  },
+  {
+    "curso": "RAZ. MATEMÁTICO",
+    "id": 7,
+    "docente": "TANCO VILLASANTE LORENZO JAIME",
+    "correo": "lorenzo.tanco@cepr.unsa.pe",
+    "horas": [
+      { "id": 23, "dia": "MARTES", "hora_ini": "09:15", "hora_fin": "10:40" }
+    ]
+  },
+  {
+    "curso": "RAZ. VERBAL",
+    "id": 8,
+    "docente": "CHULLO HUAYLLA FELICIANA NATIVIDAD",
+    "correo": "feliciana.chullo@cepr.unsa.pe",
+    "horas": [
+      { "id": 24, "dia": "LUNES", "hora_ini": "09:15", "hora_fin": "10:40"  },
+      { "id": 25, "dia": "JUEVES", "hora_ini": "09:15", "hora_fin": "10:40"  }
     ]
   }
 ]
