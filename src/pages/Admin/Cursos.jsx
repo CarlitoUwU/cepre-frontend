@@ -21,7 +21,9 @@ export const Cursos = () => {
   const handleGuardar = (id) => {
     setCursos(
       cursos.map((curso) =>
-        curso.id === id ? { ...curso, nombre: formData.nombre, color: formData.color } : curso
+        curso.id === id
+          ? { ...curso, nombre: formData.nombre, color: formData.color }
+          : curso
       )
     );
     setEditandoId(null);
@@ -41,13 +43,20 @@ export const Cursos = () => {
   };
 
   if (vistaActual === "agregar") {
-    return <AgregarCurso onAgregarCurso={handleAgregarCurso} setVistaActual={setVistaActual} />;
+    return (
+      <AgregarCurso
+        onAgregarCurso={handleAgregarCurso}
+        setVistaActual={setVistaActual}
+      />
+    );
   }
 
   return (
     <div className="overflow-x-auto bg-gray-200 p-4">
       <div className="mx-auto bg-white p-4 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE CURSOS</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          GESTIÓN DE CURSOS
+        </h2>
 
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
@@ -60,14 +69,23 @@ export const Cursos = () => {
           </thead>
           <tbody>
             {cursos.map((curso, index) => (
-              <tr key={curso.id} className={`${index % 2 === 0 ? "bg-[#F4F4F4]" : "bg-[#F6EDD8]"}`}>
-                <td className="py-2 px-4 border-b border-gray-300 text-center">{index + 1}</td>
+              <tr
+                key={curso.id}
+                className={`${
+                  index % 2 === 0 ? "bg-[#F4F4F4]" : "bg-[#F6EDD8]"
+                }`}
+              >
+                <td className="py-2 px-4 border-b border-gray-300 text-center">
+                  {index + 1}
+                </td>
                 <td className="py-2 px-4 border-b border-gray-300">
                   {editandoId === curso.id ? (
                     <input
                       type="text"
                       value={formData.nombre}
-                      onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, nombre: e.target.value })
+                      }
                       className="border p-1 w-full"
                     />
                   ) : (
@@ -79,46 +97,52 @@ export const Cursos = () => {
                     <input
                       type="color"
                       value={formData.color}
-                      onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, color: e.target.value })
+                      }
                       className="w-10 h-6"
                     />
                   ) : (
-                    <div className="w-6 h-6 mx-auto rounded-full" style={{ backgroundColor: curso.color }}></div>
+                    <div
+                      className="w-6 h-6 mx-auto rounded-full"
+                      style={{ backgroundColor: curso.color }}
+                    ></div>
                   )}
                 </td>
                 <td className="py-2 px-4 border-b border-gray-300 text-center">
-                  {editandoId === curso.id ? (
-                    <>
-                      <button
-                        className="bg-green-500 text-white px-3 py-1 rounded mx-1 hover:bg-green-700"
-                        onClick={() => handleGuardar(curso.id)}
-                      >
-                        Guardar
-                      </button>
-                      <button
-                        className="bg-gray-500 text-white px-3 py-1 rounded mx-1 hover:bg-gray-700"
-                        onClick={handleCancelar}
-                      >
-                        Cancelar
-                      </button>
-                    </>
-                  ) : (
-                    <>
-                      <button
-                        className="bg-blue-500 text-white px-3 py-1 rounded mx-1 hover:bg-blue-700"
-                        onClick={() => handleModificar(curso)}
-                      >
-                        Modificar
-                      </button>
-                      <button
-                        className="bg-red-500 text-white px-3 py-1 rounded mx-1 hover:bg-red-700"
-                        onClick={() => handleBorrar(curso.id)}
-                      >
-                        Borrar
-                      </button>
-                    </>
-                  )}
-                </td>
+  {editandoId === curso.id ? (
+    <>
+      <button
+        className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800"
+        onClick={() => handleGuardar(curso.id)}
+      >
+        Guardar
+      </button>
+      <button
+        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-800 ml-4"
+        onClick={handleCancelar}
+      >
+        Cancelar
+      </button>
+    </>
+  ) : (
+    <div className="inline-flex gap-4">
+      <button
+        className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
+        onClick={() => handleModificar(curso)}
+      >
+        Modificar
+      </button>
+      <button
+        className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
+        onClick={() => handleBorrar(curso.id)}
+      >
+        Borrar
+      </button>
+    </div>
+  )}
+</td>
+
               </tr>
             ))}
           </tbody>
