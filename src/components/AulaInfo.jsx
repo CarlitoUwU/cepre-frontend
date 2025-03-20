@@ -8,12 +8,12 @@ export const AulaInfo = ({ aula, monitor, area, numHoras, enlace }) => {
 
   )
   return (
-    <div className="border border-gray-400 p-6 bg-white rounded-lg shadow-md text-left">
-      <h2 className="text-xl font-bold mb-4 text-center">Aula: {aula}</h2>
-      <p className="text-base"><strong>Monitor:</strong> {monitor}</p>
-      <p className="text-base"><strong>Área:</strong> {area}</p>
-      <p className="text-base"><strong>Horas Académicas:</strong> {numHoras}</p>
-      <p className="text-base"><strong>Enlace Meet:</strong> <a href={enlace} className="text-blue-600 underline">{enlace}</a></p>
+    <div className="p-6 rounded-lg text-left w-full">
+      <h2 className="text-4xl font-bold mb-4 text-center">Aula: {aula}</h2>
+      <p className="text-2xl p-2"><strong>Monitor:</strong> {monitor}</p>
+      <p className="text-2xl p-2"><strong>Área:</strong> {area}</p>
+      <p className="text-2xl p-2"><strong>Horas Académicas:</strong> {numHoras}</p>
+      <p className="text-2xl p-2"><strong>Enlace Meet:</strong> <a href={enlace} target="_blank" className="text-blue-600 hover:underline">{enlace}</a></p>
     </div>
 
   );

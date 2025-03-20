@@ -4,10 +4,10 @@ import { Curso } from './Curso';
 import React from 'react';
 
 const horasIni = [
-  "07:00", "07:45", "08:30", "09:15", "10:00", "10:45", "11:30", "12:15", "13:00", "13:45", "14:30", "15:15", "16:00", "16:45", "17:30", "18:15", "19:00", "19:45", "20:30"
+  "07:00", "07:45", "08:30", "09:15", "10:00", "10:45", "11:30", "12:15", "13:00", "13:45", "14:30", "15:15", "16:00", "16:45", "17:30", "18:15", "19:00", "19:45", "20:30",
 ];
 const horasFin = [
-  "07:40", "08:25", "09:10", "09:55", "10:40", "11:25", "12:10", "12:55", "13:40", "14:25", "15:10", "15:55", "16:40", "17:25", "18:10", "18:55", "19:40", "20:25", "21:10" 
+  "07:40", "08:25", "09:10", "09:55", "10:40", "11:25", "12:10", "12:55", "13:40", "14:25", "15:10", "15:55", "16:40", "17:25", "18:10", "18:55", "19:40", "20:25", "21:10",
 ];
 const dias = [
   "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"
@@ -27,9 +27,9 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
   const getColumn = dia => dias.indexOf(dia) + 2;
 
   const areaColors = {
-    "Ingenierías": "#31A8E3",
-    "Sociales": "#E3C459",
-    "Biomédicas": "#50E372",
+    "Ingenierías": "#A4C2F4",
+    "Sociales": "#F7CB9C",
+    "Biomédicas": "#92C47F",
   };
 
   return (
@@ -54,7 +54,7 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
             key={`${i}-${k}`}
             className='rounded-lg'
             style={{
-              backgroundColor: "#f4f0fb",
+              backgroundColor: "#f4f4f4",
               borderRadius: ".2vw",
               gridColumn: i + 2,
               gridRow: k + 2,
@@ -76,7 +76,7 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
               numHoras: salon.numHoras,
               enlace: salon.enlace,
             }}
-            nombre={salon.aula }
+            nombre={salon.aula}
             backgroundColor={areaColors[salon.area] || "#f4351c"}
             gridColumn={getColumn(hora.dia)}
             gridRow={getRow(hora.hora_ini)}
