@@ -1,0 +1,18 @@
+[
+  { "id": 1, "nombre": "Biología", "color": "#3f50b4" },
+  { "id": 2, "nombre": "Cívica", "color": "#e67d72" },
+  { "id": 3, "nombre": "Filosofía", "color": "#8f24ab" },
+  { "id": 4, "nombre": "Física", "color": "#0a8143" },
+  { "id": 5, "nombre": "Geografía", "color": "#7887cb" },
+  { "id": 6, "nombre": "Historia", "color": "#039ae4" },
+  { "id": 7, "nombre": "Inglés", "color": "#f7be26" },
+  { "id": 8, "nombre": "Lenguaje", "color": "#616161" },
+  { "id": 9, "nombre": "Literatura", "color": "#e67d72" },
+  { "id": 10, "nombre": "Matemática", "color": "#32b779" },
+  { "id": 11, "nombre": "Psicología", "color": "#8f24ab" },
+  { "id": 12, "nombre": "Química", "color": "#f7be26" },
+  { "id": 13, "nombre": "Raz. Lógico", "color": "#7887cb" },
+  { "id": 14, "nombre": "Raz. Matemático", "color": "#E35050" },
+  { "id": 15, "nombre": "Raz. Verbal", "color": "#9D00FF" }
+]
+

@@ -49,10 +49,14 @@ export const Gestionar = () => {
 
         {/* Contenido, centrado solo horizontalmente */}
         <div className="w-5/6 p-8 bg-white shadow-md rounded-lg h-[75vh] flex justify-center">
-          <div className="w-full">
+          <div className="w-full overflow-auto">
             {vistaActual === "usuarios" && <Usuarios />}
             {vistaActual === "salones" && <Salones />}
-            {vistaActual === "cursos" && <Cursos />}
+            {vistaActual === "cursos" && (
+              <div className="overflow-x-auto"> {/* Agrega este div */}
+                <Cursos />
+              </div>
+            )}
           </div>
         </div>
       </div>
