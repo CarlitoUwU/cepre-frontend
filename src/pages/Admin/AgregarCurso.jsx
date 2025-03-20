@@ -2,7 +2,10 @@
 import React, { useState } from "react";
 
 export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
-  const [nuevoCurso, setNuevoCurso] = useState({ nombre: "", color: "#000000" });
+  const [nuevoCurso, setNuevoCurso] = useState({
+    nombre: "",
+    color: "#000000",
+  });
 
   const handleChange = (e) => {
     setNuevoCurso({ ...nuevoCurso, [e.target.name]: e.target.value });
@@ -19,7 +22,9 @@ export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
   return (
     <div className="bg-gray-200 p-4 mt-18 flex justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">Agregar Nuevo Curso</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          Agregar Nuevo Curso
+        </h2>
 
         {/* Campo Curso */}
         <label className="block font-semibold">Curso:</label>

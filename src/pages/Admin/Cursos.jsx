@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import cursosData from "../../data/cursos.json";
 import { AgregarCurso } from "./AgregarCurso";
 import { Tabla } from "../../components/ui/Tabla";
+import { Button } from "../../components/ui/button";
 
 // Definimos el encabezado de la tabla fuera del componente
 const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
@@ -88,18 +89,8 @@ export const Cursos = () => {
       </>
     ) : (
       <div className="inline-flex gap-4">
-        <button
-          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
-          onClick={() => handleModificar(curso)}
-        >
-          Modificar
-        </button>
-        <button
-          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
-          onClick={() => handleBorrar(curso.id)}
-        >
-          Borrar
-        </button>
+        <Button onClick={() => handleModificar(curso)}>Modificar</Button>
+        <Button onClick={() => handleBorrar(curso.id)}>Borrar</Button>
       </div>
     );
   };
