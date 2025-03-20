@@ -18,12 +18,10 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
   const horas = listaSalones.flatMap(salon => salon.horas);
   const horaMinima = horas.length ? horas.map(h => h.hora_ini).sort()[0] : "07:00";
   const horaMaxima = horas.length ? horas.map(h => h.hora_fin).sort().at(-1) : "21:00";
-  
+
   const minIndex = horasIni.indexOf(horaMinima);
   const maxIndex = horasFin.indexOf(horaMaxima);
 
-  console.log({listaSalones, horas, horaMinima, horaMaxima, minIndex, maxIndex});
-  
   const getRow = horaIni => horasIni.indexOf(horaIni) - minIndex + 2;
   const getRowSpan = (horaIni, horaFin) => horasFin.indexOf(horaFin) - horasIni.indexOf(horaIni) + 1;
   const getColumn = dia => dias.indexOf(dia) + 2;
@@ -78,7 +76,7 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
               numHoras: salon.numHoras,
               enlace: salon.enlace,
             }}
-            nombre={salon.aula }
+            nombre={salon.aula}
             backgroundColor={areaColors[salon.area] || "#f4351c"}
             gridColumn={getColumn(hora.dia)}
             gridRow={getRow(hora.hora_ini)}
