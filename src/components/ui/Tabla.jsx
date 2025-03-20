@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Tabla = ({ encabezado, datos }) => {
+export const Tabla = ({ encabezado, datos, index_key = null }) => {
   return (
     <div className="overflow-x-auto">
       <table className="w-full border-collapse border border-gray-300 shadow-md rounded-lg">
@@ -14,13 +14,13 @@ export const Tabla = ({ encabezado, datos }) => {
           </tr>
         </thead>
         <tbody>
-          {datos.map((fila, index) => (
+          {datos.map((fila, i) => (
             <tr
-              key={index}
-              className={`${index % 2 === 0 ? "bg-[#F4F4F4]" : "bg-[#F6EDD8]"} font-[Calibri] font-medium`}
+              key={index_key ? fila[index_key] : i}
+              className={`${i % 2 === 0 ? "bg-[#F4F4F4]" : "bg-[#F6EDD8]"} font-[Calibri] font-medium`}
             >
-              {fila.map((item) => (
-                <td key={item} className="py-2 px-4 border-b border-gray-300" >
+              {fila.map((item, j) => (
+                <td key={i + '_' + j} className="py-2 px-4 border-b border-gray-300" >
                   {item}
                 </td>
               ))}
