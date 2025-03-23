@@ -32,7 +32,7 @@ export const Usuarios = () => {
   
   return (
     <div>
-      <Tabla encabezado={encabezado} datos={array} />
+      <Tabla encabezado={encabezado} datos={array} index_key={1}/>
       <h1>Gestión de Usuarios</h1>
     </div>
   );
