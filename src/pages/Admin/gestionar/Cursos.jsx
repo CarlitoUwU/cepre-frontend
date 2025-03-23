@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import cursosData from "../../data/cursos.json";
+import cursosData from "../../../data/cursos.json";
 import { AgregarCurso } from "./AgregarCurso";
-import { Tabla } from "../../components/ui/Tabla";
+import { Tabla } from "../../../components/ui/Tabla";
 
 // Definimos el encabezado de la tabla fuera del componente
 const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
