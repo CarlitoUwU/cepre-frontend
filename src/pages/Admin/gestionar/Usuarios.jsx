@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabla } from "../../components/ui/Tabla";
+import { Tabla } from "../../../components/ui/Tabla";
 
 const arrayObjetosDatos = [
   {

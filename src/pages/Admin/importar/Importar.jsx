@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { ButtonCabecera } from "../../components/ui/ButtonCabecera";
+import { ButtonCabecera } from "../../../components/ui/ButtonCabecera";
 import { useNavigate } from "react-router-dom";
-import CSV from "../../services/CSV";
+import CSV from "../../../services/CSV";
 
 const roles = {
   Profesor: "Profesor",
