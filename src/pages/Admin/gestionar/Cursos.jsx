@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import cursosData from "../../../data/cursos.json";
 import { AgregarCurso } from "./AgregarCurso";
 import { Tabla } from "../../../components/ui/Tabla";
+import { fetchCourses } from "../../../services/cursoServices";
 
 // Definimos el encabezado de la tabla fuera del componente
 const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
@@ -13,7 +14,8 @@ export const Cursos = () => {
   const [vistaActual, setVistaActual] = useState("lista"); // "lista" o "agregar"
 
   useEffect(() => {
-    setCursos(cursosData);
+    fetchCourses().then((data) => setCursos(data)).catch((error) => console.error(error));
+    //setCursos(cursosData);
   }, []);
 
   const handleModificar = (curso) => {
@@ -23,7 +25,7 @@ export const Cursos = () => {
 
   const handleGuardar = (id) => {
     setCursos(
-      cursos.map((curso) =>
+      cursos?.map((curso) =>
         curso.id === id ? { ...curso, nombre: formData.nombre, color: formData.color } : curso
       )
     );
@@ -32,7 +34,7 @@ export const Cursos = () => {
   };
 
   const handleCancelar = () => { setEditandoId(null); setFormData({ nombre: "", color: "" }); };
-  const handleBorrar = (id) => setCursos(cursos.filter((curso) => curso.id !== id));
+  const handleBorrar = (id) => setCursos(cursos?.filter((curso) => curso.id !== id));
 
   const handleAgregarCurso = (nuevoCurso) => {
     setCursos([...cursos, { id: cursos.length + 1, ...nuevoCurso }]);
@@ -41,7 +43,7 @@ export const Cursos = () => {
 
   // Generar los datos de la tabla
   const getDatosCursos = () => {
-    const data = cursos.map((curso) => [
+    const data = cursos?.map((curso) => [
       curso.id,
       editandoId === curso.id ? (
         <input
