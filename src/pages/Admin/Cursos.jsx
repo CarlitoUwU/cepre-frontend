@@ -74,18 +74,8 @@ export const Cursos = () => {
   const getAcciones = (curso) => {
     return editandoId === curso.id ? (
       <>
-        <button
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800"
-          onClick={() => handleGuardar(curso.id)}
-        >
-          Guardar
-        </button>
-        <button
-          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-800 ml-4"
-          onClick={handleCancelar}
-        >
-          Cancelar
-        </button>
+        <Button onClick={() => handleGuardar(curso.id)}>Guardar</Button>
+        <Button onClick={handleCancelar}>Cancelar</Button>
       </>
     ) : (
       <div className="inline-flex gap-4">
@@ -110,12 +100,7 @@ export const Cursos = () => {
 
         {/* Botón Agregar Curso */}
         <div className="flex justify-center mt-4">
-          <button
-            className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition"
-            onClick={() => setVistaActual("agregar")}
-          >
-            Agregar Cursos
-          </button>
+          <Button onClick={() => setVistaActual("agregar")}>Agregar Cursos</Button>
         </div>
       </div>
     </div>

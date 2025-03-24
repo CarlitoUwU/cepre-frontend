@@ -3,6 +3,7 @@ import horarioData from "../../data/horario.json";
 import { TablaHorarioMonitor } from "../../components/Horarios/indexMonitor";
 import meetIcon from "../../assets/meet.png";
 import classroomIcon from "../../assets/classroom.png";
+import { Button } from "../../components/ui/button";
 
 export const MonitorPanel = () => {
   const [horario, setHorario] = useState([]);
@@ -105,15 +106,11 @@ export const MonitorPanel = () => {
               <div className="grid grid-cols-5 mt-6">
                 <div></div> {/* Espacio 1 */}
                 <div className="flex justify-center"> {/* Espacio 2 */}
-                  <button onClick={() => openModal("meet")} className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition font-[Calibri]">
-                    Añadir Enlace Meet
-                  </button>
+                  <Button onClick={() => openModal("meet")}>Añadir Enlace Meet</Button>
                 </div>
                 <div></div> {/* Espacio 3 */}
                 <div className="flex justify-center"> {/* Espacio 4 */}
-                  <button onClick={() => openModal("classroom")} className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition font-[Calibri]">
-                    Añadir Enlace Classroom
-                  </button>
+                  <Button onClick={() => openModal("classroom")}>Añadir Enlace Classroom</Button>
                 </div>
                 <div></div> {/* Espacio 5 */}
               </div>
