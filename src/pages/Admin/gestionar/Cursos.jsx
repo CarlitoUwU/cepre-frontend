@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import cursosData from "../../../data/cursos.json";
 import { AgregarCurso } from "./AgregarCurso";
 import { Tabla } from "../../../components/ui/Tabla";
-import { fetchCourses } from "../../../services/cursoServices";
+import CursoService from "../../../services/cursoServices";
 
 // Definimos el encabezado de la tabla fuera del componente
 const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
@@ -14,8 +14,18 @@ export const Cursos = () => {
   const [vistaActual, setVistaActual] = useState("lista"); // "lista" o "agregar"
 
   useEffect(() => {
-    fetchCourses().then((data) => setCursos(data)).catch((error) => console.error(error));
-    //setCursos(cursosData);
+    const fetchAreas = async () => {
+      try {
+        const data = await CursoService.getCursos();
+        if (Array.isArray(data)) {
+          setCursos(data);
+        }
+      } catch (error) {
+        console.error("Error al obtener las áreas:", error);
+      }
+    };
+
+    fetchAreas();
   }, []);
 
   const handleModificar = (curso) => {
@@ -23,22 +33,52 @@ export const Cursos = () => {
     setFormData({ nombre: curso.nombre, color: curso.color });
   };
 
-  const handleGuardar = (id) => {
-    setCursos(
-      cursos?.map((curso) =>
-        curso.id === id ? { ...curso, nombre: formData.nombre, color: formData.color } : curso
-      )
-    );
-    setEditandoId(null);
-    setFormData({ nombre: "", color: "" });
+  const handleGuardar = async (id) => {
+    try {
+      const cursoActualizado = await CursoService.updateCurso({
+        id,
+        nombre: formData.nombre,
+        color: formData.color,
+      });
+
+      if (cursoActualizado) {
+        setCursos(
+          cursos.map((curso) =>
+            curso.id === id ? cursoActualizado : curso
+          )
+        );
+        setEditandoId(null);
+        setFormData({ nombre: "", color: "" });
+      }
+    } catch (error) {
+      console.error("Error al actualizar el curso:", error);
+    }
   };
 
-  const handleCancelar = () => { setEditandoId(null); setFormData({ nombre: "", color: "" }); };
-  const handleBorrar = (id) => setCursos(cursos?.filter((curso) => curso.id !== id));
 
-  const handleAgregarCurso = (nuevoCurso) => {
-    setCursos([...cursos, { id: cursos.length + 1, ...nuevoCurso }]);
-    setVistaActual("lista"); // Volver a la lista después de agregar
+  const handleCancelar = () => { setEditandoId(null); setFormData({ nombre: "", color: "" }); };
+  const handleBorrar = async (id) => {
+    try {
+      const eliminado = await CursoService.deleteCurso(id);
+      if (eliminado) {
+        setCursos(cursos.filter((curso) => curso.id !== id));
+      }
+    } catch (error) {
+      console.error("Error al eliminar el curso:", error);
+    }
+  };
+
+
+  const handleAgregarCurso = async (nuevoCurso) => {
+    try {
+      const cursoCreado = await CursoService.createCurso(nuevoCurso);
+      if (cursoCreado) {
+        setCursos([...cursos, cursoCreado]); // Agrega el curso devuelto por el backend
+        setVistaActual("lista");
+      }
+    } catch (error) {
+      console.error("Error al agregar el curso:", error);
+    }
   };
 
   // Generar los datos de la tabla
