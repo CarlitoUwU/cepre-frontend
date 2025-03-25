@@ -12,6 +12,7 @@ import { Publicar } from "./pages/Admin/publicar/Publicar";
 import { Home } from "./pages/Admin/Home";
 import { DocentePanel } from "./pages/Docente/DocentePanel";
 import { MonitorPanel } from "./pages/Monitor/MonitorPanel";
+import { EditarEnlace } from "./pages/Monitor/EditarEnlace"; 
 import { SupervisorPanel } from "./pages/Supervisor/SupervisorPanel";
 import { HorarioMonitorPanel } from "./pages/Supervisor/HorarioMonitorPanel";
 import { NotFound } from "./pages/NotFound";
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
       {
         path: "monitor",
         element: <MonitorPanel />, // Página de monitores
+      },
+      {
+        path: "monitor/editar-enlace",
+        element: <EditarEnlace />, // Página de edtar enlaces
       },
       {
         path: "supervisor",

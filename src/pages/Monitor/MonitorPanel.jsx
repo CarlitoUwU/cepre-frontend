@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import horarioData from "../../data/horario.json";
 import { TablaHorarioMonitor } from "../../components/Horarios/indexMonitor";
 import meetIcon from "../../assets/meet.png";
@@ -6,40 +7,32 @@ import classroomIcon from "../../assets/classroom.png";
 import { Button } from "../../components/ui/button";
 
 export const MonitorPanel = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [horario, setHorario] = useState([]);
   const [meetLink, setMeetLink] = useState("https://meet.google.com/byk-mjbz-qij");
   const [classroomLink, setClassroomLink] = useState("https://classroom.google.com/c/NzA1MzczMDAwNzIz");
-  const [showModal, setShowModal] = useState(false);
-  const [tempLink, setTempLink] = useState("");
-  const [linkType, setLinkType] = useState(""); // Para saber si se edita Meet o Classroom
 
   useEffect(() => {
     setHorario(horarioData);
   }, []);
 
-  const openModal = (type) => {
-    setLinkType(type);
-    setShowModal(true);
-  };
-
-  const closeModal = () => {
-    setShowModal(false);
-    setTempLink(""); // Limpiar campo
-  };
-
-  const saveLink = () => {
-    if (tempLink.trim() !== "") {
-      if (linkType === "meet") {
-        setMeetLink(tempLink);
-      } else if (linkType === "classroom") {
-        setClassroomLink(tempLink);
+  useEffect(() => {
+    if (location.state?.linkType && location.state?.newLink) {
+      if (location.state.linkType === "meet") {
+        setMeetLink(location.state.newLink);
+      } else if (location.state.linkType === "classroom") {
+        setClassroomLink(location.state.newLink);
       }
-      closeModal();
     }
-  };
+  }, [location.state]);
+
+  const openEditPage = (type, currentLink) => {
+    navigate(`/monitor/editar-enlace`, { state: { linkType: type, currentLink } });
+  };  
 
   return (
-    <div className="bg-gray-200 p-4 mt-18">
+    <div className="bg-gray-200 p-4 mt-25 m-5 text-center ">
       <div className="mx-auto bg-white p-4 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {/* Tabla de Cursos */}
@@ -106,11 +99,11 @@ export const MonitorPanel = () => {
               <div className="grid grid-cols-5 mt-6">
                 <div></div> {/* Espacio 1 */}
                 <div className="flex justify-center"> {/* Espacio 2 */}
-                  <Button onClick={() => openModal("meet")}>Añadir Enlace Meet</Button>
+                  <Button onClick={() => openEditPage("meet", meetLink)}>Añadir Enlace Meet</Button>
                 </div>
                 <div></div> {/* Espacio 3 */}
                 <div className="flex justify-center"> {/* Espacio 4 */}
-                  <Button onClick={() => openModal("classroom")}>Añadir Enlace Classroom</Button>
+                  <Button onClick={() => openEditPage("classroom", classroomLink)}>Añadir Enlace Classroom</Button>
                 </div>
                 <div></div> {/* Espacio 5 */}
               </div>
@@ -118,32 +111,6 @@ export const MonitorPanel = () => {
           </div>
         </div>
       </div>
-
-      {/* Modal para ingresar enlaces */}
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg">
-            <h3 className="text-lg font-semibold mb-4">
-              Ingresar enlace {linkType === "meet" ? "Meet" : "Classroom"}
-            </h3>
-            <input
-              type="text"
-              className="border border-gray-300 p-2 w-full rounded"
-              placeholder="Pegar enlace aquí..."
-              value={tempLink}
-              onChange={(e) => setTempLink(e.target.value)}
-            />
-            <div className="flex justify-end gap-2 mt-4">
-              <button onClick={closeModal} className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 transition">
-                Cancelar
-              </button>
-              <button onClick={saveLink} className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815] transition">
-                Guardar
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

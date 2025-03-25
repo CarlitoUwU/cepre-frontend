@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import cursosData from "../../../data/cursos.json";
 import { AgregarCurso } from "./AgregarCurso";
 import { Tabla } from "../../../components/ui/Tabla";
-import CursoService from "../../../services/cursoServices";
 
 // Definimos el encabezado de la tabla fuera del componente
 const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
@@ -14,18 +13,7 @@ export const Cursos = () => {
   const [vistaActual, setVistaActual] = useState("lista"); // "lista" o "agregar"
 
   useEffect(() => {
-    const fetchAreas = async () => {
-      try {
-        const data = await CursoService.getCursos();
-        if (Array.isArray(data)) {
-          setCursos(data);
-        }
-      } catch (error) {
-        console.error("Error al obtener las áreas:", error);
-      }
-    };
-
-    fetchAreas();
+    setCursos(cursosData);
   }, []);
 
   const handleModificar = (curso) => {
@@ -33,57 +21,27 @@ export const Cursos = () => {
     setFormData({ nombre: curso.nombre, color: curso.color });
   };
 
-  const handleGuardar = async (id) => {
-    try {
-      const cursoActualizado = await CursoService.updateCurso({
-        id,
-        nombre: formData.nombre,
-        color: formData.color,
-      });
-
-      if (cursoActualizado) {
-        setCursos(
-          cursos.map((curso) =>
-            curso.id === id ? cursoActualizado : curso
-          )
-        );
-        setEditandoId(null);
-        setFormData({ nombre: "", color: "" });
-      }
-    } catch (error) {
-      console.error("Error al actualizar el curso:", error);
-    }
+  const handleGuardar = (id) => {
+    setCursos(
+      cursos.map((curso) =>
+        curso.id === id ? { ...curso, nombre: formData.nombre, color: formData.color } : curso
+      )
+    );
+    setEditandoId(null);
+    setFormData({ nombre: "", color: "" });
   };
-
 
   const handleCancelar = () => { setEditandoId(null); setFormData({ nombre: "", color: "" }); };
-  const handleBorrar = async (id) => {
-    try {
-      const eliminado = await CursoService.deleteCurso(id);
-      if (eliminado) {
-        setCursos(cursos.filter((curso) => curso.id !== id));
-      }
-    } catch (error) {
-      console.error("Error al eliminar el curso:", error);
-    }
-  };
+  const handleBorrar = (id) => setCursos(cursos.filter((curso) => curso.id !== id));
 
-
-  const handleAgregarCurso = async (nuevoCurso) => {
-    try {
-      const cursoCreado = await CursoService.createCurso(nuevoCurso);
-      if (cursoCreado) {
-        setCursos([...cursos, cursoCreado]); // Agrega el curso devuelto por el backend
-        setVistaActual("lista");
-      }
-    } catch (error) {
-      console.error("Error al agregar el curso:", error);
-    }
+  const handleAgregarCurso = (nuevoCurso) => {
+    setCursos([...cursos, { id: cursos.length + 1, ...nuevoCurso }]);
+    setVistaActual("lista"); // Volver a la lista después de agregar
   };
 
   // Generar los datos de la tabla
   const getDatosCursos = () => {
-    const data = cursos?.map((curso) => [
+    const data = cursos.map((curso) => [
       curso.id,
       editandoId === curso.id ? (
         <input
@@ -115,13 +73,33 @@ export const Cursos = () => {
   const getAcciones = (curso) => {
     return editandoId === curso.id ? (
       <>
-        <Button onClick={() => handleGuardar(curso.id)}>Guardar</Button>
-        <Button onClick={handleCancelar}>Cancelar</Button>
+        <button
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800"
+          onClick={() => handleGuardar(curso.id)}
+        >
+          Guardar
+        </button>
+        <button
+          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-800 ml-4"
+          onClick={handleCancelar}
+        >
+          Cancelar
+        </button>
       </>
     ) : (
       <div className="inline-flex gap-4">
-        <Button onClick={() => handleModificar(curso)}>Modificar</Button>
-        <Button onClick={() => handleBorrar(curso.id)}>Borrar</Button>
+        <button
+          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
+          onClick={() => handleModificar(curso)}
+        >
+          Modificar
+        </button>
+        <button
+          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
+          onClick={() => handleBorrar(curso.id)}
+        >
+          Borrar
+        </button>
       </div>
     );
   };
@@ -141,7 +119,12 @@ export const Cursos = () => {
 
         {/* Botón Agregar Curso */}
         <div className="flex justify-center mt-4">
-          <Button onClick={() => setVistaActual("agregar")}>Agregar Cursos</Button>
+          <button
+            className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition"
+            onClick={() => setVistaActual("agregar")}
+          >
+            Agregar Cursos
+          </button>
         </div>
       </div>
     </div>
