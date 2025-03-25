@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "../../components/ui/button";
 
 export const EditarEnlace = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const EditarEnlace = () => {
   };  
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-200">
+    <div className="flex items-center justify-center h-screen bg-gray-200 m-5">
       <div className="bg-white p-6 rounded shadow-lg w-96">
         <h3 className="text-lg font-semibold mb-4">
           Ingresar enlace {linkType === "meet" ? "Meet" : "Classroom"}
@@ -34,12 +35,7 @@ export const EditarEnlace = () => {
           >
             Cancelar
           </button>
-          <button
-            onClick={saveLink}
-            className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815] transition"
-          >
-            Guardar
-          </button>
+          <Button onClick={saveLink}>Guardar</Button>
         </div>
       </div>
     </div>

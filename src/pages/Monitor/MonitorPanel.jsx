@@ -32,7 +32,7 @@ export const MonitorPanel = () => {
   };  
 
   return (
-    <div className="bg-gray-200 p-4 mt-25 m-5 text-center ">
+    <div className="bg-gray-200 p-4 mt-25 m-5 text-center">
       <div className="mx-auto bg-white p-4 rounded-lg shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           {/* Tabla de Cursos */}
