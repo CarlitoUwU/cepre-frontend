@@ -3,7 +3,7 @@ import api from "./api";
 const CursoService = {
   /**
    * Obtiene la lista de cursos.
-   * @returns {Promise<Array<{ id: number, nombre: string, color: string }>> | null}
+   * @returns {Promise<Array<{ id: number, name: string, color: string }>> | null}
    */
   async getCursos() {
     try {
@@ -12,7 +12,7 @@ const CursoService = {
 
       const dataFormat = data.map(curso => ({
         id: curso.id,
-        nombre: curso.name,
+        name: curso.name,
         color: curso.description ?? "#3f50b4",
       }))
       console.log({ dataFormat });
@@ -25,21 +25,44 @@ const CursoService = {
   },
 
   /**
- * Crea un nuevo curso.
- * @param {Object} newCurso - Datos del curso a crear.
- * @param {string} newCurso.nombre - Nombre del curso.
- * @param {string} [newCurso.color] - Color del curso (por defecto: `#3f50b4`).
- * @returns {Promise<Object | null>}
- */
-
-  async createCurso({ nombre, color = "#3f50b4" }) {
+   * Obtiene un curso por su ID.
+   * @param {number} id - ID del curso a obtener.
+   * @returns {Promise<Object | null>}
+   */
+  async getCursoById(id) {
     try {
-      console.log({ nombre, color });
-      const response = await api.post('/areas', { name:nombre, description:color });
+      const response = await api.get(`/areas/${id}`);
       const data = response.data;
       const dataFormat = {
         id: data.id,
-        nombre: data.name,
+        name: data.name,
+        color: data.description ?? "#3f50b4",
+      }
+
+      console.log({ dataFormat });
+
+      return dataFormat;
+    } catch (e) {
+      console.error("Error al obtener el curso", e.message, e);
+      return null;
+    }
+  },
+
+  /**
+   * Crea un nuevo curso.
+   * @param {Object} newCurso - Datos del curso a crear.
+   * @param {string} newCurso.name - Nombre del curso.
+   * @param {string} [newCurso.color] - Color del curso (por defecto: `#3f50b4`).
+   * @returns {Promise<Object | null>}
+   */
+  async createCurso({ nombre, color = "#3f50b4" }) {
+    try {
+      console.log({ nombre, color });
+      const response = await api.post('/areas', { name, description: color });
+      const data = response.data;
+      const dataFormat = {
+        id: data.id,
+        name: data.name,
         color: data.description ?? "#3f50b4",
       }
 
@@ -53,21 +76,20 @@ const CursoService = {
   },
 
   /**
-  * Actualiza un curso por su ID.
-  * @param {Object} curso - Datos del curso a actualizar.
-  * @param {number} curso.id - ID del curso a actualizar.
-  * @param {string} curso.nombre - Nombre del curso.
-  * @param {string} [curso.color] - Color del curso (por defecto: `#3f50b4`).
-  * @returns {Promise<Object | null>}
-  */
-
-  async updateCurso({ id, nombre, color = "#3f50b4" }) {
+   * Actualiza un curso por su ID.
+   * @param {Object} curso - Datos del curso a actualizar.
+   * @param {number} curso.id - ID del curso a actualizar.
+   * @param {string} curso.name - Nombre del curso.
+   * @param {string} [curso.color] - Color del curso (por defecto: `#3f50b4`).
+   * @returns {Promise<Object | null>}
+   */
+  async updateCurso({ id, name, color = "#3f50b4" }) {
     try {
-      const response = await api.put(`/areas/${id}`, { name: nombre, description: color });
+      const response = await api.put(`/areas/${id}`, { name, description: color });
       const data = response.data;
       const dataFormat = {
         id: data.id,
-        nombre: data.name,
+        name: data.name,
         color: data.description ?? "#3f50b4",
       }
 

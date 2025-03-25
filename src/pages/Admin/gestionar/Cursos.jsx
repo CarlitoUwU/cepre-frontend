@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import cursosData from "../../../data/cursos.json";
+// import cursosData from "../../../data/cursos.json";
 import { AgregarCurso } from "./AgregarCurso";
 import { Tabla } from "../../../components/ui/Tabla";
 import CursoService from "../../../services/cursoServices";
@@ -10,7 +10,7 @@ const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
 export const Cursos = () => {
   const [cursos, setCursos] = useState([]);
   const [editandoId, setEditandoId] = useState(null);
-  const [formData, setFormData] = useState({ nombre: "", color: "" });
+  const [formData, setFormData] = useState({ name: "", color: "" });
   const [vistaActual, setVistaActual] = useState("lista"); // "lista" o "agregar"
 
   useEffect(() => {
@@ -30,14 +30,14 @@ export const Cursos = () => {
 
   const handleModificar = (curso) => {
     setEditandoId(curso.id);
-    setFormData({ nombre: curso.nombre, color: curso.color });
+    setFormData({ name: curso.name, color: curso.color });
   };
 
   const handleGuardar = async (id) => {
     try {
       const cursoActualizado = await CursoService.updateCurso({
         id,
-        nombre: formData.nombre,
+        name: formData.name,
         color: formData.color,
       });
 
@@ -48,7 +48,7 @@ export const Cursos = () => {
           )
         );
         setEditandoId(null);
-        setFormData({ nombre: "", color: "" });
+        setFormData({ name: "", color: "" });
       }
     } catch (error) {
       console.error("Error al actualizar el curso:", error);
@@ -56,7 +56,7 @@ export const Cursos = () => {
   };
 
 
-  const handleCancelar = () => { setEditandoId(null); setFormData({ nombre: "", color: "" }); };
+  const handleCancelar = () => { setEditandoId(null); setFormData({ name: "", color: "" }); };
   const handleBorrar = async (id) => {
     try {
       const eliminado = await CursoService.deleteCurso(id);
@@ -88,12 +88,12 @@ export const Cursos = () => {
       editandoId === curso.id ? (
         <input
           type="text"
-          value={formData.nombre}
-          onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+          value={formData.name}
+          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
           className="border p-1 w-full"
         />
       ) : (
-        curso.nombre
+        curso.name
       ),
       editandoId === curso.id ? (
         <input
