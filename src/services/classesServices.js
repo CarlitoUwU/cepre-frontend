@@ -1,4 +1,5 @@
 import api from "./api";
+const token = localStorage.getItem("token");
 
 const ClassesServices = {
   /**
@@ -7,7 +8,14 @@ const ClassesServices = {
    */
   async getClasses() {
     try {
-      const response = await api.get('/classes');
+      console.log("Obteniendo las classes...");
+      console.log({ token });
+      const response = await api.get("/classes", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       const data = response.data
       console.log({ data });
 

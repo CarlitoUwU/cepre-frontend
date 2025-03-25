@@ -1,4 +1,5 @@
 import api from "./api";
+const token = localStorage.getItem("token");
 
 const CursoService = {
   /**
@@ -7,7 +8,14 @@ const CursoService = {
    */
   async getCursos() {
     try {
-      const response = await api.get('/areas');
+      console.log("Obteniendo los cursos...");
+      console.log({ token });
+      const response = await api.get("/courses", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
       const data = response.data ?? [];
 
       const dataFormat = data.map(curso => ({

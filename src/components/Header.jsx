@@ -1,7 +1,7 @@
 import React from "react";
 import { FaSignOutAlt } from "react-icons/fa";
 import unsaLogo from "../assets/Unsa_logo.png";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
