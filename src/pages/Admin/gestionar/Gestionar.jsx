@@ -13,7 +13,7 @@ export const Gestionar = () => {
   const navigate = useNavigate(); // Hook para la navegación
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[50vh]">
       {/* Contenedor principal */}
       <div className="flex h-[85vh]">
         {/* Barra lateral */}
