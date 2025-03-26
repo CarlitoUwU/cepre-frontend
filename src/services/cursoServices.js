@@ -1,4 +1,4 @@
-import api from "./api";
+import { request } from "./api";
 
 const CursoService = {
   /**
@@ -6,7 +6,7 @@ const CursoService = {
    * @returns {Promise<Array<{ id: number, name: string, color: string }>> | null}
    */
   async getCursos() {
-    return this._request("get", "/courses", null, true);
+    return request("get", "/courses", null, true);
   },
 
   /**
@@ -17,7 +17,7 @@ const CursoService = {
    */
   async getCursoById(id) {
     if (!id || typeof id !== "number") throw new Error("ID inválido");
-    return this._request("get", `/courses/${id}`);
+    return request("get", `/courses/${id}`);
   },
 
   /**
@@ -30,7 +30,7 @@ const CursoService = {
    */
   async createCurso({ name, color = "#3f50b4", description = "Sin descripción" }) {
     if (!name) throw new Error("El nombre del curso es obligatorio.");
-    return this._request("post", "/courses", { name, color, description });
+    return request("post", "/courses", { name, color, description });
   },
 
   /**
@@ -44,7 +44,7 @@ const CursoService = {
    */
   async updateCurso({ id, name, color = "#3f50b4", description = "Sin descripción" }) {
     if (!id) throw new Error("El ID del curso es obligatorio.");
-    return this._request("put", `/courses/${id}`, { name, color, description });
+    return request("put", `/courses/${id}`, { name, color, description });
   },
 
   /**
@@ -55,36 +55,7 @@ const CursoService = {
    */
   async deleteCurso(id) {
     if (!id) throw new Error("El ID del curso es obligatorio.");
-    return this._request("delete", `/courses/${id}`);
-  },
-
-  /**
-   * Función genérica para manejar peticiones HTTP.
-   * @private
-   * @param {"get" | "post" | "put" | "delete"} method - Método HTTP de la petición.
-   * @param {string} url - Endpoint de la API.
-   * @param {Object} [data={}] - Datos a enviar en la petición.
-   * @param {boolean} [isList=false] - Indica si la respuesta es una lista y debe ordenarse.
-   * @returns {Promise<any | null>}
-   */
-  async _request(method, url, data = {}, isList = false) {
-    try {
-      const response = await api[method](url, data);
-      let result = response.data;
-
-      if (isList && Array.isArray(result)) {
-        result.sort((a, b) => a.id - b.id);
-      }
-
-      return result;
-    } catch (e) {
-      console.error("Error en la petición", {
-        method,
-        status: e.response?.status,
-        message: e.response?.data?.message || e.message,
-      });
-      return null;
-    }
+    return request("delete", `/courses/${id}`);
   },
 };
 
