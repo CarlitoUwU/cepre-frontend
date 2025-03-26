@@ -1,5 +1,7 @@
 // src/pages/Admin/AgregarCurso.jsx
 import React, { useState } from "react";
+import { Button } from "../../../components/ui/Button";
+import { ButtonNegative } from "../../../components/ui/ButtonNegative";
 
 export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
   const [nuevoCurso, setNuevoCurso] = useState({
@@ -48,18 +50,8 @@ export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
 
     {/* Botones */}
     <div className="flex justify-between">
-      <button
-        className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
-        onClick={() => setVistaActual("lista")}
-      >
-        Atrás
-      </button>
-      <button
-        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-        onClick={handleCrearCurso}
-      >
-        Crear Curso
-      </button>
+      <ButtonNegative onClick={() => setVistaActual("lista")} > Atrás </ButtonNegative>
+      <Button onClick={handleCrearCurso}> Crear Curso </Button>
     </div>
   </div>
 </div>

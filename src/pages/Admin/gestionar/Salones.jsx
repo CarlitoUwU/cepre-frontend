@@ -63,7 +63,7 @@ export const Salones = () => {
   }
 
   return (
-    <div className="overflow-x-auto bg-gray-200 p-4">
+    <div className="overflow-x-auto">
       <div className="mx-auto bg-white p-4 rounded-lg shadow-lg">
         <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE CURSOS</h2>
 

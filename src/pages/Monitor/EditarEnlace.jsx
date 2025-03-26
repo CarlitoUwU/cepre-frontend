@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button } from "../../components/ui/button";
+import { Button } from "../../components/ui/Button";
+import { ButtonNegative } from "../../components/ui/ButtonNegative";
 
 export const EditarEnlace = () => {
   const navigate = useNavigate();
@@ -29,12 +30,7 @@ export const EditarEnlace = () => {
           onChange={(e) => setTempLink(e.target.value)}
         />
         <div className="flex justify-end gap-2 mt-4">
-          <button
-            onClick={() => navigate("/monitor")}
-            className="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500 transition"
-          >
-            Cancelar
-          </button>
+          <ButtonNegative onClick={() => navigate("/monitor")}>Cancelar</ButtonNegative>
           <Button onClick={saveLink}>Guardar</Button>
         </div>
       </div>
