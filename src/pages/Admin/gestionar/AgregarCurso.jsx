@@ -2,14 +2,14 @@
 import React, { useState } from "react";
 
 export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
-  const [nuevoCurso, setNuevoCurso] = useState({ nombre: "", color: "#000000" });
+  const [nuevoCurso, setNuevoCurso] = useState({ name: "", color: "#000000" });
 
   const handleChange = (e) => {
     setNuevoCurso({ ...nuevoCurso, [e.target.name]: e.target.value });
   };
 
   const handleCrearCurso = () => {
-    if (nuevoCurso.nombre.trim() === "") {
+    if (nuevoCurso.name.trim() === "") {
       alert("El nombre del curso no puede estar vacío.");
       return;
     }
@@ -25,8 +25,8 @@ export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
         <label className="block font-semibold">Curso:</label>
         <input
           type="text"
-          name="nombre"
-          value={nuevoCurso.nombre}
+          name="name"
+          value={nuevoCurso.name}
           onChange={handleChange}
           className="border p-2 w-full mb-3 rounded"
         />
