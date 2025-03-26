@@ -41,7 +41,7 @@ export const Cursos = () => {
 
   // Generar los datos de la tabla
   const getDatosCursos = () => {
-    const data = cursos.map((curso) => [
+    return cursos.map((curso) => [
       curso.id,
       editandoId === curso.id ? (
         <input
@@ -65,8 +65,6 @@ export const Cursos = () => {
       ),
       getAcciones(curso),
     ]);
-
-    return data;
   };
 
   // Generar las acciones para cada fila
@@ -114,16 +112,15 @@ export const Cursos = () => {
         <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE CURSOS</h2>
 
         {/* Tabla reutilizable */}
-
         <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
 
-        {/* Botón Agregar Curso */}
-        <div className="flex justify-center mt-4">
+        {/* Botón Agregar Curso con nuevo diseño */}
+        <div className="fixed bottom-8 right-8 z-50">
           <button
-            className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition"
+            className="bg-[#0077B6] text-white font-bold px-6 py-4 rounded-full shadow-lg border-4 border-white hover:bg-[#005B8F] hover:scale-105 transition-all flex items-center gap-2"
             onClick={() => setVistaActual("agregar")}
           >
-            Agregar Cursos
+            + Agregar Curso
           </button>
         </div>
       </div>

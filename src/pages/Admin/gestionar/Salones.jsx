@@ -34,7 +34,6 @@ export const Salones = () => {
       aula.estado,
       getAcciones(aula),
     ]);
-
     return data;
   };
 
@@ -43,13 +42,13 @@ export const Salones = () => {
     return (
       <div className="inline-flex gap-4">
         <button
-          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
+          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#005B8F] transition-all"
           onClick={() => handleModificar(curso)}
         >
           Modificar
         </button>
         <button
-          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
+          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815] transition-all"
           onClick={() => handleBorrar(curso.id)}
         >
           Borrar
@@ -65,19 +64,18 @@ export const Salones = () => {
   return (
     <div className="overflow-x-auto bg-gray-200 p-4">
       <div className="mx-auto bg-white p-4 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE CURSOS</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE AULAS</h2>
 
         {/* Tabla reutilizable */}
-
         <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
 
-        {/* Botón Agregar Curso */}
-        <div className="flex justify-center mt-4">
+        {/* Botón Agregar Aula con nuevo diseño */}
+        <div className="fixed bottom-8 right-8 z-50">
           <button
-            className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition"
+            className="bg-[#0077B6] text-white font-bold px-6 py-4 rounded-full shadow-lg border-4 border-white hover:bg-[#005B8F] hover:scale-105 transition-all flex items-center gap-2"
             onClick={() => setVistaActual("agregar")}
           >
-            Agregar Cursos
+            + Agregar Aula
           </button>
         </div>
       </div>
