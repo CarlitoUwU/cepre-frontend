@@ -96,8 +96,8 @@ export const Salones = () => {
       {/* Tabla reutilizable */}
       <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} />
 
-      {/* Botón Agregar Salón */}
-      <div className="flex justify-center mt-4">
+      {/* Botón fijo centrado sin que el div sea más grande de lo necesario */}
+      <div className="fixed bottom-12 left-5/9 w-fit">
         <Button onClick={() => setVistaActual("agregar")}>Agregar Salón</Button>
       </div>
     </div>

@@ -124,9 +124,13 @@ export const Cursos = () => {
     <div className="overflow-x-auto w-full text-center">
       <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE CURSOS</h2>
       <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
-      <div className="flex justify-center mt-4">
-        <Button onClick={() => setVistaActual("agregar")}> Agregar Curso </Button>
+      
+      {/* Botón fijo centrado sin que el div sea más grande de lo necesario */}
+      <div className="fixed bottom-12 left-5/9 w-fit">
+        <Button onClick={() => setVistaActual("agregar")}>Agregar Curso</Button>
       </div>
     </div>
   );
+  
+  
 };

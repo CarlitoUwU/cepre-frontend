@@ -50,13 +50,11 @@ export const Gestionar = () => {
     </Button>
   </div>
 </div>
-
-
       {/* Espacio más pequeño en pantallas grandes */}
       <div className="hidden md:block mx-3"></div>
 
       {/* Contenido principal */}
-      <div className="w-full md:w-5/6 shadow-md rounded-lg flex-grow flex overflow-auto bg-gray-200 p-4">
+      <div className="w-full md:w-5/6 shadow-md rounded-lg flex-grow flex overflow-auto bg-gray-200 p-4 pb-15">
         {componentes[vistaActual]}
       </div>
     </div>
