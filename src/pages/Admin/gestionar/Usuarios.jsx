@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Tabla } from "../../../components/ui/Tabla";
 import { ButtonCabecera } from "../../../components/ui/ButtonCabecera";
+import { Button } from "../../../components/ui/Button";
+import { ButtonNegative } from "../../../components/ui/ButtonNegative";
 
 // Definir roles
 const roles = {
@@ -73,11 +75,11 @@ export const Usuarios = () => {
   // Definir encabezados de la tabla
   let encabezado = [];
   if (rol === roles.Docente) {
-    encabezado = ["#", "Curso", "Nombres y Apellidos", "Correo", "Número", "Acciones"];
+    encabezado = ["N°", "Curso", "Nombres y Apellidos", "Correo", "Número", "Acciones"];
   } else if (rol === roles.Monitor) {
-    encabezado = ["#", "Salón", "Nombres y Apellidos", "Correo", "Número", "Acciones"];
+    encabezado = ["N°", "Salón", "Nombres y Apellidos", "Correo", "Número", "Acciones"];
   } else if (rol === roles.Supervisor) {
-    encabezado = ["#", "Nombres y Apellidos", "Correo", "Número", "Acciones"];
+    encabezado = ["N°", "Nombres y Apellidos", "Correo", "Número", "Acciones"];
   }
 
   // Generar los datos para la tabla con botones de acción
@@ -87,25 +89,10 @@ export const Usuarios = () => {
     const acciones = (
       <div className="flex gap-2 justify-center">
         {rol === roles.Docente && (
-          <button
-            className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
-            onClick={() => handleAsignarSalon(idUsuario)}
-          >
-            Asignar Salón
-          </button>
+          <Button onClick={() => handleAsignarSalon(idUsuario)}>Asignar Salón</Button>
         )}
-        <button
-          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
-          onClick={() => handleModificar(idUsuario)}
-        >
-          Modificar
-        </button>
-        <button
-          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
-          onClick={() => handleBorrar(idUsuario)}
-        >
-          Borrar
-        </button>
+        <Button onClick={() => handleModificar(idUsuario)}>Modificar</Button>
+        <ButtonNegative onClick={() => handleBorrar(idUsuario)}>Borrar</ButtonNegative>
       </div>
     );
 
@@ -119,8 +106,7 @@ export const Usuarios = () => {
   });
 
   return (
-    <div className="p-4 bg-gray-200 relative">
-      <div className="bg-white p-4 rounded-lg shadow-lg relative">
+    <div className="overflow-x-auto w-full text-center">
         <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE USUARIOS</h2>
 
         {/* Navegación de roles */}
@@ -152,6 +138,6 @@ export const Usuarios = () => {
           </button>
         </div>
       </div>
-    </div>
+
   );
 };
