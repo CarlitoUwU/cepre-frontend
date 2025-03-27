@@ -4,7 +4,7 @@ import escudo from "../../assets/escudo-unsa.jpeg";
 
 export const Login = () => {
   const handleLogin = () => {
-    window.location.href = "http://localhost:3000/api/auth/google";
+    window.location.href = `${import.meta.env.VITE_API_BACK_URL}/api/auth/google`;
   };
 
   return (
