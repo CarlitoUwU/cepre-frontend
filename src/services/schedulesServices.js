@@ -61,6 +61,13 @@ const ScheduleService = {
   async deleteSchedule(id) {
     if (!id) throw new Error("ID inválido");
     return request("delete", `/schedules/${id}`);
+  },
+
+  /**
+   * Carga horarios con cursos
+   */
+  async loadWithCourses() {
+    return request("post", "/schedules/load-with-courses");
   }
 
 };
