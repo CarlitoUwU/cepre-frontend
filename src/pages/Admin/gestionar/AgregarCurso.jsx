@@ -22,7 +22,7 @@ export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
   };
 
   return (
-    <div className="bg-gray-200 w-screen h-screen flex items-center justify-center">
+    <div className="bg-gray-200 w-screen flex items-center justify-center">
   <div className="bg-white p-6 rounded-lg shadow-lg w-96">
     <h2 className="text-2xl font-bold mb-4 text-center">
       Agregar Nuevo Curso

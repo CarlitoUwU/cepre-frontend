@@ -4,6 +4,7 @@ import { AgregarCurso } from "./AgregarCurso";
 import { Tabla } from "../../../components/ui/Tabla";
 import { Button } from "../../../components/ui/Button";
 import { ButtonNegative } from "../../../components/ui/ButtonNegative";
+import { Input } from "../../../components/ui/Input";
 
 const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
 
@@ -35,29 +36,33 @@ export const Cursos = () => {
 
   const getAcciones = (curso) =>
     editandoId === curso.id ? (
-      <>
+      <div className="inline-flex gap-10">
         <Button onClick={handleGuardar}> Guardar  </Button>  
         <ButtonNegative onClick={() => setEditandoId(null)}> Cancelar </ButtonNegative>
-      </>
+      </div>
     ) : (
-      <div className="inline-flex gap-4">
+      <div className="inline-flex gap-10">
         <Button onClick={() => handleModificar(curso)}> Modificar </Button>
         <ButtonNegative onClick={() => handleBorrar(curso.id)}>Borrar  </ButtonNegative>
       </div>
     );
 
-  const getDatosCursos = () => cursos.map(curso => [
-    curso.id,
-    editandoId === curso.id ? (
-      <input type="text" value={formData.nombre} onChange={(e) => setFormData({ ...formData, nombre: e.target.value })} className="border p-1 w-full" />
-    ) : curso.nombre,
-    editandoId === curso.id ? (
-      <input type="color" value={formData.color} onChange={(e) => setFormData({ ...formData, color: e.target.value })} className="w-10 h-6" />
-    ) : (
-      <div className="w-6 h-6 mx-auto rounded-full" style={{ backgroundColor: curso.color }}></div>
-    ),
-    getAcciones(curso),
-  ]);
+    const getDatosCursos = () =>
+      cursos.map((curso) => [
+        curso.id,
+        editandoId === curso.id ? (
+          <Input type="text" value={formData.nombre} onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}/>
+        ) : (
+          curso.nombre
+        ),
+        editandoId === curso.id ? (
+          <Input type="color" value={formData.color} onChange={(e) => setFormData({ ...formData, color: e.target.value })} className="w-10 h-6"/>
+        ) : (
+          <div className="w-6 h-6 mx-auto rounded-full" style={{ backgroundColor: curso.color }}></div>
+        ),
+        getAcciones(curso),
+      ]);
+    
 
   if (vistaActual === "agregar") {
     return <AgregarCurso onAgregarCurso={handleAgregarCurso} setVistaActual={setVistaActual} />;
