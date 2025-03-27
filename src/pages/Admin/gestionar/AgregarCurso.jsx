@@ -1,8 +1,13 @@
 // src/pages/Admin/AgregarCurso.jsx
 import React, { useState } from "react";
+import { Button } from "../../../components/ui/Button";
+import { ButtonNegative } from "../../../components/ui/ButtonNegative";
 
 export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
-  const [nuevoCurso, setNuevoCurso] = useState({ name: "", color: "#000000" });
+  const [nuevoCurso, setNuevoCurso] = useState({
+    name: "",
+    color: "#000000",
+  });
 
   const handleChange = (e) => {
     setNuevoCurso({ ...nuevoCurso, [e.target.name]: e.target.value });
@@ -17,9 +22,11 @@ export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
   };
 
   return (
-    <div className="bg-gray-200 p-4 mt-18 flex justify-center">
+    <div className="bg-gray-200 w-screen flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold mb-4 text-center">Agregar Nuevo Curso</h2>
+        <h2 className="text-2xl font-bold mb-4 text-center">
+          Agregar Nuevo Curso
+        </h2>
 
         {/* Campo Curso */}
         <label className="block font-semibold">Curso:</label>
@@ -43,18 +50,8 @@ export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
 
         {/* Botones */}
         <div className="flex justify-between">
-          <button
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700"
-            onClick={() => setVistaActual("lista")}
-          >
-            Atrás
-          </button>
-          <button
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
-            onClick={handleCrearCurso}
-          >
-            Crear Curso
-          </button>
+          <ButtonNegative onClick={() => setVistaActual("lista")} > Atrás </ButtonNegative>
+          <Button onClick={handleCrearCurso}> Crear Curso </Button>
         </div>
       </div>
     </div>
