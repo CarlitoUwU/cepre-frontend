@@ -1,123 +1,107 @@
 [
-    {
-      "aula": "B-101",
-      "monitor": "José Cusilayme García",
-      "area": "Biomédicas",
-      "correo": "jcusilaymeg@unsa.edu.pe",
-      "Número": "983194013",
-      "carrera": "Ing. de Sistemas"
-    },
-    {
-      "aula": "I-101",
-      "monitor": "Ana Lucía Paredes Torres",
-      "area": "Ingenierías",
-      "correo": "alparedest@unsa.edu.pe",
-      "Número": "983194014",
-      "carrera": "Ing. Civil"
-    },
-    {
-      "aula": "S-101",
-      "monitor": "Pedro Enrique Mendoza Rojas",
-      "area": "Ciencias Sociales",
-      "correo": "pemendozar@unsa.edu.pe",
-      "Número": "983194015",
-      "carrera": "Derecho"
-    },
-    {
-      "aula": "B-102",
-      "monitor": "Lucía Fernanda Quispe Ramos",
-      "area": "Biomédicas",
-      "correo": "lfquisper@unsa.edu.pe",
-      "Número": "983194016",
-      "carrera": "Medicina"
-    },
-    {
-      "aula": "I-102",
-      "monitor": "Carlos Joaquín Valdivia Luna",
-      "area": "Ciencias Exactas",
-      "correo": "cjvaldivial@unsa.edu.pe",
-      "Número": "983194017",
-      "carrera": "Matemáticas"
-    },
-    {
-      "aula": "S-102",
-      "monitor": "Diana Sofía Chávez Loayza",
-      "area": "Biomédicas",
-      "correo": "dschavezl@unsa.edu.pe",
-      "Número": "983194018",
-      "carrera": "Odontología"
-    },
-    {
-      "aula": "B-103",
-      "monitor": "Ricardo Augusto Salas Méndez",
-      "area": "Ingenierías",
-      "correo": "rasalasm@unsa.edu.pe",
-      "Número": "983194019",
-      "carrera": "Ing. Electrónica"
-    },
-    {
-      "aula": "I-103",
-      "monitor": "Sofía Natalia Rivas López",
-      "area": "Ciencias Sociales",
-      "correo": "snrivasl@unsa.edu.pe",
-      "Número": "983194020",
-      "carrera": "Trabajo Social"
-    },
-    {
-      "aula": "S-103",
-      "monitor": "Martín Eduardo Gutiérrez Torres",
-      "area": "Biomédicas",
-      "correo": "megutierrezt@unsa.edu.pe",
-      "Número": "983194021",
-      "carrera": "Enfermería"
-    },
-    {
-      "aula": "B-104",
-      "monitor": "Gabriela Alejandra López Paredes",
-      "area": "Ingenierías",
-      "correo": "galopezp@unsa.edu.pe",
-      "Número": "983194022",
-      "carrera": "Ing. Industrial"
-    },
-    {
-      "aula": "I-104",
-      "monitor": "Jorge Andrés Valdez Rivera",
-      "area": "Ciencias Exactas",
-      "correo": "javaldezr@unsa.edu.pe",
-      "Número": "983194023",
-      "carrera": "Física"
-    },
-    {
-      "aula": "S-104",
-      "monitor": "Valeria Camila Chávez Rojas",
-      "area": "Ciencias Sociales",
-      "correo": "vcchavezr@unsa.edu.pe",
-      "Número": "983194024",
-      "carrera": "Psicología"
-    },
-    {
-      "aula": "B-105",
-      "monitor": "Esteban Nicolás Ramos Silva",
-      "area": "Ingenierías",
-      "correo": "enramoss@unsa.edu.pe",
-      "Número": "983194025",
-      "carrera": "Ing. Mecánica"
-    },
-    {
-      "aula": "I-105",
-      "monitor": "Mariana Isabel Flores Gómez",
-      "area": "Biomédicas",
-      "correo": "mifloresg@unsa.edu.pe",
-      "Número": "983194026",
-      "carrera": "Nutrición"
-    },
-    {
-      "aula": "S-105",
-      "monitor": "Héctor Daniel Salazar Quispe",
-      "area": "Ciencias Exactas",
-      "correo": "hdsalazarq@unsa.edu.pe",
-      "Número": "983194027",
-      "carrera": "Química"
-    }
-  ]
-  
+  {
+    "aula": "B-101",
+    "monitor": "José Cusilayme García",
+    "correo": "jcusilaymeg@unsa.edu.pe",
+    "Número": "983194013",
+    "carrera": "Ing. de Sistemas"
+  },
+  {
+    "aula": "I-101",
+    "monitor": "Ana Lucía Paredes Torres",
+    "correo": "alparedest@unsa.edu.pe",
+    "Número": "983194014",
+    "carrera": "Ing. Civil"
+  },
+  {
+    "aula": "S-101",
+    "monitor": "Pedro Enrique Mendoza Rojas",
+    "correo": "pemendozar@unsa.edu.pe",
+    "Número": "983194015",
+    "carrera": "Derecho"
+  },
+  {
+    "aula": "B-102",
+    "monitor": "Lucía Fernanda Quispe Ramos",
+    "correo": "lfquisper@unsa.edu.pe",
+    "Número": "983194016",
+    "carrera": "Medicina"
+  },
+  {
+    "aula": "I-102",
+    "monitor": "Carlos Joaquín Valdivia Luna",
+    "correo": "cjvaldivial@unsa.edu.pe",
+    "Número": "983194017",
+    "carrera": "Matemáticas"
+  },
+  {
+    "aula": "S-102",
+    "monitor": "Diana Sofía Chávez Loayza",
+    "correo": "dschavezl@unsa.edu.pe",
+    "Número": "983194018",
+    "carrera": "Odontología"
+  },
+  {
+    "aula": "B-103",
+    "monitor": "Ricardo Augusto Salas Méndez",
+    "correo": "rasalasm@unsa.edu.pe",
+    "Número": "983194019",
+    "carrera": "Ing. Electrónica"
+  },
+  {
+    "aula": "I-103",
+    "monitor": "Sofía Natalia Rivas López",
+    "correo": "snrivasl@unsa.edu.pe",
+    "Número": "983194020",
+    "carrera": "Trabajo Social"
+  },
+  {
+    "aula": "S-103",
+    "monitor": "Martín Eduardo Gutiérrez Torres",
+    "correo": "megutierrezt@unsa.edu.pe",
+    "Número": "983194021",
+    "carrera": "Enfermería"
+  },
+  {
+    "aula": "B-104",
+    "monitor": "Gabriela Alejandra López Paredes",
+    "correo": "galopezp@unsa.edu.pe",
+    "Número": "983194022",
+    "carrera": "Ing. Industrial"
+  },
+  {
+    "aula": "I-104",
+    "monitor": "Jorge Andrés Valdez Rivera",
+    "correo": "javaldezr@unsa.edu.pe",
+    "Número": "983194023",
+    "carrera": "Física"
+  },
+  {
+    "aula": "S-104",
+    "monitor": "Valeria Camila Chávez Rojas",
+    "correo": "vcchavezr@unsa.edu.pe",
+    "Número": "983194024",
+    "carrera": "Psicología"
+  },
+  {
+    "aula": "B-105",
+    "monitor": "Esteban Nicolás Ramos Silva",
+    "correo": "enramoss@unsa.edu.pe",
+    "Número": "983194025",
+    "carrera": "Ing. Mecánica"
+  },
+  {
+    "aula": "I-105",
+    "monitor": "Mariana Isabel Flores Gómez",
+    "correo": "mifloresg@unsa.edu.pe",
+    "Número": "983194026",
+    "carrera": "Nutrición"
+  },
+  {
+    "aula": "S-105",
+    "monitor": "Héctor Daniel Salazar Quispe",
+    "correo": "hdsalazarq@unsa.edu.pe",
+    "Número": "983194027",
+    "carrera": "Química"
+}
+]
