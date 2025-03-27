@@ -38,9 +38,9 @@ export const Tabla = ({ encabezado, datos, index_key = null, filtroDic = {} }) =
     <div className="overflow-x-auto relative">
       <table className="w-full border-collapse border border-gray-300 shadow-md rounded-lg">
         <thead>
-          <tr className="bg-[#78211E] text-white font-extrabold">
+          <tr className="bg-[#78211E] text-white font-extrabold text-center">
             {encabezado.map((item, index) => (
-              <th key={index} className="py-2 px-4 border-b border-gray-300 relative text-center">
+              <th key={index} className="py-3 px-6 border-b border-gray-300 relative">
                 {filtroDic[index] ? (
                   <div className="inline-flex items-center gap-2 relative">
                     <p>{item}</p>
@@ -75,9 +75,9 @@ export const Tabla = ({ encabezado, datos, index_key = null, filtroDic = {} }) =
         <tbody>
           {datosFiltrados.length > 0 ? (
             datosFiltrados.map((fila, i) => (
-              <tr key={index_key ? fila[index_key] : i} className={`${i % 2 === 0 ? "bg-[#F4F4F4]" : "bg-[#F6EDD8]"}`}>
+              <tr key={index_key ? fila[index_key] : i} className={`${i % 2 === 0 ? "bg-[#F4F4F4]" : "bg-[#F6EDD8]"} text-center`}>
                 {fila.map((item, j) => (
-                  <td key={`${i}_${j}`} className="py-2 px-4 border-b border-gray-300">
+                  <td key={`${i}_${j}`} className="py-3 px-6 border-b border-gray-300">
                     {item}
                   </td>
                 ))}

@@ -1,42 +1,11 @@
 import React from "react";
-import logo from "../assets/Unsa_Logo.png";
-import escudo from "../assets/escudo-unsa.jpeg";
+import logo from "../../assets/Unsa_logo.png";
+import escudo from "../../assets/escudo-unsa.jpeg";
 
 export const Login = () => {
-
   const handleLogin = () => {
-    // Escuchar el mensaje antes de abrir la ventana emergente
-    const messageListener = (event) => {
-      console.log({ event })
-      //debugger;
-      if (event.origin !== "http://localhost:3000") return; // Asegurar que el mensaje viene del frontend
-
-      if (event.data === "auth-success") {
-        window.location.href = "/admin"; // Redirige la pestaña original
-      }
-
-      window.removeEventListener("message", messageListener); // Eliminar listener después de recibir el mensaje
-    };
-
-    window.addEventListener("message", messageListener);
-
-    // Abrir la ventana emergente
-    const authWindow = window.open(
-      "http://localhost:3000/api/auth/google",
-      "authPopup",
-      "width=500,height=600"
-    );
-
-    // Revisar periódicamente si la ventana emergente se cerró
-    const checkPopup = setInterval(() => {
-      if (!authWindow || authWindow.closed) {
-        clearInterval(checkPopup);
-        window.location.reload(); // Recargar la app para verificar la cookie JWT
-      }
-    }, 1000);
+    window.location.href = "http://localhost:3000/api/auth/google";
   };
-
-
 
   return (
     <div className="h-screen p-5 flex flex-col items-left justify-center space-y-10">
