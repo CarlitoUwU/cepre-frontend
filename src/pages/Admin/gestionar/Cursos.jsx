@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-// import cursosData from "../../../data/cursos.json";
 import { AgregarCurso } from "./AgregarCurso";
 import { Tabla } from "../../../components/ui/Tabla";
 import { Button } from "../../../components/ui/Button";
@@ -105,20 +104,10 @@ export const Cursos = () => {
   // Generar las acciones para cada fila
   const getAcciones = (curso) => {
     return editandoId === curso.id ? (
-      <>
-        <button
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800"
-          onClick={() => handleGuardar(curso.id)}
-        >
-          Guardar
-        </button>
-        <button
-          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-800 ml-4"
-          onClick={handleCancelar}
-        >
-          Cancelar
-        </button>
-      </>
+      <div className="inline-flex gap-10">
+        <Button onClick={() => handleGuardar(curso.id)}>Guardar</Button>
+        <ButtonNegative onClick={handleCancelar}>Cancelar</ButtonNegative>
+      </div>
     ) : (
       <div className="inline-flex gap-10">
         <Button onClick={() => handleModificar(curso)}> Modificar </Button>
