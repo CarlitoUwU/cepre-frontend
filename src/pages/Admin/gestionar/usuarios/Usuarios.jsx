@@ -98,7 +98,7 @@ export const Usuarios = () => {
   };
 
   const handleAgregar = () => {
-    setEditFormData({ nombre: "", correo: "", numero: "", extra: "" }); // Limpia el formulario
+    setEditFormData({ nombre: "", correo: "", numero: "", extra: "" }); 
     setVista("formulario");
 };
 
