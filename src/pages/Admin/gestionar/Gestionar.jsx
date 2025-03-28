@@ -54,7 +54,7 @@ export const Gestionar = () => {
       <div className="hidden md:block mx-3"></div>
 
       {/* Contenido principal */}
-      <div className="w-full md:w-5/6 shadow-md rounded-lg flex-grow flex overflow-auto bg-gray-200 p-4 pb-15">
+      <div className="w-full md:w-5/6 shadow-md rounded-lg flex-grow flex overflow-auto bg-gray-200 p-4">
         {componentes[vistaActual]}
       </div>
     </div>

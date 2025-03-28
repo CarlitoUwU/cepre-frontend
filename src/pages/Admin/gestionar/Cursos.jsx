@@ -122,15 +122,14 @@ export const Cursos = () => {
 
   return (
     <div className="overflow-x-auto w-full text-center">
-      <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE CURSOS</h2>
-      <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
-      
-      {/* Botón fijo centrado sin que el div sea más grande de lo necesario */}
-      <div className="fixed bottom-12 left-5/9 w-fit">
+      {/* Contenedor del título y el botón */}
+      <div className="flex justify-between items-center mb-6 px-4">
+        <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE CURSOS</h2>
         <Button onClick={() => setVistaActual("agregar")}>Agregar Curso</Button>
       </div>
+  
+      {/* Tabla reutilizable */}
+      <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
     </div>
-  );
-  
-  
+  );  
 };

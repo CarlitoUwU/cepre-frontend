@@ -17,6 +17,11 @@ export const Salones = () => {
   const [editandoId, setEditandoId] = useState(null);
   const [formData, setFormData] = useState({ aula: "", area: "", turno: "" });
   const [vistaActual, setVistaActual] = useState("lista"); // Estado para cambiar entre lista y agregar
+  const filtro = {
+    1: ["Biomédicas", "Ingenierías", "Sociales"],
+    2: ["Mañana", "Tarde", "Noche"],
+    3: ["Listo", "Faltan Docentes"]
+  }
 
   useEffect(() => {
     setAulas(aulasData);
@@ -91,15 +96,14 @@ export const Salones = () => {
 
   return (
     <div className="overflow-x-auto w-full text-center">
-      <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE SALONES</h2>
-
-      {/* Tabla reutilizable */}
-      <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} />
-
-      {/* Botón fijo centrado sin que el div sea más grande de lo necesario */}
-      <div className="fixed bottom-12 left-5/9 w-fit">
+      {/* Contenedor para el título y el botón */}
+      <div className="flex justify-between items-center mt-1 mb-6 px-4">
+        <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE SALONES</h2>
         <Button onClick={() => setVistaActual("agregar")}>Agregar Salón</Button>
       </div>
+  
+      {/* Tabla reutilizable */}
+      <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
     </div>
-  );
+  );  
 };
