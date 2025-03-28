@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Tabla } from "../../../components/ui/Tabla";
-import { ButtonCabecera } from "../../../components/ui/ButtonCabecera";
-import { Button } from "../../../components/ui/Button";
-import { ButtonNegative } from "../../../components/ui/ButtonNegative";
+import { Tabla } from "../../../../components/ui/Tabla";
+import { ButtonCabecera } from "../../../../components/ui/ButtonCabecera";
+import { Button } from "../../../../components/ui/Button";
+import { ButtonNegative } from "../../../../components/ui/ButtonNegative";
+import { Input } from "../../../../components/ui/Input";
 
 // Definir roles
 const roles = {
@@ -185,27 +186,10 @@ export const Usuarios = () => {
         // Supervisor: 5 columnas
         return [
           index + 1, // N°
-          <input
-            type="text"
-            name="nombre"
-            value={editFormData.nombre}
-            onChange={handleEditChange}
-            className="border p-1"
-          />,
-          <input
-            type="email"
-            name="correo"
-            value={editFormData.correo}
-            onChange={handleEditChange}
-            className="border p-1"
-          />,
-          <input
-            type="text"
-            name="numero"
-            value={editFormData.numero}
-            onChange={handleEditChange}
-            className="border p-1"
-          />,
+          <Input type="text" name="nombre" value={editFormData.nombre} onChange={handleEditChange} />, // Nombre
+          <Input type="email" name="correo" value={editFormData.correo} onChange={handleEditChange} />, // Correo
+          <Input type="text" name="numero" value={editFormData.numero} onChange={handleEditChange} />, // Número
+
           <div className="flex gap-2 justify-center">
             <Button onClick={() => handleSaveEdit(idUsuario)}>Guardar</Button>
             <ButtonNegative onClick={() => setEditingId(null)}>Cancelar</ButtonNegative>
@@ -216,27 +200,10 @@ export const Usuarios = () => {
         return [
           index + 1, // N°
           rol === roles.Docente ? usuario.curso : usuario.aula, // 2da columna (Curso o Salón)
-          <input
-            type="text"
-            name="nombre"
-            value={editFormData.nombre}
-            onChange={handleEditChange}
-            className="border p-1"
-          />,
-          <input
-            type="email"
-            name="correo"
-            value={editFormData.correo}
-            onChange={handleEditChange}
-            className="border p-1"
-          />,
-          <input
-            type="text"
-            name="numero"
-            value={editFormData.numero}
-            onChange={handleEditChange}
-            className="border p-1"
-          />,
+          <Input type="text" name="nombre" value={editFormData.nombre} onChange={handleEditChange} />, // Nombre
+          <Input type="email" name="correo" value={editFormData.correo} onChange={handleEditChange} />, // Correo  
+          <Input type="text" name="numero" value={editFormData.numero} onChange={handleEditChange} />, // Número 
+
           <div className="flex gap-2 justify-center">
             <Button onClick={() => handleSaveEdit(idUsuario)}>Guardar</Button>
             <ButtonNegative onClick={() => setEditingId(null)}>Cancelar</ButtonNegative>

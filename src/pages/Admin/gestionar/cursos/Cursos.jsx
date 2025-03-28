@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { AgregarCurso } from "./AgregarCurso";
-import { Tabla } from "../../../components/ui/Tabla";
-import { Button } from "../../../components/ui/Button";
-import { ButtonNegative } from "../../../components/ui/ButtonNegative";
-import { Input } from "../../../components/ui/Input";
-import CursoService from "../../../services/cursoServices";
+import { Tabla } from "../../../../components/ui/Tabla";
+import { Button } from "../../../../components/ui/Button";
+import { ButtonNegative } from "../../../../components/ui/ButtonNegative";
+import { Input } from "../../../../components/ui/Input";
+import CursoService from "../../../../services/cursoServices";
 
 const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
 
@@ -122,11 +122,14 @@ export const Cursos = () => {
 
   return (
     <div className="overflow-x-auto w-full text-center">
-      <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE CURSOS</h2>
-      <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
-      <div className="flex justify-center mt-4">
-        <Button onClick={() => setVistaActual("agregar")}> Agregar Curso </Button>
+      {/* Contenedor del título y el botón */}
+      <div className="flex justify-between items-center mb-6 px-4">
+        <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE CURSOS</h2>
+        <Button onClick={() => setVistaActual("agregar")}>Agregar Curso</Button>
       </div>
+  
+      {/* Tabla reutilizable */}
+      <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
     </div>
-  );
+  );  
 };
