@@ -97,7 +97,10 @@ export const Usuarios = () => {
     setEditingId(null);
   };
 
-  const handleAgregar = () => setVista("formulario");
+  const handleAgregar = () => {
+    setEditFormData({ nombre: "", correo: "", numero: "", extra: "" }); // Limpia el formulario
+    setVista("formulario");
+};
 
   const generarFilaUsuario = (usuario, index) => {
     const idUsuario = usuario.id;
