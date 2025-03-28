@@ -42,6 +42,13 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
           <>
             <LabelForm text="Curso:" />
             <Input type="text" name="curso" value={formData.curso || ""} onChange={handleChange} required />
+          
+
+            <LabelForm text="Correo Personal:" />
+            <Input  />
+
+            <LabelForm text="Disponibilidad:" />
+            <Input  />
           </>
         )}
         {rol === "Monitor" && (
@@ -61,7 +68,7 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
         )}
 
         {/* Campos generales */}
-        <LabelForm text="Correo:" />
+        <LabelForm text="Correo Ceprunsa:" />
         <Input type="email" name="correo" value={formData.correo || ""} onChange={handleChange} required />
         
         <LabelForm text="Número:" />
