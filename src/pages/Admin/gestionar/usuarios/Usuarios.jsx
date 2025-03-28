@@ -166,12 +166,7 @@ export const Usuarios = () => {
   }
 
   return vista === "formulario" ? (
-    <AgregarUsuarios
-      rol={rol}
-      formData={editFormData}
-      handleChange={(e) => setEditFormData({ ...editFormData, [e.target.name]: e.target.value })}
-      handleGuardarNuevoUsuario={() => {}}
-      setVista={setVista}
-    />
+    <AgregarUsuarios rol={rol} formData={editFormData} handleChange={(e) => setEditFormData({ ...editFormData, [e.target.name]: e.target.value })} handleGuardarNuevoUsuario={() => {}}
+      setVista={setVista}/>
   ) : null;
 };
