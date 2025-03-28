@@ -1,9 +1,8 @@
 import React from "react";
-import Login from "../../components/Login";
+import { Login } from "./Login";
 import background from "../../assets/ceprunsa.jpg";
 
 export const LoginPanel = () => {
-
   return (
     <div
       className="h-screen w-full bg-cover bg-center bg-no-repeat"
@@ -11,10 +10,7 @@ export const LoginPanel = () => {
     >
       <Login />
     </div>
-
   );
-  // Verifica la ruta de la imagen en la consola
-
 };
 
 export default LoginPanel;

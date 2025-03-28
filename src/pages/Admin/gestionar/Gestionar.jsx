@@ -1,64 +1,60 @@
-import React, { useState } from "react";
-import { Usuarios } from "./Usuarios";
-import { Salones } from "./Salones";
-import { Cursos } from "./Cursos";
+import React, { useMemo } from "react";
+import { useSearchParams, useNavigate} from "react-router-dom";
+import { Usuarios } from "./usuarios/Usuarios";
+import { Salones } from "./salones/Salones";
+import { Cursos } from "./cursos/Cursos";
+import { Button } from "../../../components/ui/Button";
 
-const usuariosIcon = "/usuarios.png";
-const salonesIcon = "/salones.png";
-const cursosIcon = "/cursos.png";
+const secciones = [
+  { id: "usuarios", nombre: "Usuarios", icono: "/usuarios.png" },
+  { id: "salones", nombre: "Salones", icono: "/salones.png" },
+  { id: "cursos", nombre: "Cursos", icono: "/cursos.png" },
+];
+
+const componentes = {
+  usuarios: <Usuarios />,
+  salones: <Salones />,
+  cursos: <Cursos />,
+};
 
 export const Gestionar = () => {
-  const [vistaActual, setVistaActual] = useState("usuarios");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const vistaActual = useMemo(() => searchParams.get("vista") || "usuarios", [searchParams]);
+  const navigate = useNavigate();
+
+  const cambiarVista = (nuevaVista) => {
+    setSearchParams(new URLSearchParams({ vista: nuevaVista }));
+  };
 
   return (
-    <div className="flex flex-col">
-      {/* Contenedor principal sin tanto margen inferior */}
-      <div className="flex h-[85vh]">
-        {/* Barra lateral */}
-        <div className="w-1/6 h-full bg-gray-300 p-6 flex flex-col gap-10 items-center justify-center">
-        <button
-            className={`flex flex-col justify-center items-center p-4 rounded-lg shadow-md w-50 h-50 transition-all ${
-              vistaActual === "usuarios" ? "bg-gray-400" : "bg-white hover:bg-gray-200"
-            }`}
-            onClick={() => setVistaActual("usuarios")}
-          >
-            <img src={usuariosIcon} alt="Usuarios" className="w-15 h-15" />
-            <span className="mt-2 font-semibold text-lg">Usuarios</span>
-          </button>
-
-          <button
-            className={`flex flex-col justify-center items-center p-4 rounded-lg shadow-md w-50 h-50 transition-all ${
-              vistaActual === "salones" ? "bg-gray-400" : "bg-white hover:bg-gray-200"
-            }`}
-            onClick={() => setVistaActual("salones")}
-          >
-            <img src={salonesIcon} alt="Salones" className="w-15 h-15" />
-            <span className="mt-2 font-semibold text-lg">Salones</span>
-          </button>
-
-          <button
-            className={`flex flex-col justify-center items-center p-4 rounded-lg shadow-md w-50 h-50 transition-all ${
-              vistaActual === "cursos" ? "bg-gray-400" : "bg-white hover:bg-gray-200"
-            }`}
-            onClick={() => setVistaActual("cursos")}
-          >
-            <img src={cursosIcon} alt="Cursos" className="w-15 h-15" />
-            <span className="mt-2 font-semibold text-lg">Cursos</span>
-          </button>
+    <div className="flex flex-col md:flex-row h-[85vh] m-5 mt-25">
+      {/* Barra lateral responsive */}
+      <div className="w-full md:w-1/6 bg-gray-200 p-6 flex flex-wrap md:flex-col gap-4 md:gap-6 items-center justify-start rounded-lg h-full max-h-screen overflow-auto">
+        {/* Botón Menú Principal ocupa todo el ancho */}
+        <div className="w-full text-center">
+          <Button onClick={() => navigate("..")} >
+            Menú Principal
+          </Button>
         </div>
+        {secciones.map(({ id, nombre, icono }) => (
+          <button
+            key={id}
+            className={`cursor-pointer flex flex-col justify-center items-center p-4 rounded-lg shadow-md w-full flex-1 transition-all ${
+              vistaActual === id ? "bg-gray-400" : "bg-white hover:bg-gray-200"
+            }`}
+            onClick={() => cambiarVista(id)}
+          >
+            <img src={icono} alt={nombre} className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16" />
+            <span className="mt-2 font-semibold text-xs sm:text-sm md:text-md">{nombre}</span>
+          </button>
+        ))}
+      </div>
+      {/* Espacio más pequeño en pantallas grandes */}
+      <div className="hidden md:block mx-3"></div>
 
-        {/* Contenido, centrado solo horizontalmente */}
-        <div className="w-5/6 pl-5 bg-white shadow-md rounded-lg h-[85vh] flex justify-center ">
-          <div className="w-full overflow-auto">
-            {vistaActual === "usuarios" && <Usuarios />}
-            {vistaActual === "salones" && <Salones />}
-            {vistaActual === "cursos" && (
-              <div className="overflow-x-auto"> {/* Agrega este div */}
-                <Cursos />
-              </div>
-            )}
-          </div>
-        </div>
+      {/* Contenido principal */}
+      <div className="w-full md:w-5/6 shadow-md rounded-lg flex-grow flex overflow-auto bg-gray-200 p-4">
+        {componentes[vistaActual]}
       </div>
     </div>
   );
