@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { Button } from "../../../../components/ui/Button";
 import { ButtonNegative } from "../../../../components/ui/ButtonNegative";
+import { Input } from "../../../../components/ui/Input";
 
 export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
   const [nuevoCurso, setNuevoCurso] = useState({
@@ -30,26 +31,14 @@ export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
 
         {/* Campo Curso */}
         <label className="block font-semibold">Curso:</label>
-        <input
-          type="text"
-          name="name"
-          value={nuevoCurso.name}
-          onChange={handleChange}
-          className="border p-2 w-full mb-3 rounded"
-        />
+        <Input name="name" value={nuevoCurso.name} onChange={handleChange} required/>
 
         {/* Campo Color */}
-        <label className="block font-semibold">Color:</label>
-        <input
-          type="color"
-          name="color"
-          value={nuevoCurso.color}
-          onChange={handleChange}
-          className="w-full h-10 mb-4 cursor-pointer"
-        />
+        <label className="block font-semibold mt-5">Color:</label>
+        <Input type="color" name="color" value={nuevoCurso.color} onChange={handleChange} />
 
         {/* Botones */}
-        <div className="flex justify-between">
+        <div className="flex justify-between mt-5">
           <ButtonNegative onClick={() => setVistaActual("lista")} > Atrás </ButtonNegative>
           <Button onClick={handleCrearCurso}> Crear Curso </Button>
         </div>

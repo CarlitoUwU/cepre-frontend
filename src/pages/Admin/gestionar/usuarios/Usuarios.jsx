@@ -4,6 +4,7 @@ import { ButtonCabecera } from "../../../../components/ui/ButtonCabecera";
 import { Button } from "../../../../components/ui/Button";
 import { ButtonNegative } from "../../../../components/ui/ButtonNegative";
 import { Input } from "../../../../components/ui/Input";
+import { AgregarUsuarios } from "./AgregarUsuarios";
 
 // Definir roles
 const roles = {
@@ -235,8 +236,14 @@ const handleSaveEdit = (id) => {
   if (vista === "tabla") {
     return (
       <div className="overflow-x-auto w-full text-center">
-        <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE USUARIOS</h2>
-
+        {/* Contenedor del título y botón en la misma fila */}
+        <div className="relative flex justify-center items-center py-2">
+          <h2 className="text-2xl font-bold">GESTIÓN DE USUARIOS</h2>
+          <div className="absolute right-4">
+            <Button onClick={handleAgregar}>Agregar {rol}</Button>
+          </div>
+        </div>
+    
         {/* Navegación de roles */}
         <div className="flex w-80 justify-between mx-auto mb-4">
           {Object.values(roles).map((tipoRol) => (
@@ -248,117 +255,21 @@ const handleSaveEdit = (id) => {
             />
           ))}
         </div>
-
+    
         {/* Tabla de usuarios */}
         {datos.length > 0 ? (
           <Tabla encabezado={encabezado} datos={datos} />
         ) : (
           <p className="text-center text-gray-500">No hay datos disponibles para este rol.</p>
         )}
-
-        {/* Botón flotante para agregar usuario */}
-        <div className="fixed bottom-8 right-8 z-50">
-          <button
-            className="bg-[#0077B6] text-white font-bold px-6 py-4 rounded-full shadow-lg border-4 border-white hover:bg-[#005B8F] hover:scale-105 transition-all flex items-center gap-2"
-            onClick={handleAgregar}
-          >
-            + Agregar {rol}
-          </button>
-        </div>
       </div>
-    );
+    );     
   }
 
   // Vista de formulario (solo se muestra el formulario)
   if (vista === "formulario") {
-    return (
-      <div className="p-4 w-full text-center">
-        <h2 className="text-2xl font-bold mb-4 text-center">Agregar {rol}</h2>
-        <form onSubmit={handleGuardarNuevoUsuario} className="p-4 bg-white rounded shadow-md max-w-md mx-auto">
-          {rol === roles.Docente && (
-            <>
-              <label className="block mb-2">
-                Docente:
-                <input type="text" name="docente" value={formData.docente || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Curso:
-                <input type="text" name="curso" value={formData.curso || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Correo:
-                <input type="email" name="correo" value={formData.correo || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Número:
-                <input type="text" name="numero" value={formData.numero || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Salones Asignados (separados por coma):
-                <input type="text" name="salones_asignados" value={formData.salones_asignados || ""} onChange={handleChange} className="border p-1 ml-2 w-full" />
-              </label>
-            </>
-          )}
-          {rol === roles.Monitor && (
-            <>
-              <label className="block mb-2">
-                Aula:
-                <input type="text" name="aula" value={formData.aula || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Monitor:
-                <input type="text" name="monitor" value={formData.monitor || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Correo:
-                <input type="email" name="correo" value={formData.correo || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Número:
-                <input type="text" name="numero" value={formData.numero || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Carrera:
-                <input type="text" name="carrera" value={formData.carrera || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-            </>
-          )}
-          {rol === roles.Supervisor && (
-            <>
-              <label className="block mb-2">
-                Supervisor:
-                <input type="text" name="supervisor" value={formData.supervisor || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Correo:
-                <input type="email" name="correo" value={formData.correo || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Número:
-                <input type="text" name="numero" value={formData.numero || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Carrera:
-                <input type="text" name="carrera" value={formData.carrera || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-              <label className="block mb-2">
-                Salones Asignados (separados por coma):
-                <input type="text" name="salones_asignados" value={formData.salones_asignados || ""} onChange={handleChange} className="border p-1 ml-2 w-full" required />
-              </label>
-            </>
-          )}
-          <div className="mt-4 flex flex-cemter justify-center gap-20">
-            <button type="submit" className="bg-[#0077B6] text-white px-4 py-2 rounded">
-              Guardar
-            </button>
-            <button type="button" onClick={() => setVista("tabla")} className="bg-gray-600 text-white px-4 py-2 rounded">
-              Cancelar
-            </button>
-          </div>
-        </form>
-      </div>
-    );
-  }
+    return <AgregarUsuarios rol={rol} formData={formData} handleChange={handleChange} handleGuardarNuevoUsuario={handleGuardarNuevoUsuario} setVista={setVista} />;
+  }  
 
   return null;
 };

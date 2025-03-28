@@ -33,7 +33,7 @@ export const AgregarSalon = ({ onAgregarSalon, setVistaActual }) => {
 
         {/* Campo N° de Aula */}
         <label className="block font-semibold">N° de Aula:</label>
-        <Input type="text" name="aula" value={nuevoSalon.aula} onChange={handleChange} />
+        <Input type="text" name="aula" value={nuevoSalon.aula} onChange={handleChange} required/>
 
         {/* Campo Área */}
         <label className="block font-semibold mt-3">Área:</label>
