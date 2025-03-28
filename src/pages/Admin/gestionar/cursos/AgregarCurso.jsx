@@ -1,4 +1,3 @@
-// src/pages/Admin/AgregarCurso.jsx
 import React, { useState } from "react";
 import { Button } from "../../../../components/ui/Button";
 import { ButtonNegative } from "../../../../components/ui/ButtonNegative";
@@ -10,15 +9,19 @@ export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
     color: "#000000",
   });
 
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     setNuevoCurso({ ...nuevoCurso, [e.target.name]: e.target.value });
   };
 
   const handleCrearCurso = () => {
     if (nuevoCurso.name.trim() === "") {
-      alert("El nombre del curso no puede estar vacío.");
+      setError("El nombre del curso no puede estar vacío.");
       return;
     }
+
+    setError(""); // Limpiar error si todo está bien
     onAgregarCurso(nuevoCurso);
   };
 
@@ -29,9 +32,12 @@ export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
           Agregar Nuevo Curso
         </h2>
 
+        {/* Mostrar mensaje de error */}
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
         {/* Campo Curso */}
         <label className="block font-semibold">Curso:</label>
-        <Input name="name" value={nuevoCurso.name} onChange={handleChange} required/>
+        <Input name="name" value={nuevoCurso.name} onChange={handleChange} required />
 
         {/* Campo Color */}
         <label className="block font-semibold mt-5">Color:</label>
@@ -39,7 +45,7 @@ export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
 
         {/* Botones */}
         <div className="flex justify-between mt-5">
-          <ButtonNegative onClick={() => setVistaActual("lista")} > Atrás </ButtonNegative>
+          <ButtonNegative onClick={() => setVistaActual("lista")}> Atrás </ButtonNegative>
           <Button onClick={handleCrearCurso}> Crear Curso </Button>
         </div>
       </div>

@@ -14,15 +14,19 @@ export const AgregarSalon = ({ onAgregarSalon, setVistaActual }) => {
     turno: opcionesTurno[0],
   });
 
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     setNuevoSalon({ ...nuevoSalon, [e.target.name]: e.target.value });
   };
 
   const handleCrearSalon = () => {
     if (nuevoSalon.aula.trim() === "") {
-      alert("El número de aula no puede estar vacío.");
+      setError("El número de aula no puede estar vacío.");
       return;
     }
+
+    setError(""); // Limpiar error si todo está bien
     onAgregarSalon(nuevoSalon);
   };
 
@@ -31,9 +35,12 @@ export const AgregarSalon = ({ onAgregarSalon, setVistaActual }) => {
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">Agregar Nuevo Salón</h2>
 
+        {/* Mostrar error */}
+        {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+
         {/* Campo N° de Aula */}
         <label className="block font-semibold">N° de Aula:</label>
-        <Input type="text" name="aula" value={nuevoSalon.aula} onChange={handleChange} required/>
+        <Input type="text" name="aula" value={nuevoSalon.aula} onChange={handleChange} />
 
         {/* Campo Área */}
         <label className="block font-semibold mt-3">Área:</label>
