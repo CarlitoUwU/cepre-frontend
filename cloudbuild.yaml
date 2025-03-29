@@ -3,7 +3,7 @@ steps:
     entrypoint: npm
     args: ["ci", "--prefer-offline", "--no-audit"]
 
-  - name: 'gcr.io/cloud-builders/bash'
+  - name: 'gcr.io/cloud-builders/npm'
     secretEnv: ["VITE_API_BACK_URL"]
     args:
       - "-c"
