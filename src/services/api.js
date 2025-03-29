@@ -54,7 +54,19 @@ export async function request(method, endpoint, data = {}, isList = false) {
     let result = response.data;
 
     if (isList && Array.isArray(result)) {
-      result.sort((a, b) => a.id - b.id);
+      result.sort((a, b) => {
+        const isNumberA = !isNaN(a.id);
+        const isNumberB = !isNaN(b.id);
+
+        if (isNumberA && isNumberB) {
+          // Orden numérico
+          return Number(a.id) - Number(b.id);
+        } else {
+          // Orden alfabético para UUIDs
+          return a.id.localeCompare(b.id);
+        }
+      });
+
     }
 
     return result;
