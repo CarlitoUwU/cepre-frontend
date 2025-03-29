@@ -4,17 +4,13 @@ steps:
     args: ["ci", "--prefer-offline", "--no-audit"]
 
   - name: 'gcr.io/cloud-builders/bash'
+    secretEnv: ["VITE_API_BACK_URL"]
     args:
       - "-c"
       - |
-        if [ -z "$$VITE_API_BACK_URL" ]; then
-          echo "Error: VITE_API_BACK_URL no está definido" >&2
-          exit 1
-        fi
         echo "VITE_API_BACK_URL=$$VITE_API_BACK_URL" > .env
-        cat .env  # Para verificar en los logs
+        cat .env  # Verificar que el secreto se está pasando correctamente
         npm run build
-    secretEnv: ["VITE_API_BACK_URL"]
 
   - name: gcr.io/cloud-builders/gsutil
     args: ["-m", "rm", "-r", "gs://cepr-front/*"]
@@ -26,3 +22,8 @@ timeout: "1600s"
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/tu-proyecto/secrets/VITE_API_BACK_URL/versions/latest
+      env: VITE_API_BACK_URL
