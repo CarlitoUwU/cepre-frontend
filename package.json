@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "postinstall": "npm install @rollup/rollup-linux-x64-gnu || true",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
