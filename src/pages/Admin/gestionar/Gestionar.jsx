@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate} from "react-router-dom";
 import { Usuarios } from "./usuarios/Usuarios";
 import { Salones } from "./salones/Salones";
 import { Cursos } from "./cursos/Cursos";
-import { Button } from "/src/components/ui/button.js";
+import { Button } from "@/components/ui/button.tsx";
 
 const secciones = [
   { id: "usuarios", nombre: "Usuarios", icono: "/usuarios.png" },
