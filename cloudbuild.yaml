@@ -25,5 +25,5 @@ options:
 
 availableSecrets:
   secretManager:
-    - versionName: projects/tu-proyecto/secrets/VITE_API_BACK_URL/versions/latest
+    - versionName: projects/eminent-tape-454300-s3/secrets/VITE_API_BACK_URL/versions/latest
       env: VITE_API_BACK_URL
