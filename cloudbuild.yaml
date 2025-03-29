@@ -1,6 +1,7 @@
 steps:
   - name: node
     entrypoint: npm
+
     args: ["install"]
     secretEnv: ['VITE_API_BACK_URL']
 
@@ -8,6 +9,7 @@ steps:
     entrypoint: npm
     args: ["run", "build"]
     secretEnv: ['VITE_API_BACK_URL']
+
 
   - name: gcr.io/cloud-builders/gsutil
     args: ["-m", "rm", "-r", "gs://cepr-front/*"]
@@ -24,3 +26,5 @@ availableSecrets:
   secretManager:
     - versionName: projects/581122223714/secrets/VITE_API_BACK_URL/versions/latest
       env: 'VITE_API_BACK_URL'
+
+
