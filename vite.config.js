@@ -3,7 +3,7 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path';
 
 export default defineConfig({
-  base: '/cepr-front/',
+  base: 'https://storage.googleapis.com/cepr-front/',
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {},
