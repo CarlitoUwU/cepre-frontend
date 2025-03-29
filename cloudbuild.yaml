@@ -1,11 +1,20 @@
 steps:
   - name: node
     entrypoint: npm
-    args: ["install"]
+    args: ["ci", "--prefer-offline", "--no-audit"]
 
-  - name: node
-    entrypoint: npm
-    args: ["run", "build"]
+  - name: 'gcr.io/cloud-builders/bash'
+    args:
+      - "-c"
+      - |
+        if [ -z "$$VITE_API_BACK_URL" ]; then
+          echo "Error: VITE_API_BACK_URL no está definido" >&2
+          exit 1
+        fi
+        echo "VITE_API_BACK_URL=$$VITE_API_BACK_URL" > .env
+        cat .env  # Para verificar en los logs
+        npm run build
+    secretEnv: ["VITE_API_BACK_URL"]
 
   - name: gcr.io/cloud-builders/gsutil
     args: ["-m", "rm", "-r", "gs://cepr-front/*"]
