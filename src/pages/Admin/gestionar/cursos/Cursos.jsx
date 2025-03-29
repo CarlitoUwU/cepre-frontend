@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AgregarCurso } from "./AgregarCurso";
 import { Tabla } from "@/components/ui/Tabla";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
 import CursoService from "@/services/cursoServices";

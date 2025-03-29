@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { ButtonCabecera } from "@/components/ui/ButtonCabecera";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 
 // Definir roles

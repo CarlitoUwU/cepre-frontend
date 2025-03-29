@@ -1,6 +1,6 @@
 // src/pages/Admin/AgregarCurso.jsx
 import React, { useState } from "react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 
 export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
