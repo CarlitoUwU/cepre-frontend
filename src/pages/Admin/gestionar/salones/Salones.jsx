@@ -1,52 +1,108 @@
 import React, { useState, useEffect } from "react";
 import { Tabla } from "../../../../components/ui/Tabla";
-import aulasData from "../../../../data/todasAulas.json";
 import { Button } from "../../../../components/ui/Button";
 import { ButtonNegative } from "../../../../components/ui/ButtonNegative";
 import { Select } from "../../../../components/ui/Select";
-import { AgregarSalon } from "./AgregarSalon"; // Importa el componente de agregar salón
+import { AgregarSalon } from "./AgregarSalon";
+import ClassesServices from "../../../../services/ClassesServices";
+import AreaServices from "../../../../services/AreaServices";
+import ShiftsServices from "../../../../services/ShiftsServices";
 
 const encabezadoCursos = ["N° de Aula", "Área", "Turno", "Estado", "Acciones"];
-const opciones = {
-  area: ["Biomédicas", "Ingenierías", "Sociales"],
-  turno: ["Mañana", "Tarde", "Noche"],
-};
 
 export const Salones = () => {
   const [aulas, setAulas] = useState([]);
+  const [areas, setAreas] = useState([]);
+  const [turnos, setTurnos] = useState([]);
+  const [filtro, setFiltro] = useState({});
   const [editandoId, setEditandoId] = useState(null);
-  const [formData, setFormData] = useState({ aula: "", area: "", turno: "" });
+  const [formData, setFormData] = useState({ name: "", areaId: 0, turnoId: 0 });
   const [vistaActual, setVistaActual] = useState("lista"); // Estado para cambiar entre lista y agregar
-  const filtro = {
-    1: ["Biomédicas", "Ingenierías", "Sociales"],
-    2: ["Mañana", "Tarde", "Noche"],
-    3: ["Listo", "Faltan Docentes"]
-  }
+
 
   useEffect(() => {
-    setAulas(aulasData);
+    const fetchSalones = async () => {
+      const data = await ClassesServices.getClasses();
+      const areasData = await AreaServices.getAreas();
+      const shiftsData = await ShiftsServices.getShifts();
+
+      setAreas(areasData);
+      setTurnos(shiftsData);
+      setFiltro({
+        1: areasData.map((area) => area.name),
+        2: shiftsData.map((turno) => turno.name),
+        3: ["Listo", "Falta Docentes"]
+      });
+
+      if (Array.isArray(data)) {
+        const aulas = data.map((aula) => ({
+          ...aula,
+          aula: `${aula.area.name[0]} - ${aula.name}`,
+          area: aula.area.name,
+          turno: aula.shift.name,
+          estado: "Listo",
+        }));
+
+        setAulas(aulas);
+      }
+    }
+    fetchSalones();
   }, []);
 
   const handleModificar = (aula) => {
     setEditandoId(aula.id);
-    setFormData({ aula: aula.aula, area: aula.area, turno: aula.turno });
+    setFormData({ name: aula.aula, areaId: areas.find(a => a.name === aula.area)?.id, turnoId: turnos.find(t => t.name === aula.turno)?.id });
   };
 
-  const handleGuardar = () => {
-    setAulas(aulas.map(a => (a.id === editandoId ? { ...a, ...formData } : a)));
+
+  const handleGuardar = async () => {
+    const claseEditando = aulas.find(a => a.id === editandoId);
+    const dataClase = {
+      id: claseEditando.id,
+      name: claseEditando.name,
+      idSede: claseEditando.idSede,
+      areaId: parseInt(formData.areaId),
+      shiftId: parseInt(formData.turnoId),
+      capacity: claseEditando.capacity,
+      urlMeet: claseEditando.urlMeet,
+    }
+
+    let claseActualizada = await ClassesServices.updateClass(dataClase);
+    claseActualizada = {
+      ...claseActualizada,
+      aula: `${claseActualizada.area.name[0]} - ${claseActualizada.name}`,
+      area: claseActualizada.area.name,
+      turno: claseActualizada.shift.name,
+      estado: "Listo",
+    }
+
+    setAulas(aulas.map(a => (a.id === editandoId ? { ...claseActualizada } : a)));
     setEditandoId(null);
-    setFormData({ aula: "", area: "", turno: "" });
+    setFormData({ name: "", areaId: 0, turnoId: 0 });
   };
 
   const handleCancelar = () => {
     setEditandoId(null);
-    setFormData({ aula: "", area: "", turno: "" });
+    setFormData({ name: "", areaId: 0, turnoId: 0 });
   };
 
-  const handleBorrar = (id) => setAulas(aulas.filter((aula) => aula.id !== id));
+  const handleBorrar = async (id) => {
+    try {
+      const eliminado = await ClassesServices.deleteClass(id);  // retornara "" si se elimino correctamente
+
+      if (eliminado === "") {
+        setAulas(aulas.filter((aula) => aula.id !== id));
+      } else {
+        console.error("Error al eliminar el aula:", eliminado);
+      }
+    } catch (error) {
+      console.error("Error al eliminar el aula:", error);
+    }
+  };
+
 
   const handleAgregarSalon = (nuevoSalon) => {
-    setAulas([...aulas, { id: aulas.length + 1, ...nuevoSalon }]);
+    setAulas([...aulas, { ...nuevoSalon }]);
     setVistaActual("lista"); // Volver a la vista de lista después de agregar
   };
 
@@ -68,18 +124,20 @@ export const Salones = () => {
       aula.aula,
       editandoId === aula.id ? (
         <Select
-          value={formData.area}
-          onChange={(e) => setFormData({ ...formData, area: e.target.value })}
-          options={opciones.area}
+          name="areaId"
+          value={formData.areaId}
+          onChange={(e) => setFormData({ ...formData, areaId: e.target.value })}
+          options={areas}
         />
       ) : (
         aula.area
       ),
       editandoId === aula.id ? (
         <Select
-          value={formData.turno}
-          onChange={(e) => setFormData({ ...formData, turno: e.target.value })}
-          options={opciones.turno}
+          name="turnoId"
+          value={formData.turnoId}
+          onChange={(e) => setFormData({ ...formData, turnoId: e.target.value })}
+          options={turnos}
         />
       ) : (
         aula.turno
@@ -91,7 +149,7 @@ export const Salones = () => {
 
   // Si la vista es "agregar", mostrar el formulario de AgregarSalon
   if (vistaActual === "agregar") {
-    return <AgregarSalon onAgregarSalon={handleAgregarSalon} setVistaActual={setVistaActual} />;
+    return <AgregarSalon onAgregarSalon={handleAgregarSalon} setVistaActual={setVistaActual} areas={areas} turnos={turnos} />;
   }
 
   return (
@@ -101,9 +159,9 @@ export const Salones = () => {
         <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE SALONES</h2>
         <Button onClick={() => setVistaActual("agregar")}>Agregar Salón</Button>
       </div>
-  
+
       {/* Tabla reutilizable */}
       <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
     </div>
-  );  
+  );
 };
