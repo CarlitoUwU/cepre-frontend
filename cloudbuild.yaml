@@ -8,7 +8,10 @@ steps:
     args: ["run", "build"]
 
   - name: gcr.io/cloud-builders/gsutil
-    args: ["-m", "rsync", "-r", "dist/", "gs://cepr-front"]
+    args: ["-m", "rsync", "-r", "-d", "-c", "dist/", "gs://cepr-front"]
+
+  - name: gcr.io/cloud-builders/gsutil
+    args: ["-m", "setmeta", "-h", "Cache-Control:no-cache, max-age=0", "gs://cepr-front/index.html"]
 
 timeout: "1600s"
 
