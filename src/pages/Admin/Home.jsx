@@ -29,18 +29,22 @@ export const Home = () => {
   };
 
   return (
-    <div className=" flex flex-col items-center justify-center bg-[#F4F4F4] py-10">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-16 gap-y-16">
-        {options.map((option, index) => (
-          <Button
-            key={index}
-            path={option.path}
-            title={option.title}
-            img={option.img}
-            handleClick={handleClick}
-          />
-        ))}
+    <div className="mt-25 m-5">
+      <div className="w-full h-[86vh] flex flex-col items-center justify-center bg-[#F4F4F4] overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-16 gap-y-16">
+          {options.map((option, index) => (
+            <Button
+              key={index}
+              path={option.path}
+              title={option.title}
+              img={option.img}
+              handleClick={handleClick}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
+  
 };
+

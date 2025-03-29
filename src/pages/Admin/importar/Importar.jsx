@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { ButtonCabecera } from "../../../components/ui/ButtonCabecera";
 import { useNavigate } from "react-router-dom";
 import CSV from "../../../services/CSV";
+import { Button } from "../../../components/ui/Button";
+import { ButtonNegative } from "../../../components/ui/ButtonNegative";
 
 const roles = {
   Profesor: "Profesor",
@@ -67,8 +69,8 @@ export const Importar = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="flex w-80 justify-between">
+    <div className="max-w-2xl mx-auto m-5 mt-25">
+      <div className="flex w-80 justify-between mb-3">
         <ButtonCabecera text={roles.Profesor} handleClick={handleClick} data_role="Profesor" className={`${rol === roles.Profesor ? 'bg-gray-200' : ''}`} />
         <ButtonCabecera text={roles.Monitor} handleClick={handleClick} data_role="Monitor" className={`${rol === roles.Monitor ? 'bg-gray-200' : ''}`} />
         <ButtonCabecera text={roles.Supervisor} handleClick={handleClick} data_role="Supervisor" className={`${rol === roles.Supervisor ? 'bg-gray-200' : ''}`} />
@@ -99,12 +101,8 @@ export const Importar = () => {
 
       {/* BOTONES DE NAVEGACIÓN */}
       <div className="flex justify-center space-x-8 mt-4">
-        <button onClick={() => navigate('..')} className="bg-[#6D1D1D] text-white px-6 py-2 rounded-md shadow-md cursor-pointer">
-          Menú Principal
-        </button>
-        <button className="bg-[#6D1D1D] text-white px-6 py-2 rounded-md shadow-md cursor-pointer">
-          Generar Guía
-        </button>
+        <ButtonNegative onClick={() => navigate('..')}>Menú Principal</ButtonNegative>
+        <Button>Generar Guía</Button>
       </div>
     </div>
   );
