@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Tabla } from "../../../../components/ui/Tabla";
-import aulasData from "../../../../data/todasAulas.json";
-import { Button } from "../../../../components/ui/Button";
-import { ButtonNegative } from "../../../../components/ui/ButtonNegative";
-import { Select } from "../../../../components/ui/Select";
+import { Tabla } from "@/components/ui/Tabla";
+import aulasData from "@/data/todasAulas.json";
+import { Button } from "@/components/ui/Button";
+import { ButtonNegative } from "@/components/ui/ButtonNegative";
+import { Select } from "@/components/ui/Select";
 import { AgregarSalon } from "./AgregarSalon"; // Importa el componente de agregar salón
 
 const encabezadoCursos = ["N° de Aula", "Área", "Turno", "Estado", "Acciones"];

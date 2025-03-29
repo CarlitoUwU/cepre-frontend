@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Tabla } from "../../../../components/ui/Tabla";
-import { ButtonCabecera } from "../../../../components/ui/ButtonCabecera";
-import { Button } from "../../../../components/ui/Button";
-import { ButtonNegative } from "../../../../components/ui/ButtonNegative";
-import { Input } from "../../../../components/ui/Input";
+import { Tabla } from "@/components/ui/Tabla";
+import { ButtonCabecera } from "@/components/ui/ButtonCabecera";
+import { Button } from "@/components/ui/Button";
+import { ButtonNegative } from "@/components/ui/ButtonNegative";
+import { Input } from "@/components/ui/Input";
 
 // Definir roles
 const roles = {
