@@ -1,16 +1,15 @@
 steps:
   - name: node
     entrypoint: npm
-    args: ["ci", "--prefer-offline", "--no-audit"]
 
-  - name: 'gcr.io/cloud-builders/npm'
-    secretEnv: ["VITE_API_BACK_URL"]
-    args:
-      - "-c"
-      - |
-        echo "VITE_API_BACK_URL=$$VITE_API_BACK_URL" > .env
-        cat .env  # Verificar que el secreto se está pasando correctamente
-        npm run build
+    args: ["install"]
+    secretEnv: ['VITE_API_BACK_URL']
+
+  - name: node
+    entrypoint: npm
+    args: ["run", "build"]
+    secretEnv: ['VITE_API_BACK_URL']
+
 
   - name: gcr.io/cloud-builders/gsutil
     args: ["-m", "rm", "-r", "gs://cepr-front/*"]
@@ -25,5 +24,7 @@ options:
 
 availableSecrets:
   secretManager:
-    - versionName: projects/eminent-tape-454300-s3/secrets/VITE_API_BACK_URL/versions/latest
-      env: VITE_API_BACK_URL
+    - versionName: projects/581122223714/secrets/VITE_API_BACK_URL/versions/latest
+      env: 'VITE_API_BACK_URL'
+
+
