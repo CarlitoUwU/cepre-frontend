@@ -9,7 +9,7 @@ steps:
     secretEnv: ['VITE_API_BACK_URL']
 
   - name: gcr.io/cloud-builders/gsutil
-    args: ["-m", "rm", "-r", "gs://cepr-front/*"]
+    args: ["-m", "rm", "-r","dist/", "gs://cepr-front/*"]
     allowFailure: true
 
   - name: gcr.io/cloud-builders/gsutil
