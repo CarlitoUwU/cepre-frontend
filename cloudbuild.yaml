@@ -10,6 +10,7 @@ steps:
 
   - name: gcr.io/cloud-builders/gsutil
     args: ["-m", "rm", "-r", "gs://cepr-front/*"]
+    allowFailure: true
 
   - name: gcr.io/cloud-builders/gsutil
     args: ["-m", "rsync", "-r", "dist/", "gs://cepr-front"]
