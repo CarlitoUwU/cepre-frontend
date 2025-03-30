@@ -2,8 +2,7 @@ import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path';
 
-export default defineConfig(() => ({
-  //base: mode === 'production' ? '/cepr-front/' : '/', // Solo en producción usa '/cepr-front/'
+export default defineConfig({
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {},
@@ -16,4 +15,4 @@ export default defineConfig(() => ({
       '@': path.resolve(__dirname, 'src'),
     },
   },
-}));
+})
