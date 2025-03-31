@@ -30,7 +30,6 @@ export const AgregarSalon = ({ onAgregarSalon, setVistaActual, areas, turnos }) 
       shiftId: parseInt(nuevoSalon.shiftId),
       idSede: 1,
       capacity: 100,
-      urlMeet: "https://meet.google.com/byk-mjbz-qij",
     };
 
     let salonCreado = await ClassesServices.createClass(dataSalon);

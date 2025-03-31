@@ -56,15 +56,10 @@ export const Salones = () => {
 
 
   const handleGuardar = async () => {
-    const claseEditando = aulas.find(a => a.id === editandoId);
     const dataClase = {
-      id: claseEditando.id,
-      name: claseEditando.name,
-      idSede: claseEditando.idSede,
+      id: editandoId,
       areaId: parseInt(formData.areaId),
       shiftId: parseInt(formData.turnoId),
-      capacity: claseEditando.capacity,
-      urlMeet: claseEditando.urlMeet,
     }
 
     let claseActualizada = await ClassesServices.updateClass(dataClase);
