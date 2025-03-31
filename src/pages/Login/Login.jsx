@@ -22,6 +22,10 @@ export const Login = () => {
   useEffect(() => {
     const receiveMessage = (event) => {
       if (event.origin !== import.meta.env.VITE_API_BACK_URL) return;
+      if (event.data.error) {
+        alert("An error occurred during login. Please try again. ");
+        return;
+      }
       if (event.data.token) {
         localStorage.setItem("token", event.data.token);
         navigate("/"); // Redirigir a la página 
