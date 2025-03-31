@@ -1,11 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import logo from "../../assets/Unsa_logo.png";
 import escudo from "../../assets/escudo-unsa.jpeg";
 
 export const Login = () => {
   const handleLogin = () => {
-    window.location.href = "http://localhost:3000/api/auth/google";
+    const width = 500;
+    const height = 600;
+    const left = (window.screen.width - width) / 2;
+    const top = (window.screen.height - height) / 2;
+    
+    window.open(
+      `${import.meta.env.VITE_API_BACK_URL}/api/auth/google`,
+      "_blank",
+      `width=${width},height=${height},left=${left},top=${top}`
+    );
   };
+  
+  useEffect(() => {
+    const receiveMessage = (event) => {
+      if (event.origin !== import.meta.env.VITE_API_BACK_URL) return;
+      if (event.data.token) {
+        localStorage.setItem("token", event.data.token);
+        window.location.href = "/admin";
+      }
+    };
+    window.addEventListener("message", receiveMessage);
+    return () => window.removeEventListener("message", receiveMessage);
+  }, []);
 
   return (
     <div className="h-screen p-5 flex flex-col items-left justify-center space-y-10">
