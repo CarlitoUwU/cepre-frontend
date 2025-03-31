@@ -1,14 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Input } from "../../../../components/ui/Input";
 import { Button } from "../../../../components/ui/Button";
 import { ButtonNegative } from "../../../../components/ui/ButtonNegative";
 import { LabelForm } from "../../../../components/ui/LabelForm";
+import CursoService from "../../../../services/cursoServices";
+import { Select } from "../../../../components/ui/Select";
 
 export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuevoUsuario, setVista }) => {
   const [error, setError] = useState("");
+  const [cursos, setCursos] = useState([]); // Inicializar con array vacío
+
+  useEffect(() => {
+    const fetchCursos = async () => {
+      try {
+        const data = await CursoService.getCursos();
+        setCursos(Array.isArray(data) ? data : []); // Asegurar que siempre sea un array
+      } catch (error) {
+        console.error("Error al obtener los cursos:", error);
+        setCursos([]); // En caso de error, evitar undefined
+      }
+    };
+  
+    fetchCursos();
+  }, []);
 
   const validarYGuardar = () => {
-    // Verifica si algún campo está vacío
     const camposRequeridos = ["docente", "correo", "numero"];
     if (rol === "Docente") camposRequeridos.push("curso");
     if (rol === "Monitor") camposRequeridos.push("aula", "carrera");
@@ -21,7 +37,7 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
       return;
     }
 
-    setError(""); // Limpiar error si todo está bien
+    setError("");
     handleGuardarNuevoUsuario();
   };
 
@@ -30,25 +46,32 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">Agregar Nuevo {rol}</h2>
 
-        {/* Mostrar mensaje de error */}
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-        {/* Campos generales */}
         <LabelForm text="Nombres y Apellidos:" />
         <Input type="text" name="docente" value={formData.docente || ""} onChange={handleChange} required />
 
-        {/* Campos según el rol */}
         {rol === "Docente" && (
           <>
             <LabelForm text="Curso:" />
-            <Input type="text" name="curso" value={formData.curso || ""} onChange={handleChange} required />
-          
+            <Select name="curso" value={formData.curso || ""} onChange={handleChange} required>
+              <option value="">Seleccione un curso</option>
+              {Array.isArray(cursos) && cursos.length > 0 ? (
+                cursos.map((curso) => (
+                  <option key={curso.id} value={curso.name}>
+                    {curso.name}
+                  </option>
+                ))
+              ) : (
+                <option value="" disabled>Cargando cursos...</option>
+              )}
+            </Select>
 
             <LabelForm text="Correo Personal:" />
-            <Input  />
+            <Input type="email" name="correo_personal" value={formData.correo_personal || ""} onChange={handleChange} required />
 
             <LabelForm text="Disponibilidad:" />
-            <Input  />
+            <Input type="text" name="disponibilidad" value={formData.disponibilidad || ""} onChange={handleChange} required />
           </>
         )}
         {rol === "Monitor" && (
@@ -61,20 +84,18 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
           </>
         )}
         {rol === "Supervisor" && (
-          <> 
+          <>
             <LabelForm text="Carrera:" />
             <Input type="text" name="carrera" value={formData.carrera || ""} onChange={handleChange} required />
           </>
         )}
 
-        {/* Campos generales */}
         <LabelForm text="Correo Ceprunsa:" />
         <Input type="email" name="correo" value={formData.correo || ""} onChange={handleChange} required />
         
         <LabelForm text="Número:" />
         <Input type="text" name="numero" value={formData.numero || ""} onChange={handleChange} required />
 
-        {/* Botones */}
         <div className="flex justify-between mt-5">
           <ButtonNegative onClick={() => setVista("tabla")}>Atrás</ButtonNegative>
           <Button type="button" onClick={validarYGuardar}>Guardar</Button>
