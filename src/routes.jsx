@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
           {
-            path: "admin/*",
+            path: "admin/",
             element: <AdminPanel />,
             children: [
               { index: true, element: <Home /> },

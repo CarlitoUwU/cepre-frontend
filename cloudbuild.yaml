@@ -1,0 +1,26 @@
+steps:
+  - name: node
+    entrypoint: npm
+    args: ["install"]
+
+  - name: node
+    entrypoint: npm
+    args: ["run", "build"]
+    secretEnv: ['VITE_API_BACK_URL']
+
+  - name: gcr.io/cloud-builders/gsutil
+    args: ["-m", "rm", "-r","dist/", "gs://cepr-front/*"]
+    allowFailure: true
+
+  - name: gcr.io/cloud-builders/gsutil
+    args: ["-m", "rsync", "-r", "dist/", "gs://cepr-front"]
+
+timeout: "1600s"
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/581122223714/secrets/VITE_API_BACK_URL/versions/latest
+      env: 'VITE_API_BACK_URL'

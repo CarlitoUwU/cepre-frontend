@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-// import cursosData from "../../../data/cursos.json";
 import { AgregarCurso } from "./AgregarCurso";
-import { Tabla } from "../../../components/ui/Tabla";
-import CursoService from "../../../services/cursoServices";
+import { Tabla } from "@/components/ui/Tabla";
+import { Button } from "@/components/ui/button.tsx";
+import { ButtonNegative } from "@/components/ui/ButtonNegative";
+import { Input } from "@/components/ui/Input";
+import CursoService from "@/services/cursoServices";
 
-// Definimos el encabezado de la tabla fuera del componente
 const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
 
 export const Cursos = () => {
@@ -55,7 +56,6 @@ export const Cursos = () => {
     }
   };
 
-
   const handleCancelar = () => { setEditandoId(null); setFormData({ name: "", color: "" }); };
   const handleBorrar = async (id) => {
     try {
@@ -86,22 +86,12 @@ export const Cursos = () => {
     const data = cursos?.map((curso) => [
       curso.id,
       editandoId === curso.id ? (
-        <input
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          className="border p-1 w-full"
-        />
+        <Input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
       ) : (
         curso.name
       ),
       editandoId === curso.id ? (
-        <input
-          type="color"
-          value={formData.color}
-          onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-          className="w-10 h-6"
-        />
+        <Input type="color" value={formData.color} onChange={(e) => setFormData({ ...formData, color: e.target.value })} className="w-10 h-6" />
       ) : (
         <div className="w-6 h-6 mx-auto rounded-full" style={{ backgroundColor: curso.color }}></div>
       ),
@@ -114,34 +104,14 @@ export const Cursos = () => {
   // Generar las acciones para cada fila
   const getAcciones = (curso) => {
     return editandoId === curso.id ? (
-      <>
-        <button
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-800"
-          onClick={() => handleGuardar(curso.id)}
-        >
-          Guardar
-        </button>
-        <button
-          className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-800 ml-4"
-          onClick={handleCancelar}
-        >
-          Cancelar
-        </button>
-      </>
+      <div className="inline-flex gap-10">
+        <Button onClick={() => handleGuardar(curso.id)}>Guardar</Button>
+        <ButtonNegative onClick={handleCancelar}>Cancelar</ButtonNegative>
+      </div>
     ) : (
-      <div className="inline-flex gap-4">
-        <button
-          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
-          onClick={() => handleModificar(curso)}
-        >
-          Modificar
-        </button>
-        <button
-          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
-          onClick={() => handleBorrar(curso.id)}
-        >
-          Borrar
-        </button>
+      <div className="inline-flex gap-10">
+        <Button onClick={() => handleModificar(curso)}> Modificar </Button>
+        <ButtonNegative onClick={() => handleBorrar(curso.id)}>Borrar  </ButtonNegative>
       </div>
     );
   };
@@ -151,24 +121,15 @@ export const Cursos = () => {
   }
 
   return (
-    <div className="overflow-x-auto bg-gray-200 p-4">
-      <div className="mx-auto bg-white p-4 rounded-lg shadow-lg">
-        <h2 className="text-2xl font-bold mb-4 text-center">GESTIÓN DE CURSOS</h2>
-
-        {/* Tabla reutilizable */}
-
-        <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
-
-        {/* Botón Agregar Curso */}
-        <div className="flex justify-center mt-4">
-          <button
-            className="bg-[#78211E] text-white px-6 py-2 rounded hover:bg-[#5a1815] transition"
-            onClick={() => setVistaActual("agregar")}
-          >
-            Agregar Cursos
-          </button>
-        </div>
+    <div className="overflow-x-auto w-full text-center">
+      {/* Contenedor del título y el botón */}
+      <div className="flex justify-between items-center mb-6 px-4">
+        <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE CURSOS</h2>
+        <Button onClick={() => setVistaActual("agregar")}>Agregar Curso</Button>
       </div>
+  
+      {/* Tabla reutilizable */}
+      <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
     </div>
-  );
+  );  
 };

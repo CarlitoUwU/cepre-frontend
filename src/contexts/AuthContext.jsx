@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
             id: decoded.id,
             email: decoded.email,
             role: decoded.role,
+            token
           });
         } catch (error) {
           console.error("Error decodificando el token:", error);
@@ -52,6 +53,7 @@ export const AuthProvider = ({ children }) => {
         id: decoded.id,
         email: decoded.email,
         role: decoded.role,
+        token,
       };
 
       setUser(user);

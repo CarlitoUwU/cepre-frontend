@@ -1,40 +1,22 @@
-import api from "./api";
+import { request } from "./api";
 
 const ClassesServices = {
   /**
    * Obtiene la lista de classes.
-   * @returns {Promise<Array<{ id: number, name: string, color: string }>> | null}
+   * @returns {Promise<Array<{ id: number, name: string, capacity: number, urlMeet: string, area: Object, shift: Object, monitor: Object }>> | null}
    */
   async getClasses() {
-    try {
-      const response = await api.get('/classes');
-      const data = response.data
-      console.log({ data });
-
-      return data;
-    } catch (e) {
-      console.error("Error al obtener las classes", e.message, e);
-      return null;
-    }
+    return request("get", "/classes", null, true);
   },
-
 
   /**
    * Obtiene una classe por su ID.
-   * @param {number} id - ID de la classe a obtener.
+   * @param {string} id - ID de la classe a obtener.
    * @returns {Promise<Object | null>}
    */
   async getClassById(id) {
-    try {
-      const response = await api.get(`/classes/${id}`);
-      const data = response.data;
-      console.log({ data });
-
-      return data;
-    } catch (e) {
-      console.error("Error al obtener la clase", e.message, e);
-      return null;
-    }
+    if (!id) throw new Error("ID inválido");
+    return request("get", `/classes/${id}`);
   },
 
   /**
@@ -49,23 +31,13 @@ const ClassesServices = {
    * @param {number} newClass.monitorId - ID del monitor de la clase.
    */
   async createClass({ name, idSede, areaId, shiftId, capacity, urlMeet, monitorId }) {
-    try {
-      console.log({ name, idSede, areaId, shiftId, capacity, urlMeet, monitorId });
-      const response = await api.post('/classes', { name, idSede, areaId, shiftId, capacity, urlMeet, monitorId });
-      const data = response.data;
-      console.log({ data });
-
-      return data;
-    } catch (e) {
-      console.error("Error al crear la clase", e.message, e);
-      return null;
-    }
+    return request("post", "/classes", { name, idSede, areaId, shiftId, capacity, urlMeet, monitorId });
   },
 
   /**
    * Actualiza una clase existente.
    * @param {Object} classData - Datos de la clase a actualizar.
-   * @param {number} classData.id - ID de la clase a actualizar.
+   * @param {string} classData.id - ID de la clase a actualizar.
    * @param {string} classData.name - Nombre de la clase.
    * @param {number} classData.idSede - ID de la sede de la clase.
    * @param {number} classData.areaId - ID del area de la clase.
@@ -75,36 +47,27 @@ const ClassesServices = {
    * @param {number} classData.monitorId - ID del monitor de la clase.
    */
   async updateClass({ id, name, idSede, areaId, shiftId, capacity, urlMeet, monitorId }) {
-    try {
-      console.log({ id, name, idSede, areaId, shiftId, capacity, urlMeet, monitorId });
-      const response = await api.put(`/classes/${id}`, { name, idSede, areaId, shiftId, capacity, urlMeet, monitorId });
-      const data = response.data;
-      console.log({ data });
-
-      return data;
-    } catch (e) {
-      console.error("Error al actualizar la clase", e.message, e);
-      return null;
-    }
+    return request("put", `/classes/${id}`, { name, idSede, areaId, shiftId, capacity, urlMeet, monitorId });
   },
 
   /**
    * Elimina una clase por su ID.
    * @param {number} id - ID de la clase a eliminar.
+   * @returns {Promise<boolean>}
+   * @throws {Error} Si el ID no es válido.
    */
   async deleteClass(id) {
-    try {
-      const response = await api.delete(`/classes/${id}`);
-      const data = response.data;
-      console.log({ data });
-
-      return data;
-    } catch (e) {
-      console.error("Error al eliminar la clase", e.message, e);
-      return null;
-    }
+    if (!id) throw new Error("ID inválido");
+    return request("delete", `/classes/${id}`);
   },
 
+  /**
+   * Obtiene la lista de clases del profesor.
+   * @returns {Promise<Array<Object }>> | null}
+   */
+  async getClassOfTeacher() {
+    return request("get", "/classes/getClassOfTeacher", null, true);
+  },
 };
 
 export default ClassesServices;

@@ -1,22 +1,12 @@
-import api from "./api";
+import { request } from "./api";
 
 const HourSessionsServices = {
-
   /**
    * Obtiene todas las sesiones de hora.
    * @returns {Promise<Array<{ id: number, shiftId: number, period: number, startTime: time, endTime: time }>> | null}
    */
   async getHourSessions() {
-    try {
-      const response = await api.get('/hour-sessions');
-      const data = response.data;
-      console.log({ data });
-
-      return data;
-    } catch (e) {
-      console.error("Error al obtener las sesiones de hora", e.message, e);
-      return null;
-    }
+    return request("get", "/hour-sessions", null, true);
   },
 
   /**
@@ -25,16 +15,7 @@ const HourSessionsServices = {
    * @returns {Promise<Object | null>}
    */
   async getHourSessionById(id) {
-    try {
-      const response = await api.get(`/hour-sessions/${id}`);
-      const data = response.data;
-      console.log({ data });
-
-      return data;
-    } catch (e) {
-      console.error("Error al obtener la sesión de hora", e.message, e);
-      return null;
-    }
+    return request("get", `/hour-sessions/${id}`);
   },
 
   /**
@@ -46,17 +27,7 @@ const HourSessionsServices = {
    * @param {time} newHourSession.endTime - Hora de fin de la sesión de hora.
    */
   async createHourSession({ shiftId, period, startTime, endTime }) {
-    try {
-      console.log({ shiftId, period, startTime, endTime });
-      const response = await api.post('/hour-sessions', { shiftId, period, startTime, endTime });
-      const data = response.data;
-      console.log({ data });
-
-      return data;
-    } catch (e) {
-      console.error("Error al crear la sesión de hora", e.message, e);
-      return null;
-    }
+    request("post", "/hour-sessions", { shiftId, period, startTime, endTime });
   },
 
   /**
@@ -69,17 +40,7 @@ const HourSessionsServices = {
    * @param {time} hourSession.endTime - Hora de fin de la sesión de hora.
    */
   async updateHourSession({ id, shiftId, period, startTime, endTime }) {
-    try {
-      console.log({ id, shiftId, period, startTime, endTime });
-      const response = await api.put(`/hour-sessions/${id}`, { shiftId, period, startTime, endTime });
-      const data = response.data;
-      console.log({ data });
-
-      return data;
-    } catch (e) {
-      console.error("Error al actualizar la sesión de hora", e.message, e);
-      return null;
-    }
+    request("put", `/hour-sessions/${id}`, { shiftId, period, startTime, endTime });
   },
 
   /**
@@ -87,19 +48,8 @@ const HourSessionsServices = {
    * @param {number} id - ID de la sesión de hora a eliminar.
    */
   async deleteHourSession(id) {
-    try {
-      console.log({ id });
-      const response = await api.delete(`/hour-sessions/${id}`);
-      const data = response.data;
-      console.log({ data });
-
-      return data;
-    } catch (e) {
-      console.error("Error al eliminar la sesión de hora", e.message, e);
-      return null;
-    }
+    request("delete", `/hour-sessions/${id}`);
   },
-
 };
 
 export default HourSessionsServices;
