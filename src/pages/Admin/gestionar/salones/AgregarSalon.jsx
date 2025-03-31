@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import ClassesServices from "../../../../services/ClassesServices";
+import ClassesServices from "@/services/classesServices.js";
 
 export const AgregarSalon = ({ onAgregarSalon, setVistaActual, areas, turnos }) => {
   const [nuevoSalon, setNuevoSalon] = useState({

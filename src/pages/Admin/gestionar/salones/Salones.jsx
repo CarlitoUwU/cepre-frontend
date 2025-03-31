@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Tabla } from "@/components/ui/Tabla";
-import aulasData from "@/data/todasAulas.json";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Select } from "@/components/ui/Select";
 import { AgregarSalon } from "./AgregarSalon"; // Importa el componente de agregar salón
-import ClassesServices from "../../../../services/ClassesServices";
-import AreaServices from "../../../../services/AreaServices";
-import ShiftsServices from "../../../../services/ShiftsServices";
+import ClassesServices from "@/services/classesServices.js";
+import AreaServices from "@/services/areaServices.js";
+import ShiftsServices from "@/services/shiftsServices.js";
 
 const encabezadoCursos = ["N° de Aula", "Área", "Turno", "Estado", "Acciones"];
 
