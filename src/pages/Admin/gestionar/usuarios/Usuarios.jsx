@@ -5,7 +5,6 @@ import { ButtonCabecera } from "@/components/ui/ButtonCabecera";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
-import { Input } from "../../../../components/ui/Input";
 import { AgregarUsuarios } from "./AgregarUsuarios";
 
 const roles = {
