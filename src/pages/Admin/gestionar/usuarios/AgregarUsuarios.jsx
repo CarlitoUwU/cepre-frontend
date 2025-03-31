@@ -54,18 +54,7 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
         {rol === "Docente" && (
           <>
             <LabelForm text="Curso:" />
-            <Select name="curso" value={formData.curso || ""} onChange={handleChange} required>
-              <option value="">Seleccione un curso</option>
-              {Array.isArray(cursos) && cursos.length > 0 ? (
-                cursos.map((curso) => (
-                  <option key={curso.id} value={curso.name}>
-                    {curso.name}
-                  </option>
-                ))
-              ) : (
-                <option value="" disabled>Cargando cursos...</option>
-              )}
-            </Select>
+            <Select name="curso" value={formData.curso || ""} onChange={handleChange} options={cursos.map((curso) => ({ id: curso.id, name: curso.name }))} required/>
 
             <LabelForm text="Correo Personal:" />
             <Input type="email" name="correo_personal" value={formData.correo_personal || ""} onChange={handleChange} required />
