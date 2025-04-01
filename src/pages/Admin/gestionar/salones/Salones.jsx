@@ -19,7 +19,6 @@ export const Salones = () => {
   const [formData, setFormData] = useState({ name: "", areaId: 0, turnoId: 0 });
   const [vistaActual, setVistaActual] = useState("lista"); // Estado para cambiar entre lista y agregar
 
-
   useEffect(() => {
     const fetchSalones = async () => {
       const data = await ClassesServices.getClasses();
@@ -37,7 +36,6 @@ export const Salones = () => {
       if (Array.isArray(data)) {
         const aulas = data.map((aula) => ({
           ...aula,
-          aula: `${aula.area.name[0]} - ${aula.name}`,
           area: aula.area.name,
           turno: aula.shift.name,
           estado: "Listo",
@@ -51,26 +49,22 @@ export const Salones = () => {
 
   const handleModificar = (aula) => {
     setEditandoId(aula.id);
-    setFormData({ name: aula.aula, areaId: areas.find(a => a.name === aula.area)?.id, turnoId: turnos.find(t => t.name === aula.turno)?.id });
+    setFormData({ name: aula.name, areaId: areas.find(a => a.name === aula.area)?.id, turnoId: turnos.find(t => t.name === aula.turno)?.id });
   };
 
-
   const handleGuardar = async () => {
-    const claseEditando = aulas.find(a => a.id === editandoId);
+    const area = areas.find(a => a.id === parseInt(formData.areaId));
+
     const dataClase = {
-      id: claseEditando.id,
-      name: claseEditando.name,
-      idSede: claseEditando.idSede,
-      areaId: parseInt(formData.areaId),
+      id: editandoId,
+      name: `${area.name[0]}-${formData.name.slice(2)}`,
+      areaId: area.id,
       shiftId: parseInt(formData.turnoId),
-      capacity: claseEditando.capacity,
-      urlMeet: claseEditando.urlMeet,
     }
 
     let claseActualizada = await ClassesServices.updateClass(dataClase);
     claseActualizada = {
       ...claseActualizada,
-      aula: `${claseActualizada.area.name[0]} - ${claseActualizada.name}`,
       area: claseActualizada.area.name,
       turno: claseActualizada.shift.name,
       estado: "Listo",
@@ -121,7 +115,7 @@ export const Salones = () => {
 
   const getDatosAulas = () => {
     return aulas.map((aula) => [
-      aula.aula,
+      aula.name,
       editandoId === aula.id ? (
         <Select
           name="areaId"
