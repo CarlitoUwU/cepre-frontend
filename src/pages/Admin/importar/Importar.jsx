@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { ButtonCabecera } from "../../../components/ui/ButtonCabecera";
+import { ButtonCabecera } from "@/components/ui/ButtonCabecera";
 import { useNavigate } from "react-router-dom";
 import CSV from "../../../services/CSV";
-import { Button } from "../../../components/ui/Button";
-import { ButtonNegative } from "../../../components/ui/ButtonNegative";
+import { Button } from "@/components/ui/button.tsx";
+import { ButtonNegative } from "@/components/ui/ButtonNegative";
 
 const roles = {
   Profesor: "Profesor",
