@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button } from "../../components/ui/Button";
-import { ButtonNegative } from "../../components/ui/ButtonNegative";
+import { Button } from "@/components/ui/button.js";
+import { ButtonNegative } from "@/components/ui/ButtonNegative";
 
 export const EditarEnlace = () => {
   const navigate = useNavigate();
