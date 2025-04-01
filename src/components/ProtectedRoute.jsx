@@ -33,7 +33,7 @@ export const ProtectedRoute = () => {
     // Definir las rutas permitidas por rol
     const rolePaths = {
       administrador: "/admin",
-      docente: "/docente",
+      profesor: "/docente",
       monitor: "/monitor",
       supervisor: "/supervisor",
     };
