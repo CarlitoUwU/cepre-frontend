@@ -61,6 +61,13 @@ const MonitorServices = {
     return request("get", "/monitors/cargar/horario", null);
   },
 
+  /**
+   * Obtiene la lista de docentes.
+   */
+  async cargarDocentes() {
+    return request("get", "/monitors/datos/teachers", null);
+  }
+
 };
 
 export default MonitorServices;
