@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Select } from "@/components/ui/Select";
 import { AgregarSalon } from "./AgregarSalon"; // Importa el componente de agregar salón
+import  EditarSalon  from "./EditarSalon";
 import ClassesServices from "@/services/classesServices.js";
 import AreaServices from "@/services/areaServices.js";
 import ShiftsServices from "@/services/shiftsServices.js";
@@ -100,6 +101,10 @@ export const Salones = () => {
     setVistaActual("lista"); // Volver a la vista de lista después de agregar
   };
 
+  const handleEditarSalon = (id) => {
+    setVistaActual("asignarEditarSalon");
+  };
+
   const getAcciones = (aula) =>
     editandoId === aula.id ? (
       <div className="inline-flex gap-10">
@@ -108,7 +113,7 @@ export const Salones = () => {
       </div>
     ) : (
       <div className="inline-flex gap-10">
-        <Button onClick={() => handleModificar(aula)}>Modificar</Button>
+        <Button onClick={() => handleEditarSalon(aula)}>Modificar</Button> 
         <ButtonNegative onClick={() => handleBorrar(aula.id)}>Borrar</ButtonNegative>
       </div>
     );
@@ -144,6 +149,10 @@ export const Salones = () => {
   // Si la vista es "agregar", mostrar el formulario de AgregarSalon
   if (vistaActual === "agregar") {
     return <AgregarSalon onAgregarSalon={handleAgregarSalon} setVistaActual={setVistaActual} areas={areas} turnos={turnos} />;
+  }
+
+  if (vistaActual === "asignarEditarSalon") {
+    return <EditarSalon />;
   }
 
   return (
