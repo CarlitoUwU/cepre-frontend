@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import horarioData from "../../data/horario.json";
-import { TablaHorarioMonitor } from "../../components/Horarios/indexMonitor";
-import { ListaCursosMonitor } from "../../components/ListaCursosMonitor";
-import { FuncionesMonitor } from "../../components/FuncionesMonitor";
-import MonitorServices from "../../services/monitorServices";
+import horarioData from "@/data/horario.json";
+import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
+import { ListaCursosMonitor } from "@/components/ListaCursosMonitor";
+import { FuncionesMonitor } from "@/components/FuncionesMonitor";
+import MonitorServices from "@/services/monitorServices";
 
 const formatTimeToHHMM = (isoString) => {
   const date = new Date(isoString);

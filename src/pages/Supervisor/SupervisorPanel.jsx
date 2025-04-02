@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Tabla } from "../../components/ui/Tabla";
-import { TablaHorarioMonitor } from "../../components/Horarios/indexMonitor";
-import docentesData from "../../data/docentes.json";
-import horarioData from "../../data/horario.json";
-import SupervisorsServices from "../../services/SupervisorsServices";
+import { Tabla } from "@/components/ui/Tabla";
+import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
+import docentesData from "@/data/docentes.json";
+import horarioData from "@/data/horario.json";
+import SupervisorsServices from "@/services/SupervisorsServices";
 
 export const SupervisorPanel = () => {
   const [aulasData, setAulasData] = useState([]);

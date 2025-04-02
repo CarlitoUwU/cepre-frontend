@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { AulaInfo } from "../../components/AulaInfo";
-import { ListaSalones } from "../../components/ListaSalones";
-import { TablaHorario } from "../../components/Horarios";
-import ClassesServices from "../../services/ClassesServices";
+import { AulaInfo } from "@/components/AulaInfo";
+import { ListaSalones } from "@/components/ListaSalones";
+import { TablaHorario } from "@/components/Horarios";
+import ClassesServices from "@/services/ClassesServices";
 
 const DIAS = {
   "Lunes": "LUNES",
