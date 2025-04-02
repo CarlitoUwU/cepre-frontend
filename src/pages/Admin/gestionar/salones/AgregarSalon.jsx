@@ -8,9 +8,9 @@ import ClassesServices from "@/services/classesServices.js";
 export const AgregarSalon = ({ onAgregarSalon, setVistaActual, areas, turnos }) => {
   const [nuevoSalon, setNuevoSalon] = useState({
     name: "",
-    areaId: areas.length > 0 ? areas[0].id : 0,
-    shiftId: turnos.length > 0 ? turnos[0].id : 0,
-  });
+    areaId: (areas && areas.length > 0) ? areas[0].id : 0,
+    shiftId: (turnos && turnos.length > 0) ? turnos[0].id : 0,
+  });  
 
   const [error, setError] = useState("");
 
@@ -58,10 +58,10 @@ export const AgregarSalon = ({ onAgregarSalon, setVistaActual, areas, turnos }) 
         <Input type="text" name="name" value={nuevoSalon.name} onChange={handleChange} />
 
         <label className="block font-semibold mt-3">Área:</label>
-        <Select name="areaId" value={nuevoSalon.areaId} onChange={handleChange} options={areas} />
+        <Select name="areaId" value={nuevoSalon.areaId} onChange={handleChange} options={areas ? areas : []}/>
 
         <label className="block font-semibold mt-3">Turno:</label>
-        <Select name="shiftId" value={nuevoSalon.shiftId} onChange={handleChange} options={turnos} />
+        <Select name="shiftId" value={nuevoSalon.shiftId} onChange={handleChange} options={turnos ? turnos : []} />
 
         <div className="flex justify-between mt-4">
           <ButtonNegative onClick={() => setVistaActual("lista")}>Atrás</ButtonNegative>
