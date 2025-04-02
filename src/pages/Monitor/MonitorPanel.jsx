@@ -4,22 +4,59 @@ import horarioData from "../../data/horario.json";
 import { TablaHorarioMonitor } from "../../components/Horarios/indexMonitor";
 import { ListaCursosMonitor } from "../../components/ListaCursosMonitor";
 import { FuncionesMonitor } from "../../components/FuncionesMonitor";
+import MonitorServices from "../../services/monitorServices";
+
+const formatTimeToHHMM = (isoString) => {
+  const date = new Date(isoString);
+  return date.toISOString().substring(11, 16);
+};
+
+const DIAS = {
+  "Lunes": "LUNES",
+  "Martes": "MARTES",
+  "Miércoles": "MIÉRCOLES",
+  "Jueves": "JUEVES",
+  "Viernes": "VIERNES",
+  "Sábado": "SÁBADO",
+};
+
+const fetchHorarioData = async () => {
+  try {
+    const horario = await MonitorServices.cargarHorario();
+    return horario.map((hora) => ({
+      dia: DIAS[hora.weekday],
+      hora_ini: formatTimeToHHMM(hora.startTime),
+      hora_fin: formatTimeToHHMM(hora.endTime),
+      curso: hora.courseName,
+    }));
+  } catch (error) {
+    console.error("Error fetching horario data", error);
+    return [];
+  }
+};
 
 export const MonitorPanel = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const horario = horarioData;
-
+  
+  const [horario, setHorario] = useState([]);
   const [meetLink, setMeetLink] = useState("https://meet.google.com/");
-  const [classroomLink, setClassroomLink] = useState(
-    "https://classroom.google.com/"
-  );
-
+  const [classroomLink, setClassroomLink] = useState("https://classroom.google.com/");
+  
   const updateLinks = () => {
-    if (!location.state?.linkType || !location.state?.newLink) return;
+    const { linkType, newLink } = location.state || {};
+    if (!linkType || !newLink) return;
     const linkHandlers = { meet: setMeetLink, classroom: setClassroomLink };
-    linkHandlers[location.state.linkType]?.(location.state.newLink);
+    linkHandlers[linkType]?.(newLink);
   };
+
+  useEffect(() => {
+    const loadHorario = async () => {
+      const data = await fetchHorarioData();
+      setHorario(data);
+    };
+    loadHorario();
+  }, []);
 
   useEffect(updateLinks, [location.state]);
 
@@ -37,13 +74,13 @@ export const MonitorPanel = () => {
         {/* Lista de Cursos */}
         <div className="col-span-2 overflow-x-auto">
           <h2 className="text-2xl font-bold mb-4">CURSOS</h2>
-          <ListaCursosMonitor cursos={horario} />
+          <ListaCursosMonitor cursos={horarioData} />
         </div>
 
         {/* Horario del Monitor */}
         <div className="col-span-3 overflow-x-auto">
           <h2 className="text-2xl font-bold mb-4">HORARIO I-102</h2>
-          <TablaHorarioMonitor listaCursos={horario} />
+          <TablaHorarioMonitor horas={horario} />
 
           {/* Funciones del Monitor */}
           <div className="col-span-5 mt-8">
