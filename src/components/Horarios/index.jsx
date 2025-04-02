@@ -68,7 +68,7 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
       {listaSalones.flatMap(salon =>
         salon.horas.map(hora => {
           return <Curso
-            key={hora.id}
+            key={`${salon.aula}-${hora.dia}-${hora.hora_ini}`}
             clase={{
               aula: salon.aula,
               monitor: salon.monitor,
