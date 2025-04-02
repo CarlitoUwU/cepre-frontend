@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
 import { AgregarUsuarios } from "./AgregarUsuarios";
+import  AsignarSalonDoc  from "./AsignarSalonDoc";
+import  AsignarSalonSup  from "./AsignarSalonSup";
 
 const roles = {
   Docente: "Docente",
@@ -84,12 +86,12 @@ export const Usuarios = () => {
     const nuevosDatos = datosRol.map((usuario) =>
       usuario.id === id
         ? {
-          ...usuario,
-          [camposPorRol[rol].nombre]: editFormData.nombre,
-          correo: editFormData.correo,
-          numero: editFormData.numero,
-          [camposPorRol[rol].extra]: editFormData.extra,
-        }
+            ...usuario,
+            [camposPorRol[rol].nombre]: editFormData.nombre,
+            correo: editFormData.correo,
+            numero: editFormData.numero,
+            [camposPorRol[rol].extra]: editFormData.extra,
+          }
         : usuario
     );
 
@@ -103,6 +105,14 @@ export const Usuarios = () => {
     setVista("formulario");
   };
 
+  const handleAsignarSalonDoc = (id) => {
+    setVista("asignarSalonDoc");
+  };
+
+  const handleAsignarSalonSup = (id) => {
+    setVista("asignarSalonSup");
+  };
+
   const generarFilaUsuario = (usuario, index) => {
     const idUsuario = usuario.id;
     const esEdicion = editingId === idUsuario;
@@ -110,7 +120,10 @@ export const Usuarios = () => {
     const acciones = (
       <div className="flex gap-2 justify-center">
         {rol === roles.Docente && (
-          <Button onClick={() => handleAsignarSalon(idUsuario)}>Asignar Salón</Button>
+          <Button onClick={() => handleAsignarSalonDoc(idUsuario)}>Asignar Salón</Button>
+        )}
+        {rol === roles.Supervisor && (
+          <Button onClick={() => handleAsignarSalonSup(idUsuario)}>Asignar Salón</Button>
         )}
         <Button onClick={() => handleModificar(idUsuario)}>Modificar</Button>
         <ButtonNegative onClick={() => handleBorrar(idUsuario)}>Borrar</ButtonNegative>
@@ -128,7 +141,7 @@ export const Usuarios = () => {
           <Button onClick={() => handleSaveEdit(idUsuario)}>Guardar</Button>
           <ButtonNegative onClick={() => setEditingId(null)}>Cancelar</ButtonNegative>
         </div>,
-      ].filter(Boolean); // Elimina valores `null` en la vista de Supervisor
+      ].filter(Boolean); 
     }
 
     return [
@@ -168,6 +181,9 @@ export const Usuarios = () => {
       </div>
     );
   }
+
+  if (vista === "asignarSalonDoc") return <AsignarSalonDoc />;
+  if (vista === "asignarSalonSup") return <AsignarSalonSup />;
 
   return vista === "formulario" ? (
     <AgregarUsuarios rol={rol} formData={editFormData} handleChange={(e) => setEditFormData({ ...editFormData, [e.target.name]: e.target.value })} handleGuardarNuevoUsuario={() => { }}
