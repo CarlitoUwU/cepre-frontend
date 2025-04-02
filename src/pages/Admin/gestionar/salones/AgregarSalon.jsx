@@ -24,19 +24,20 @@ export const AgregarSalon = ({ onAgregarSalon, setVistaActual, areas, turnos }) 
       return;
     }
 
+    const area = areas.find((a) => a.id === parseInt(nuevoSalon.areaId));
+
     const dataSalon = {
       ...nuevoSalon,
+      name: `${area.name[0]}-${nuevoSalon.name}`,
       areaId: parseInt(nuevoSalon.areaId),
       shiftId: parseInt(nuevoSalon.shiftId),
       idSede: 1,
       capacity: 100,
-      urlMeet: "https://meet.google.com/byk-mjbz-qij",
     };
 
     let salonCreado = await ClassesServices.createClass(dataSalon);
     salonCreado = {
       ...salonCreado,
-      aula: `${salonCreado.area.name[0]} - ${salonCreado.name}`,
       area: salonCreado.area.name,
       turno: salonCreado.shift.name,
       estado: "Listo",
