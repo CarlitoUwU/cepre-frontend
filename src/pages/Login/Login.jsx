@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import logo from "../../assets/Unsa_logo.png";
-import escudo from "../../assets/escudo-unsa.jpeg";
+import logo from "@/assets/Unsa_logo.png";
+import escudo from "@/assets/escudo-unsa.jpeg";
 import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {

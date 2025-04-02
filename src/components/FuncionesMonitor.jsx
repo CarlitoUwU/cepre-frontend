@@ -1,7 +1,7 @@
 import React from "react";
 import { Tabla } from "./ui/Tabla";
-import meetIcon from "../assets/meet.png";
-import classroomIcon from "../assets/classroom.png";
+import meetIcon from "@/assets/meet.png";
+import classroomIcon from "@/assets/classroom.png";
 import { Button } from "./ui/button.tsx";
 
 export const FuncionesMonitor = ({ monitorInfo }) => {

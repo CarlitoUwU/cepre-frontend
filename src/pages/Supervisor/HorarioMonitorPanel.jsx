@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { TablaHorarioMonitor } from "../../components/Horarios/indexMonitor";
+import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
 
 export const HorarioMonitorPanel = () => {
   const { salon } = useParams(); // Obtener el parámetro del salón

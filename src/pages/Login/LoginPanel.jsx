@@ -1,6 +1,6 @@
 import React from "react";
 import { Login } from "./Login";
-import background from "../../assets/ceprunsa.png";
+import background from "@/assets/ceprunsa.webp";
 
 export const LoginPanel = () => {
   return (

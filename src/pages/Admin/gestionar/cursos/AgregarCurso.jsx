@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { Input } from "../../../../components/ui/Input";
+import { Input } from "@/components/ui/Input";
 
 export const AgregarCurso = ({ onAgregarCurso, setVistaActual }) => {
   const [nuevoCurso, setNuevoCurso] = useState({
