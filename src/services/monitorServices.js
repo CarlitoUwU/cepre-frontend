@@ -54,7 +54,8 @@ const MonitorServices = {
   },
 
   /**
-   * ns
+   * Obtiene el horario del monitor,
+   * Id saca del token
    */
   async cargarHorario() {
     return request("get", "/monitors/cargar/horario", null);
