@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FaSignOutAlt } from "react-icons/fa";
 import unsaLogo from "@/assets/Unsa_logo.png";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, login } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user) {
+      const token = localStorage.getItem("token");
+      if (token) {
+        login(token, navigate);
+      }
+    }
+  }, [user, login, navigate]);
 
   const handleLogout = () => {
     logout(navigate);

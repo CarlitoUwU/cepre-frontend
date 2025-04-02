@@ -18,7 +18,7 @@ export const GoogleAuthHandler = () => {
       console.error("No se encontró token en la URL.");
       navigate("/"); // Si no hay token, redirige
     }
-  },[]);
+  },[token, login, navigate]);
 
   return <div>Autenticando...</div>;
 };
