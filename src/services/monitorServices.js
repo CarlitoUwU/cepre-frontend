@@ -62,12 +62,14 @@ const MonitorServices = {
   },
 
   /**
-   * Obtiene la lista de docentes.
+   * Obtiene la lista de docentes del monitor.
+   * @param {string|null} id - ID del monitor. Si es null, obtiene todos los docentes.
+   * @returns {Promise<Array<{ courseName: string, firstName: string, lastName: string, email: string }>>}
    */
-  async cargarDocentes() {
-    return request("get", "/monitors/datos/teachers", null);
+  async cargarDocentes(id = null) {
+    const url = id ? `/monitors/${id}/teachers` : "/monitors/datos/teachers";
+    return request("get", url, null);
   }
-
 };
 
 export default MonitorServices;
