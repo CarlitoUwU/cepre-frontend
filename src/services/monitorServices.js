@@ -54,13 +54,23 @@ const MonitorServices = {
   },
 
   /**
-   * Obtiene el horario del monitor,
-   * Id saca del token
+   * Obtiene el horario de un monitor por su ID.
+   * @param {string|null} id - ID del monitor. Si es null, obtiene el horario de con el id del token
    */
-  async cargarHorario() {
-    return request("get", "/monitors/cargar/horario", null);
+  async cargarHorario(id = null) {
+    const url = id ? `/monitors/${id}/horario` : "/monitors/cargar/horario";
+    return request("get", url, null);
   },
 
+  /**
+   * Obtiene la lista de docentes del monitor.
+   * @param {string|null} id - ID del monitor. Si es null, obtiene todos los docentes.
+   * @returns {Promise<Array<{ courseName: string, firstName: string, lastName: string, email: string }>>}
+   */
+  async cargarDocentes(id = null) {
+    const url = id ? `/monitors/${id}/teachers` : "/monitors/datos/teachers";
+    return request("get", url, null);
+  }
 };
 
 export default MonitorServices;
