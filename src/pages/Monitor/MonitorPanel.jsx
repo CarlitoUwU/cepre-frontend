@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
 import { ListaCursosMonitor } from "@/components/ListaCursosMonitor";
-import { FuncionesMonitor } from "@/components/FuncionesMonitor";
+import { FuncionesMonitor } from "./FuncionesMonitor";
 import MonitorServices from "@/services/monitorServices";
 
 const formatTimeToHHMM = (isoString) => {
