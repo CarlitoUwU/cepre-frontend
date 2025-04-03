@@ -1,8 +1,8 @@
 {
-  "reescribe": [
+  "rewrites": [
     {
-      "fuente": "/(.*)",
-      "destino": "/"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
