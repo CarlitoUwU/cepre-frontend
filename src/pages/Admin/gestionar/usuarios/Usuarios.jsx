@@ -64,6 +64,7 @@ export const Usuarios = () => {
     setDatosRol(nuevosDatos);
     localStorage.setItem(`usuarios_${rol}`, JSON.stringify(nuevosDatos));
   };
+  
 
   const handleModificar = (id) => {
     const usuario = datosRol.find((u) => u.id === id);
@@ -183,7 +184,8 @@ export const Usuarios = () => {
   }
 
   if (vista === "asignarSalonDoc") return <AsignarSalonDoc />;
-  if (vista === "asignarSalonSup") return <AsignarSalonSup />;
+  if (vista === "asignarSalonSup") return <AsignarSalonSup idSupervisor={1} setVista={setVista} />;
+
 
   return vista === "formulario" ? (
     <AgregarUsuarios rol={rol} formData={editFormData} handleChange={(e) => setEditFormData({ ...editFormData, [e.target.name]: e.target.value })} handleGuardarNuevoUsuario={() => { }}
