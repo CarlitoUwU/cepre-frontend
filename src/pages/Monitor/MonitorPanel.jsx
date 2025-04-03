@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import horarioData from "@/data/horario.json";
 import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
 import { ListaCursosMonitor } from "@/components/ListaCursosMonitor";
 import { FuncionesMonitor } from "./FuncionesMonitor";
@@ -35,14 +34,30 @@ const fetchHorarioData = async () => {
   }
 };
 
+const fetchProfesoresData = async () => {
+  try {
+    const profesores = await MonitorServices.cargarDocentes();
+    return profesores.map((profesor) => ({
+      curso: profesor.courseName,
+      docente: `${profesor.firstName} ${profesor.lastName}`,
+      correo: profesor.email,
+    }))
+  }
+  catch (error) {
+    console.error("Error fetching profesores data", error);
+    return [];
+  }
+}
+
 export const MonitorPanel = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const [horario, setHorario] = useState([]);
+  const [listaProfesores, setListaProfesores] = useState([]);
   const [meetLink, setMeetLink] = useState("https://meet.google.com/");
   const [classroomLink, setClassroomLink] = useState("https://classroom.google.com/");
-  
+
   const updateLinks = () => {
     const { linkType, newLink } = location.state || {};
     if (!linkType || !newLink) return;
@@ -53,6 +68,8 @@ export const MonitorPanel = () => {
   useEffect(() => {
     const loadHorario = async () => {
       const data = await fetchHorarioData();
+      const profesores = await fetchProfesoresData();
+      setListaProfesores(profesores);
       setHorario(data);
     };
     loadHorario();
@@ -74,7 +91,7 @@ export const MonitorPanel = () => {
         {/* Lista de Cursos */}
         <div className="col-span-2 overflow-x-auto">
           <h2 className="text-2xl font-bold mb-4">CURSOS</h2>
-          <ListaCursosMonitor cursos={horarioData} />
+          <ListaCursosMonitor cursos={listaProfesores} />
         </div>
 
         {/* Horario del Monitor */}
