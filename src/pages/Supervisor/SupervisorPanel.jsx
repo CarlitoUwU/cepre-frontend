@@ -3,6 +3,8 @@ import { Tabla } from "@/components/ui/Tabla";
 import SupervisorsServices from "@/services/SupervisorsServices";
 import { HorarioMonitorPanel } from "./HorarioMonitorPanel";
 import { DirectorioMonitorPanel } from "./DirectorioMonitorPanel";
+import {Button} from "@/components/ui/Button";
+import {ButtonNegative} from "@/components/ui/ButtonNegative";
 
 const ESTADO = {
   "INDEX": "INDEX",
@@ -65,25 +67,8 @@ export const SupervisorPanel = () => {
         {aula.enlace}
       </a>,
       <div className="inline-flex gap-4">
-        <button
-          onClick={() => {
-            setSelectedSalon(aula);
-            setEstado(ESTADO.HORARIO);
-          }}
-          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
-        >
-          Visualizar Horario
-        </button>
-
-        <button
-          onClick={() => {
-            setEstado(ESTADO.DIRECTORIO);
-            setSelectedSalon(aula);
-          }}
-          className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
-        >
-          Ver Directorio
-        </button>
+        <Button onClick={() => {setSelectedSalon(aula); setEstado(ESTADO.HORARIO);}}> Visualizar Horario </Button>
+        <ButtonNegative onClick={() => {setSelectedSalon(aula); setEstado(ESTADO.DIRECTORIO);}}> Visualizar Directorio </ButtonNegative>
       </div>,
     ]);
   }, [aulasData]);
@@ -92,7 +77,8 @@ export const SupervisorPanel = () => {
   if (error) return <p className="text-center text-red-600">{error}</p>;
 
   return (
-    <div className="p-6 bg-gray-100 min-h-full">
+    <div className="p-5">
+      <div className="bg-gray-100 p-5 rounded-md shadow-md overflow-x-auto text-center">
       <h1 className="text-2xl font-bold text-center mb-6">Panel de Supervisor</h1>
 
       {estado === ESTADO.INDEX &&
@@ -103,6 +89,7 @@ export const SupervisorPanel = () => {
 
       {estado === ESTADO.DIRECTORIO &&
         <DirectorioMonitorPanel aula={selectedSalon} cambiarVista={cambiarVistaHorario} volver={volverAlIndex} />}
+    </div>
     </div>
   );
 };

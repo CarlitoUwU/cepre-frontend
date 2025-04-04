@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import MonitorServices from "@/services/monitorServices";
+import { Button } from "@/components/ui/Button";
+import { ButtonNegative } from "@/components/ui/ButtonNegative";
 
 export const DirectorioMonitorPanel = ({ aula = {}, volver = () => { }, cambiarVista = () => { } }) => {
   const [docentes, setDocentes] = useState([]);
@@ -38,14 +40,10 @@ export const DirectorioMonitorPanel = ({ aula = {}, volver = () => { }, cambiarV
       <h2 className="text-xl font-semibold text-center mb-4">
         {`Directorio del Aula ${aula.aula}`}
       </h2>
-      <Tabla encabezado={["#", "Curso", "Nombre", "Correo", "Número"]} datos={docentes} />
+      <Tabla encabezado={["N°", "Curso", "Nombre", "Correo", "Número"]} datos={docentes} />
       <div className="text-center mt-4 flex gap-4 justify-center">
-        <button onClick={cambiarVista} className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]">
-          Visualizar Horario
-        </button>
-        <button onClick={volver} className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-800">
-          Volver
-        </button>
+        <Button onClick={cambiarVista} > Visualizar Horario </Button>
+        <ButtonNegative onClick={volver} > Volver </ButtonNegative>
       </div>
     </div>
   )
