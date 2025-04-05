@@ -183,7 +183,8 @@ export const Usuarios = () => {
     );
   }
 
-  if (vista === "asignarSalonDoc") return <AsignarSalonDoc />;
+  if (vista === "asignarSalonDoc") return <AsignarSalonDoc setVista={setVista} />;
+
   if (vista === "asignarSalonSup") return <AsignarSalonSup idSupervisor={1} setVista={setVista} />;
 
 
