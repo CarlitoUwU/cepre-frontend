@@ -12,7 +12,7 @@ export const Header = () => {
     if (!user) {
       const token = localStorage.getItem("token");
       if (token) {
-        login(token, navigate);
+        login(token, navigate, false);
       }
     }
   }, [user, login, navigate]);
