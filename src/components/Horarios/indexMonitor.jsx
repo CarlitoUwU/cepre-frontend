@@ -2,8 +2,6 @@ import { Dia } from "./Dia";
 import { Hora } from "./Hora";
 import { Curso } from "./Curso";
 import React from "react";
-import { useMemo } from "react";
-
 
 const horasIni = [
   "07:00", "07:45", "08:30", "09:15", "10:00", "10:45", "11:30", "12:15", "13:00", "13:45", "14:30", "15:15", "16:00", "16:45", "17:30", "18:15", "19:00", "19:45", "20:30",
@@ -14,90 +12,78 @@ const horasFin = [
 const dias = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"];
 
 const cursoColors = {
-    "RAZ. MATEMÁTICO": "#D50000",
-    "RAZ. VERBAL": "#F4511E",
-    "MATEMÁTICA": "#32b779",
-    "HISTORIA": "#039ae4",
-    "GEOGRAFÍA": "#7887cb",
-    "LENGUAJE": "#616161",
-    "LITERATURA": "#e67d72",
-    "QUÍMICA": "#f7be26",
-    "FÍSICA": "#0a8143",
-    "BIOLOGÍA": "#3f50b4",
-    "PSICOLOGÍA": "#8f24ab",
-    "FILOSOFÍA": "#8f24ab",
-    "CÍVICA": "#e67d72",
-    "INGLÉS": "#f7be26",
-    "RAZ. LÓGICO": "#7887cb",
+  "RAZ. MATEMÁTICO": "#D50000",
+  "RAZ. VERBAL": "#F4511E",
+  "MATEMÁTICA": "#32b779",
+  "HISTORIA": "#039ae4",
+  "GEOGRAFÍA": "#7887cb",
+  "LENGUAJE": "#616161",
+  "LITERATURA": "#e67d72",
+  "QUÍMICA": "#f7be26",
+  "FÍSICA": "#0a8143",
+  "BIOLOGÍA": "#3f50b4",
+  "PSICOLOGÍA": "#8f24ab",
+  "FILOSOFÍA": "#8f24ab",
+  "CÍVICA": "#e67d72",
+  "INGLÉS": "#f7be26",
+  "RAZ. LÓGICO": "#7887cb",
 };
 
 
-export const TablaHorarioMonitor = ({ listaCursos = [] }) => {
-    // Ordenamos los cursos de manera memoizada para que siempre se refleje la actualización
-    const cursosOrdenados = useMemo(() => {
-        return [...listaCursos].sort((a, b) => a.curso.localeCompare(b.curso));
-    }, [listaCursos]);
+export const TablaHorarioMonitor = ({ horas = [] }) => {
+  const horaMinima = horas.length ? horas.map((h) => h.hora_ini).sort()[0] : "07:00";
+  const horaMaxima = horas.length ? horas.map((h) => h.hora_fin).sort().at(-1) : "12:10";
 
-    const horas = cursosOrdenados.flatMap((curso) => curso.horas);
-    const horaMinima = horas.length ? horas.map((h) => h.hora_ini).sort()[0] : "07:00";
-    const horaMaxima = horas.length ? horas.map((h) => h.hora_fin).sort().at(-1) : "12:10";
+  const minIndex = horasIni.indexOf(horaMinima);
+  const maxIndex = horasFin.indexOf(horaMaxima);
 
-    const minIndex = horasIni.indexOf(horaMinima);
-    const maxIndex = horasFin.indexOf(horaMaxima);
+  const getRow = (horaIni) => horasIni.indexOf(horaIni) - minIndex + 2;
+  const getRowSpan = (horaIni, horaFin) => horasFin.indexOf(horaFin) - horasIni.indexOf(horaIni) + 1;
+  const getColumn = (dia) => dias.indexOf(dia) + 2;
 
-    const getRow = (horaIni) => horasIni.indexOf(horaIni) - minIndex + 2;
-    const getRowSpan = (horaIni, horaFin) => horasFin.indexOf(horaFin) - horasIni.indexOf(horaIni) + 1;
-    const getColumn = (dia) => dias.indexOf(dia) + 2;
+  return (
+    <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4">
 
-    return (
-      <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4">
+      <div></div>
 
-        <div></div>
-        
-        {dias.map((dia, index) => (
-          <Dia key={index} nombre={dia} />
-        ))}
+      {dias.map((dia, index) => (
+        <Dia key={index} nombre={dia} />
+      ))}
 
-        {horasIni.slice(minIndex, maxIndex + 1).map((hora, index) => (
-          <Hora key={index} hora={`${hora} - ${horasFin[minIndex + index]}`} />
-        ))}
+      {horasIni.slice(minIndex, maxIndex + 1).map((hora, index) => (
+        <Hora key={index} hora={`${hora} - ${horasFin[minIndex + index]}`} />
+      ))}
 
-        {dias.flatMap((_, i) =>
+      {dias.flatMap((_, i) =>
         horasIni.slice(minIndex, maxIndex + 1).map((_, k) => (
-            <div
+          <div
             key={`${i}-${k}`}
             className="rounded-lg"
             style={{
-                backgroundColor: "#f4f0fb",
-                borderRadius: ".2vw",
-                gridColumn: i + 2,
-                gridRow: k + 2,
-                color: "#000",
-                minHeight: "3rem", // Aumenta el alto de la celda (ajusta según necesidad)
+              backgroundColor: "#f4f0fb",
+              borderRadius: ".2vw",
+              gridColumn: i + 2,
+              gridRow: k + 2,
+              color: "#000",
+              minHeight: "3rem", // Aumenta el alto de la celda (ajusta según necesidad)
             }}
-            ></div>
+          ></div>
         ))
-        )}
+      )}
 
-        {/* ✅ Ahora cursosOrdenados está garantizado que ya está ordenado */}
-        {cursosOrdenados.flatMap((curso) =>
-          curso.horas.map((hora) => (
-            <Curso
-                key={`${curso.curso}-${hora.dia}-${hora.hora_ini}`}
-                clase={{
-                    curso: curso.curso,
-                    docente: curso.docente,
-                    correo: curso.correo,
-                }}
-                nombre={curso.curso}
-                backgroundColor={cursoColors[curso.curso.toUpperCase()] || "#31A8E3"}
-                gridColumn={getColumn(hora.dia)}
-                gridRow={getRow(hora.hora_ini)}
-                gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
-                style={{ minHeight: "6rem" }} // Ajuste del alto
-            />
-          ))
-        )}
-      </div>
-    );
+      {horas.map((hora) => (
+        <Curso
+          key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
+
+          nombre={hora.curso}
+          backgroundColor={cursoColors[hora.curso.toUpperCase()] || "#31A8E3"}
+          gridColumn={getColumn(hora.dia)}
+          gridRow={getRow(hora.hora_ini)}
+          gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
+          style={{ minHeight: "6rem" }} // Ajuste del alto
+        />
+
+      ))}
+    </div>
+  );
 };

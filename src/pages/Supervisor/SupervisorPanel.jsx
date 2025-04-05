@@ -1,18 +1,57 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Tabla } from "../../components/ui/Tabla";
-import { TablaHorarioMonitor } from "../../components/Horarios/indexMonitor";
-import aulasData from "../../data/aulas.json";
-import docentesData from "../../data/docentes.json";
-import horarioData from "../../data/horario.json";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { Tabla } from "@/components/ui/Tabla";
+import SupervisorsServices from "@/services/SupervisorsServices";
+import { HorarioMonitorPanel } from "./HorarioMonitorPanel";
+import { DirectorioMonitorPanel } from "./DirectorioMonitorPanel";
+
+const ESTADO = {
+  "INDEX": "INDEX",
+  "HORARIO": "HORARIO",
+  "DIRECTORIO": "DIRECTORIO",
+}
 
 export const SupervisorPanel = () => {
+  const [aulasData, setAulasData] = useState([]);
+  const [estado, setEstado] = useState(ESTADO.INDEX);
   const [selectedSalon, setSelectedSalon] = useState(null);
-  const [mostrarHorario, setMostrarHorario] = useState(false); // Controla si se muestra el horario o el directorio
-  const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Datos de las aulas para la tabla principal
-  const getDatosAulas = () => {
+  const cambiarVistaHorario = useCallback(() => setEstado(ESTADO.HORARIO), []);
+  const cambiarVistaDirectorio = useCallback(() => setEstado(ESTADO.DIRECTORIO), []);
+  const volverAlIndex = useCallback(() => setEstado(ESTADO.INDEX), []);
+
+  const fetchMonitorData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await SupervisorsServices.getMonitors();
+      if (!Array.isArray(response)) {
+        throw new Error("La respuesta de la API no es válida");
+      }
+
+      const data = response.map((clase) => ({
+        id: "e4bd595e-9b1b-4c14-ad6e-d98a66dc6ffe", //clase?.id || "Sin ID",
+        aula: clase?.classes?.name || "Sin clase",
+        monitor: `${clase?.profile?.firstName || "Desconocido"} ${clase?.profile?.lastName || ""}`.trim(),
+        enlace: clase?.classes?.urlMeet || "",
+      }));
+
+      setAulasData(data);
+    } catch (err) {
+      console.error("Error al obtener monitores:", err);
+      setError("No se pudieron cargar los datos.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMonitorData();
+  }, []);
+
+  const datosAulas = useMemo(() => {
     return aulasData.map((aula, index) => [
       index + 1,
       aula.aula,
@@ -28,17 +67,18 @@ export const SupervisorPanel = () => {
       <div className="inline-flex gap-4">
         <button
           onClick={() => {
-            setSelectedSalon(aula.aula);
-            setMostrarHorario(true);
+            setSelectedSalon(aula);
+            setEstado(ESTADO.HORARIO);
           }}
           className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
         >
           Visualizar Horario
         </button>
+
         <button
           onClick={() => {
-            setSelectedSalon(aula.aula);
-            setMostrarHorario(false);
+            setEstado(ESTADO.DIRECTORIO);
+            setSelectedSalon(aula);
           }}
           className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
         >
@@ -46,80 +86,23 @@ export const SupervisorPanel = () => {
         </button>
       </div>,
     ]);
-  };
+  }, [aulasData]);
 
-  // Directorio de docentes para el aula seleccionada
-  const getDirectorioDocentes = () => {
-    if (!selectedSalon) return [];
-    return docentesData
-      .filter((docente) => docente.salones_asignados.includes(selectedSalon))
-      .map((docente, index) => [
-        index + 1,
-        docente.curso,
-        docente.docente,
-        docente.correo,
-        docente.numero,
-      ]);
-  };
-
-  // Extraer los cursos del horario para el aula seleccionada
-  const getHorariosPorSalon = () => {
-    if (!selectedSalon) return [];
-    return horarioData.filter((curso) => curso.id_salon === selectedSalon);
-  };
+  if (loading) return <p className="text-center text-gray-500">Cargando datos...</p>;
+  if (error) return <p className="text-center text-red-600">{error}</p>;
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-full">
       <h1 className="text-2xl font-bold text-center mb-6">Panel de Supervisor</h1>
 
-      {selectedSalon === null ? (
-        <Tabla
-          encabezado={["N°", "Aula", "Monitor", "Enlace", "Acciones"]}
-          datos={getDatosAulas()}
-        />
-      ) : (
-        <div>
-          <h2 className="text-xl font-semibold text-center mb-4">
-            {mostrarHorario
-              ? `Horario del Aula ${selectedSalon}`
-              : `Directorio del Aula ${selectedSalon}`}
-          </h2>
+      {estado === ESTADO.INDEX &&
+        <Tabla encabezado={["N°", "Aula", "Monitor", "Enlace", "Acciones"]} datos={datosAulas} index_key={0} />}
 
-          {mostrarHorario ? (
-            getHorariosPorSalon().length > 0 ? (
-              <TablaHorarioMonitor listaCursos={getHorariosPorSalon()} />
-            ) : (
-              <p className="text-center py-4 text-red-600">
-                No hay horario disponible para este aula.
-              </p>
-            )
-          ) : getDirectorioDocentes().length > 0 ? (
-            <Tabla
-              encabezado={["#", "Curso", "Nombre", "Correo", "Número"]} 
-              datos={getDirectorioDocentes()}
-            />
-          ) : (
-            <p className="text-center py-4 text-red-600">
-              No hay docentes asignados a este aula.
-            </p>
-          )}
+      {estado === ESTADO.HORARIO &&
+        <HorarioMonitorPanel aula={selectedSalon} cambiarVista={cambiarVistaDirectorio} volver={volverAlIndex} />}
 
-          <div className="text-center mt-4 flex gap-4 justify-center">
-            <button
-              onClick={() => setMostrarHorario(!mostrarHorario)}
-              className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]"
-            >
-              {mostrarHorario ? "Ver Directorio" : "Visualizar Horario"}
-            </button>
-            <button
-              onClick={() => setSelectedSalon(null)}
-              className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-800"
-            >
-              Volver
-            </button>
-          </div>
-        </div>
-      )}
+      {estado === ESTADO.DIRECTORIO &&
+        <DirectorioMonitorPanel aula={selectedSalon} cambiarVista={cambiarVistaHorario} volver={volverAlIndex} />}
     </div>
   );
 };

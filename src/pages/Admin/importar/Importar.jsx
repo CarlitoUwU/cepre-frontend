@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ButtonCabecera } from "@/components/ui/ButtonCabecera";
 import { useNavigate } from "react-router-dom";
-import CSV from "../../../services/CSV";
+import CSV from "@/services/CSV";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 
@@ -69,19 +69,19 @@ export const Importar = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto m-5 mt-25">
-      <div className="flex w-80 justify-between mb-3">
+    <div className="w-full max-w-screen-lg mx-auto m-5 mt-25">
+      <div className="flex w-full mb-3 gap-1">
         <ButtonCabecera text={roles.Profesor} handleClick={handleClick} data_role="Profesor" className={`${rol === roles.Profesor ? 'bg-gray-200' : ''}`} />
         <ButtonCabecera text={roles.Monitor} handleClick={handleClick} data_role="Monitor" className={`${rol === roles.Monitor ? 'bg-gray-200' : ''}`} />
         <ButtonCabecera text={roles.Supervisor} handleClick={handleClick} data_role="Supervisor" className={`${rol === roles.Supervisor ? 'bg-gray-200' : ''}`} />
       </div>
 
       {/* FORMULARIO */}
-      <form onSubmit={handleSubmit} className={`bg-gray-200 p-4 rounded-lg -translate-y-[4px] ${app_estado === app_estados.SinArchivo ? 'h-90' : 'h-100'} max-w-2xl mx-auto`}>
-        <label htmlFor="file-upload" className={`${app_estado === app_estados.SinArchivo ? 'cursor-pointer' : ''} flex flex-col items-center justify-center h-80 rounded-lg border-4 border-black border-dashed bg-gray-100`}>
+      <form onSubmit={handleSubmit} className="bg-gray-200 p-6 rounded-lg w-full mx-auto flex flex-col min-h-[60vh] max-w-screen-lg">
+        <label htmlFor="file-upload" className={`${app_estado === app_estados.SinArchivo ? 'cursor-pointer' : ''} flex flex-col items-center justify-center flex-grow w-full rounded-lg border-4 border-black border-dashed bg-gray-100`}>
           {app_estado === app_estados.SinArchivo ? (
             <>
-              <img src="../subir.png" alt="Upload icon" className="w-30 h-30" />
+              <img src="../subir.png" alt="Upload icon" className="w-25 h-25 sm:w-45 sm:h-45" />
               <p>Haz clic para subir</p>
               <input type="file" id="file-upload" className="hidden" accept=".csv" name="file" onChange={handleFileChange} />
             </>
@@ -100,7 +100,7 @@ export const Importar = () => {
       </form>
 
       {/* BOTONES DE NAVEGACIÓN */}
-      <div className="flex justify-center space-x-8 mt-4">
+      <div className="flex justify-center space-x-8 mt-5">
         <ButtonNegative onClick={() => navigate('..')}>Menú Principal</ButtonNegative>
         <Button>Generar Guía</Button>
       </div>
