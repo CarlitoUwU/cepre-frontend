@@ -1,7 +1,6 @@
 import React from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Tabla } from "@/components/ui/Tabla";
-import aulasData from "@/data/aulas.json";
 import supervisoresData from "@/data/supervisores.json"; // Importamos los supervisores
 
 export const AsignarSalonSup = ({ idSupervisor, setVista }) => {
@@ -9,26 +8,17 @@ export const AsignarSalonSup = ({ idSupervisor, setVista }) => {
   const supervisor = supervisoresData.find((sup) => sup.id === idSupervisor);
   const supervisorNombre = supervisor ? supervisor.supervisor : "Desconocido";
 
-  // Obtener los salones asignados al supervisor
+  // Obtener los salones asignados directamente del supervisor
   const getSalonesAsignados = () => {
-    return aulasData
-      .filter((aula) => aula.supervisorId === idSupervisor)
-      .map((aula, index) => [
-        index + 1,
-        aula.aula,
-        aula.monitor,
-        <a
-          href={aula.enlace}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 underline hover:text-blue-700"
-        >
-          {aula.enlace}
-        </a>,
-        <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
-          Eliminar
-        </button>,
-      ]);
+    return supervisor?.salones_asignados?.map((salon, index) => [
+      index + 1,
+      salon,
+      "-", // Monitor no disponible desde supervisores.json
+      "-", // Enlace no disponible desde supervisores.json
+      <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
+        Eliminar
+      </button>,
+    ]) || [];
   };
 
   return (
@@ -39,7 +29,7 @@ export const AsignarSalonSup = ({ idSupervisor, setVista }) => {
         </h2>
       </div>
 
-      {aulasData.some((aula) => aula.supervisorId === idSupervisor) ? (
+      {supervisor?.salones_asignados?.length > 0 ? (
         <Tabla
           encabezado={["N°", "Aula", "Monitor", "Enlace", "Acciones"]}
           datos={getSalonesAsignados()}

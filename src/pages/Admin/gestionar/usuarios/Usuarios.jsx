@@ -37,6 +37,7 @@ export const Usuarios = () => {
   const [vista, setVista] = useState("tabla");
   const [rol, setRol] = useState(roles.Docente);
   const [datosRol, setDatosRol] = useState([]);
+  const [selectedSupervisorId, setSelectedSupervisorId] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({ nombre: "", correo: "", numero: "", extra: "" });
 
@@ -111,6 +112,7 @@ export const Usuarios = () => {
   };
 
   const handleAsignarSalonSup = (id) => {
+    setSelectedSupervisorId(id);
     setVista("asignarSalonSup");
   };
 
@@ -185,7 +187,8 @@ export const Usuarios = () => {
 
   if (vista === "asignarSalonDoc") return <AsignarSalonDoc setVista={setVista} />;
 
-  if (vista === "asignarSalonSup") return <AsignarSalonSup idSupervisor={1} setVista={setVista} />;
+  if (vista === "asignarSalonSup") return <AsignarSalonSup idSupervisor={selectedSupervisorId} setVista={setVista} />;
+
 
 
   return vista === "formulario" ? (
