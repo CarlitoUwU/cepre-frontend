@@ -37,6 +37,7 @@ export const Usuarios = () => {
   const [vista, setVista] = useState("tabla");
   const [rol, setRol] = useState(roles.Docente);
   const [datosRol, setDatosRol] = useState([]);
+  const [selectedDocenteId, setSelectedDocenteId] = useState(null);
   const [selectedSupervisorId, setSelectedSupervisorId] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({ nombre: "", correo: "", numero: "", extra: "" });
@@ -49,9 +50,8 @@ export const Usuarios = () => {
       fetch(dataSources[rol])
         .then((response) => response.json())
         .then((data) => {
-          const dataConId = data.map((usuario, index) => ({ ...usuario, id: index + 1 }));
-          setDatosRol(dataConId);
-          localStorage.setItem(`usuarios_${rol}`, JSON.stringify(dataConId));
+          setDatosRol(data);
+          localStorage.setItem(`usuarios_${rol}`, JSON.stringify(data));
         })
         .catch((error) => console.error("Error cargando los datos:", error));
     }
@@ -109,6 +109,7 @@ export const Usuarios = () => {
 
   const handleAsignarSalonDoc = (id) => {
     setVista("asignarSalonDoc");
+    setSelectedDocenteId(id);
   };
 
   const handleAsignarSalonSup = (id) => {
@@ -185,7 +186,7 @@ export const Usuarios = () => {
     );
   }
 
-  if (vista === "asignarSalonDoc") return <AsignarSalonDoc setVista={setVista} />;
+  if (vista === "asignarSalonDoc") return <AsignarSalonDoc idDocente={selectedDocenteId} setVista={setVista} />;
 
   if (vista === "asignarSalonSup") return <AsignarSalonSup idSupervisor={selectedSupervisorId} setVista={setVista} />;
 
