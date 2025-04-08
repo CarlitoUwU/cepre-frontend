@@ -5,8 +5,8 @@ const TeacherServices = {
    * Obtiene la lista de teachers.
    * @returns {Promise<Array<{ userId: string, courseId: string, maxHours: number, scheduledHours: number, isActive: boolean, jobShiftType: string, createdAt: string, updatedAt: string }>> | null}
    */
-  async getTeachers() {
-    return request("get", "/teachers", null, true);
+  async getTeachers(page = 1, limit = 20) {
+    return request("get", `/teachers?page=${page}&limit=${limit}`, null, true);
   },
 
   /**
@@ -29,9 +29,9 @@ const TeacherServices = {
    * @param {string} newTeacher.jobShiftType - Tipo de turno.
    * @returns {Promise<{ userId: string, courseId: string, maxHours: number, scheduledHours: number, isActive: boolean, jobShiftType: string, createdAt: string, updatedAt: string } | null>}
    */
-  async createTeacher({ userId, courseId, maxHours,scheduledHours, isActive = true, jobShiftType}) {
+  async createTeacher({ userId, courseId, maxHours, scheduledHours, isActive = true, jobShiftType }) {
     const now = new Date().toISOString();
-    return request("post", "/teachers", { userId, courseId, maxHours,scheduledHours, isActive, jobShiftType,  createdAt: now, updatedAt: now });
+    return request("post", "/teachers", { userId, courseId, maxHours, scheduledHours, isActive, jobShiftType, createdAt: now, updatedAt: now });
   },
 
   /**
@@ -46,10 +46,10 @@ const TeacherServices = {
    * @returns {Promise<{ userId: string, courseId: string, maxHours: number, scheduledHours: number, isActive: boolean, jobShiftType: string, createdAt: string, updatedAt: string } | null>}
    * @throws {Error} Si el ID del teacher no es válido.
    */
-  async updateTeacher({ userId, courseId, maxHours,scheduledHours, isActive, jobShiftType }) {
+  async updateTeacher({ userId, courseId, maxHours, scheduledHours, isActive, jobShiftType }) {
     if (!userId) throw new Error("ID inválido");
     const now = new Date().toISOString();
-    return request("put", `/teachers/${userId}`, { userId, courseId, maxHours,scheduledHours, isActive, jobShiftType, updatedAt: now });
+    return request("put", `/teachers/${userId}`, { userId, courseId, maxHours, scheduledHours, isActive, jobShiftType, updatedAt: now });
   },
 
   /**
