@@ -1,51 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Select } from "@/components/ui/Select";
 import { AgregarSalon } from "./AgregarSalon"; // Importa el componente de agregar salón
-import ClassesServices from "@/services/classesServices.js";
-import AreaServices from "@/services/areaServices.js";
-import ShiftsServices from "@/services/shiftsServices.js";
+import { toast } from "react-toastify";
+import { useClases } from "@/hooks/useClases";
+import { useAreas } from "@/hooks/useAreas";
+import { useTurnos } from "@/hooks/useTurnos";
+import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 
 const encabezadoCursos = ["N° de Aula", "Área", "Turno", "Estado", "Acciones"];
 
 export const Salones = () => {
-  const [aulas, setAulas] = useState([]);
-  const [areas, setAreas] = useState([]);
-  const [turnos, setTurnos] = useState([]);
-  const [filtro, setFiltro] = useState({});
+  const {
+    clases,
+    isLoading: isLoadingClases,
+    isError: isErrorClases,
+    eliminarClaseMutation,
+    crearClaseMutation,
+  } = useClases();
+  const { areas, isLoading: isLoadingAreas, isError: isErrorAreas } = useAreas();
+  const { turnos, isLoading: isLoadingTurnos, isError: isErrorTurnos } = useTurnos();
+
   const [editandoId, setEditandoId] = useState(null);
   const [formData, setFormData] = useState({ name: "", areaId: 0, turnoId: 0 });
   const [vistaActual, setVistaActual] = useState("lista"); // Estado para cambiar entre lista y agregar
 
-  useEffect(() => {
-    const fetchSalones = async () => {
-      const data = await ClassesServices.getClasses();
-      const areasData = await AreaServices.getAreas();
-      const shiftsData = await ShiftsServices.getShifts();
+  const filtro = useMemo(() => {
+    if (!areas.length || !turnos.length) return {};
+    return {
+      1: areas.map((a) => a.name),
+      2: turnos.map((t) => t.name),
+      3: ["Listo", "Falta Docentes"]
+    };
+  }, [areas, turnos]);
 
-      setAreas(areasData);
-      setTurnos(shiftsData);
-      setFiltro({
-        1: areasData.map((area) => area.name),
-        2: shiftsData.map((turno) => turno.name),
-        3: ["Listo", "Falta Docentes"]
-      });
-
-      if (Array.isArray(data)) {
-        const aulas = data.map((aula) => ({
-          ...aula,
-          area: aula.area.name,
-          turno: aula.shift.name,
-          estado: "Listo",
-        }));
-
-        setAulas(aulas);
-      }
-    }
-    fetchSalones();
-  }, []);
 
   const handleModificar = (aula) => {
     setEditandoId(aula.id);
@@ -53,7 +43,7 @@ export const Salones = () => {
   };
 
   const handleGuardar = async () => {
-    const area = areas.find(a => a.id === parseInt(formData.areaId));
+    /* const area = areas.find(a => a.id === parseInt(formData.areaId));
 
     const dataClase = {
       id: editandoId,
@@ -70,9 +60,9 @@ export const Salones = () => {
       estado: "Listo",
     }
 
-    setAulas(aulas.map(a => (a.id === editandoId ? { ...claseActualizada } : a)));
+    //setAulas(aulas.map(a => (a.id === editandoId ? { ...claseActualizada } : a)));
     setEditandoId(null);
-    setFormData({ name: "", areaId: 0, turnoId: 0 });
+    setFormData({ name: "", areaId: 0, turnoId: 0 }); */
   };
 
   const handleCancelar = () => {
@@ -81,23 +71,31 @@ export const Salones = () => {
   };
 
   const handleBorrar = async (id) => {
-    try {
-      const eliminado = await ClassesServices.deleteClass(id);  // retornara "" si se elimino correctamente
+    console.log("ID a eliminar:", id);
 
-      if (eliminado === "") {
-        setAulas(aulas.filter((aula) => aula.id !== id));
-      } else {
-        console.error("Error al eliminar el aula:", eliminado);
+    try {
+      const claseEliminada = await eliminarClaseMutation.mutateAsync(id);  // retornara "" si se elimino correctamente
+
+      if (claseEliminada) {
+        console.log("Clase eliminada:", claseEliminada);
       }
     } catch (error) {
       console.error("Error al eliminar el aula:", error);
     }
   };
 
+  const handleAgregarSalon = async (nuevoSalon) => {
+    try {
+      const claseCreada = await crearClaseMutation.mutateAsync(nuevoSalon);
 
-  const handleAgregarSalon = (nuevoSalon) => {
-    setAulas([...aulas, { ...nuevoSalon }]);
-    setVistaActual("lista"); // Volver a la vista de lista después de agregar
+      if (claseCreada) {
+        toast.success(`Curso "${claseCreada.name}" creado correctamente`);
+        setVistaActual("lista");
+      }
+    } catch (error) {
+      toast.error("Error al crear el curso");
+      console.error("Error al agregar el curso:", error);
+    }
   };
 
   const getAcciones = (aula) =>
@@ -114,7 +112,7 @@ export const Salones = () => {
     );
 
   const getDatosAulas = () => {
-    return aulas.map((aula) => [
+    return clases.map((aula) => [
       aula.name,
       editandoId === aula.id ? (
         <Select
@@ -124,7 +122,7 @@ export const Salones = () => {
           options={areas}
         />
       ) : (
-        aula.area
+        aula.area.name
       ),
       editandoId === aula.id ? (
         <Select
@@ -134,9 +132,9 @@ export const Salones = () => {
           options={turnos}
         />
       ) : (
-        aula.turno
+        aula.shift.name
       ),
-      aula.estado,
+      aula.estado || "Sin estado",
       getAcciones(aula),
     ]);
   };
@@ -155,7 +153,13 @@ export const Salones = () => {
       </div>
 
       {/* Tabla reutilizable */}
-      <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
+      {isLoadingAreas || isLoadingTurnos || isLoadingClases ? (
+        <SkeletonTabla />
+      ) : isErrorClases || isErrorAreas || isErrorTurnos ? (
+        <div>Error al cargar los salones</div>
+      ) : (
+        <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
+      )}
     </div>
   );
 };
