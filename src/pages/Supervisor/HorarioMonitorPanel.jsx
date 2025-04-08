@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
 import MonitorServices from "@/services/monitorServices";
+import { Button } from "@/components/ui/Button";
+import { ButtonNegative } from "@/components/ui/ButtonNegative";
 
 const formatTimeToHHMM = (isoString) => {
   if (!isoString) return "00:00"; // Evita errores si el valor es null o undefined
@@ -57,12 +59,8 @@ export const HorarioMonitorPanel = ({ aula = {}, volver = () => { }, cambiarVist
       </h2>
       <TablaHorarioMonitor horas={horariosRender} />
       <div className="text-center mt-4 flex gap-4 justify-center">
-        <button onClick={cambiarVista} className="bg-[#78211E] text-white px-4 py-2 rounded hover:bg-[#5a1815]">
-          Visualizar Directorio
-        </button>
-        <button onClick={volver} className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-800">
-          Volver
-        </button>
+        <Button onClick={cambiarVista}>Visualizar Directorio</Button>
+        <ButtonNegative onClick={volver}>Volver</ButtonNegative>
       </div>
     </div>
   );
