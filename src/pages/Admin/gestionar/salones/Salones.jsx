@@ -21,25 +21,23 @@ export const Salones = () => {
   const {
     clases,
     isLoading: isLoadingClases,
-    isError: isErrorClases,
     eliminarClaseMutation,
     crearClaseMutation,
   } = useClases();
+
   const {
     areas,
     isLoading: isLoadingAreas,
-    isError: isErrorAreas
   } = useAreas();
   const { turnos,
     isLoading: isLoadingTurnos,
-    isError: isErrorTurnos
   } = useTurnos();
 
   const [salonAEditar, setSalonAEditar] = useState(null);
   const [vistaActual, setVistaActual] = useState(VISTAS.LISTA);
 
   const filtro = useMemo(() => {
-    if (!areas.length || !turnos.length) return {};
+    if (!areas?.length || !turnos?.length) return {};
     return {
       1: areas.map((a) => a.name),
       2: turnos.map((t) => t.name),
@@ -61,7 +59,7 @@ export const Salones = () => {
     try {
       const claseCreada = await crearClaseMutation.mutateAsync(nuevoSalon);
       toast.success(`Curso "${claseCreada.name}" creado correctamente`);
-      setVistaActual("lista");
+      setVistaActual(VISTAS.LISTA);
     } catch (error) {
       console.error("Error al agregar el curso:", error);
       toast.error("Error al crear el curso");
@@ -95,6 +93,8 @@ export const Salones = () => {
   }
 
   const getDatosAulas = () => {
+    if (!clases || !Array.isArray(clases)) return [];
+
     return clases.map((aula) => [
       aula.name || "Sin nombre",
       aula.area?.name || "Sin área",
@@ -125,12 +125,10 @@ export const Salones = () => {
 
       {/* Tabla reutilizable */}
       {isLoadingAreas || isLoadingTurnos || isLoadingClases ? (
-        <SkeletonTabla />
-      ) : isErrorClases || isErrorAreas || isErrorTurnos ? (
-        <div>Error al cargar los salones</div>
+        <SkeletonTabla numRows={6} />
       ) : (
         <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
       )}
-    </div>
+    </div >
   );
 };
