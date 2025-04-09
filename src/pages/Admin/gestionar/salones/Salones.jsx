@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { AgregarSalon } from "./AgregarSalon"; // Importa el componente de agregar salón
+import { AgregarSalon } from "./AgregarSalon";
 import { toast } from "react-toastify";
 import { useClases } from "@/hooks/useClases";
 import { useAreas } from "@/hooks/useAreas";

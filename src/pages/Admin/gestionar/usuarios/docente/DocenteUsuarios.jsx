@@ -9,12 +9,25 @@ import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { AsignarSalonDoc } from "./AsignarSalonDoc";
 
 const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
+const VISTA = {
+  TABLA: "tabla",
+  FORMULARIO: "formulario",
+  ASIGNAR_SALON: "asignarSalonDoc"
+};
 
 export const DocenteUsuarios = () => {
-  const [vista, setVista] = useState("tabla");
+  const [vista, setVista] = useState(VISTA.TABLA);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const { profesores, totalPages, isLoading } = useProfesores({ page, limit });
+  const {
+    profesores,
+    totalPages,
+    isLoading,
+   // isError,
+    crearProfesorMutation,
+    actualizarProfesorMutation,
+    eliminarProfesorMutation,
+  } = useProfesores({ page, limit });
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
     nombres: "",
@@ -47,6 +60,10 @@ export const DocenteUsuarios = () => {
   };
 
   const handleGuardar = (id) => {
+    console.log({ id })
+    console.log({ editFormData })
+    return
+    crearProfesorMutation
     const actualizados = profesores.map((docente) =>
       docente.id === id
         ? {
@@ -65,21 +82,64 @@ export const DocenteUsuarios = () => {
   };
 
   const handleBorrar = (id) => {
-    const nuevos = profesores.filter((d) => d.id !== id);
-    console.log(nuevos);
+    console.log({ id })
+    //const nuevos = profesores.filter((d) => d.id !== id);
+    //console.log(nuevos);
     //setDocentes(nuevos);
   };
 
   const handleAgregar = () => {
     setEditFormData({ nombres: "", apellidos: "", correo: "", numero: "", extra: "" });
-    setVista("formulario");
+    setVista(VISTA.FORMULARIO);
   };
 
-  const handleAsignarSalon = (id) => {
+  const handleNuevoUsuario = (formData) => {
+    console.log({ formData });
+    /*     {formData: {…}}
+    formData
+    : 
+    apellidos
+    : 
+    "asd"
+    coordinador
+    : 
+    true
+    correo
+    : 
+    "asd@cepr.unsa.pe"
+    correo_personal
+    : 
+    "asdsad@gmail.com"
+    curso
+    : 
+    "9"
+    disponibilidad
+    : 
+    "full-time"
+    dni
+    : 
+    "72307538"
+    docente
+    : 
+    "asd"
+    extra
+    : 
+    ""
+    nombres
+    : 
+    ""
+    numero
+    : 
+    "912345678"
+    [[Prototype]]
+    : 
+    Object
+    [[Prototype */
+  }
 
-    // Aquí podrías implementar lo de asignar salón más adelante
+  const handleAsignarSalon = (id) => {
     console.log("Asignar salón al docente con ID:", id);
-    setVista("asignarSalonDoc");
+    setVista(VISTA.ASIGNAR_SALON);
   };
 
   const getDatosProfesor = () => {
@@ -160,7 +220,7 @@ export const DocenteUsuarios = () => {
       rol="Docente"
       formData={editFormData}
       handleChange={(e) => setEditFormData({ ...editFormData, [e.target.name]: e.target.value })}
-      handleGuardarNuevoUsuario={() => { }}
+      handleGuardarNuevoUsuario={handleNuevoUsuario}
       setVista={setVista}
     />
   );

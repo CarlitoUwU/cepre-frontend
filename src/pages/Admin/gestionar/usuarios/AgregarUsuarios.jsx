@@ -67,7 +67,8 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
     }
 
     setError("");
-    handleGuardarNuevoUsuario();
+    handleGuardarNuevoUsuario(formData);
+    setVista("tabla");
   };
 
   return (
