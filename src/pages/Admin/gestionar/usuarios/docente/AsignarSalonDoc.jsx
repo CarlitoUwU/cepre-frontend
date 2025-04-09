@@ -4,7 +4,7 @@ import docentesData from "@/data/docentes.json";
 import TurnosSelector from "@/components/Horarios/TurnosSelector.jsx";
 import DisponibilidadModal from "@/components/Horarios/DisponibilidadModal";
 
-function AsignarSalonDoc({ idDocente, setVista }) {
+export const AsignarSalonDoc = ({ idDocente, setVista }) => {
   const docente = docentesData.find((doc) => doc.id === idDocente);
   const nombreDocente = docente ? docente.docente : "Desconocido";
 
@@ -60,5 +60,3 @@ function AsignarSalonDoc({ idDocente, setVista }) {
     </div>
   );
 }
-
-export default AsignarSalonDoc;

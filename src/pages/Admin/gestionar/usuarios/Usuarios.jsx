@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
 import { AgregarUsuarios } from "./AgregarUsuarios";
-import  AsignarSalonDoc  from "./AsignarSalonDoc";
-import  AsignarSalonSup  from "./AsignarSalonSup";
+import { AsignarSalonDoc } from "./docente/AsignarSalonDoc";
+import { AsignarSalonSup } from "./supervisor/AsignarSalonSup";
 
 const roles = {
   Docente: "Docente",
@@ -65,7 +65,7 @@ export const Usuarios = () => {
     setDatosRol(nuevosDatos);
     localStorage.setItem(`usuarios_${rol}`, JSON.stringify(nuevosDatos));
   };
-  
+
 
   const handleModificar = (id) => {
     const usuario = datosRol.find((u) => u.id === id);
@@ -88,12 +88,12 @@ export const Usuarios = () => {
     const nuevosDatos = datosRol.map((usuario) =>
       usuario.id === id
         ? {
-            ...usuario,
-            [camposPorRol[rol].nombre]: editFormData.nombre,
-            correo: editFormData.correo,
-            numero: editFormData.numero,
-            [camposPorRol[rol].extra]: editFormData.extra,
-          }
+          ...usuario,
+          [camposPorRol[rol].nombre]: editFormData.nombre,
+          correo: editFormData.correo,
+          numero: editFormData.numero,
+          [camposPorRol[rol].extra]: editFormData.extra,
+        }
         : usuario
     );
 
@@ -145,7 +145,7 @@ export const Usuarios = () => {
           <Button onClick={() => handleSaveEdit(idUsuario)}>Guardar</Button>
           <ButtonNegative onClick={() => setEditingId(null)}>Cancelar</ButtonNegative>
         </div>,
-      ].filter(Boolean); 
+      ].filter(Boolean);
     }
 
     return [

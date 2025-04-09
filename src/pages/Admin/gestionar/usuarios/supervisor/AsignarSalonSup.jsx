@@ -87,5 +87,3 @@ export const AsignarSalonSup = ({ idSupervisor, setVista }) => {
     </div>
   );
 };
-
-export default AsignarSalonSup;
