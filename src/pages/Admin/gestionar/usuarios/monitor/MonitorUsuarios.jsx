@@ -3,7 +3,7 @@ import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
-import { AgregarUsuarios } from "./AgregarUsuarios";
+import { AgregarUsuarios } from "../AgregarUsuarios";
 
 export const MonitorUsuarios = () => {
   const [vista, setVista] = useState("tabla");

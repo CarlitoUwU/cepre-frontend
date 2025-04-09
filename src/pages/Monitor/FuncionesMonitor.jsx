@@ -3,7 +3,7 @@ import { Tabla } from "@/components/ui/Tabla.jsx";
 import meetIcon from "@/assets/meet.png";
 import classroomIcon from "@/assets/classroom.png";
 import { Button } from "@/components/ui/button.tsx";
-import { Input } from "@/components/ui/input.tsx";
+import { Input } from "@/components/ui/Input.tsx";
 
 export const FuncionesMonitor = ({ monitorInfo }) => {
   const { meetLink, classroomLink } = monitorInfo; // Ya no usamos openEditPage

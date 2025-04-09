@@ -3,7 +3,8 @@ import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
-import { AgregarUsuarios } from "./AgregarUsuarios";
+import { AgregarUsuarios } from "../AgregarUsuarios";
+import { AsignarSalonSup } from "./AsignarSalonSup";
 
 export const SupervisorUsuarios = () => {
   const [vista, setVista] = useState("tabla");
@@ -77,6 +78,11 @@ export const SupervisorUsuarios = () => {
     setVista("formulario");
   };
 
+  const handleAsignarSalonSup = (id) => {
+    setEditingId(id);
+    setVista("asignarSalonSup");
+  }
+
   const encabezado = ["N°", "Nombres y Apellidos", "Correo", "Número", "Acciones"];
 
   const datos = supervisores.map((supervisor, index) => {
@@ -101,6 +107,7 @@ export const SupervisorUsuarios = () => {
       supervisor.correo,
       supervisor.numero || supervisor.Número,
       <div className="flex gap-2 justify-center">
+        <Button onClick={() => handleAsignarSalonSup(supervisor.id)}>Asignar Salón</Button>
         <Button onClick={() => handleModificar(supervisor.id)}>Modificar</Button>
         <ButtonNegative onClick={() => handleBorrar(supervisor.id)}>Borrar</ButtonNegative>
       </div>,
@@ -121,6 +128,11 @@ export const SupervisorUsuarios = () => {
         <p className="text-center text-gray-500">No hay supervisores registrados.</p>
       )}
     </div>
+  ) : vista === "asignarSalonSup" ? (
+    <AsignarSalonSup
+      setVista={setVista}
+      idSupervisor={editingId}
+    />
   ) : (
     <AgregarUsuarios
       rol="Supervisor"

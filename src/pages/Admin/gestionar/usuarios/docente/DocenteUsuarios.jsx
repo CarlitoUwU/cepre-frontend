@@ -3,9 +3,10 @@ import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
-import { AgregarUsuarios } from "./AgregarUsuarios";
+import { AgregarUsuarios } from "../AgregarUsuarios";
 import { useProfesores } from "@/hooks/useProfesores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
+import { AsignarSalonDoc } from "./AsignarSalonDoc";
 
 const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
 
@@ -75,8 +76,10 @@ export const DocenteUsuarios = () => {
   };
 
   const handleAsignarSalon = (id) => {
+
     // Aquí podrías implementar lo de asignar salón más adelante
     console.log("Asignar salón al docente con ID:", id);
+    setVista("asignarSalonDoc");
   };
 
   const getDatosProfesor = () => {
@@ -147,6 +150,11 @@ export const DocenteUsuarios = () => {
         </select>
       </div>
     </div>
+  ) : vista === "asignarSalonDoc" ? (
+    <AsignarSalonDoc
+      id={editingId}
+      setVista={setVista}
+    />
   ) : (
     <AgregarUsuarios
       rol="Docente"

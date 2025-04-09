@@ -1,6 +1,6 @@
 import { request } from "./api";
 
-const SupervisorsService = {
+const SupervisorsServices = {
 
   /**
    * Obtiene la lista de supervisores.
@@ -44,4 +44,4 @@ const SupervisorsService = {
 
 };
 
-export default SupervisorsService;
+export default SupervisorsServices;

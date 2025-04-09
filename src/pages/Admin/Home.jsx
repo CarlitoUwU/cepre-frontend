@@ -18,9 +18,6 @@ export const Home = () => {
   const options = [
     { path: 'importar', title: 'Importar Archivos', img: 'importar.png' },
     { path: 'gestionar', title: 'Gestionar Datos', img: 'gestionar.png' },
-    { path: 'visualizar', title: 'Visualizar Horarios', img: 'visualizar.png' },
-    { path: 'validar', title: 'Validar Información', img: 'validar.png' },
-    { path: 'exportar', title: 'Exportar Horarios', img: 'exportar.png' },
     { path: 'publicar', title: 'Publicar Horarios', img: 'publicar.png' }
   ];
 

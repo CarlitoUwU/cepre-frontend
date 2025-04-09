@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { ButtonCabecera } from "@/components/ui/ButtonCabecera";
-import { DocenteUsuarios } from "./DocenteUsuarios";
-import { MonitorUsuarios } from "./MonitorUsuarios";
-import { SupervisorUsuarios } from "./SupervisorUsuarios";
+import { DocenteUsuarios } from "./docente/DocenteUsuarios";
+import { MonitorUsuarios } from "./monitor/MonitorUsuarios";
+import { SupervisorUsuarios } from "./supervisor/SupervisorUsuarios";
 
 const ROLES = {
   DOCENTE: "Docente",
