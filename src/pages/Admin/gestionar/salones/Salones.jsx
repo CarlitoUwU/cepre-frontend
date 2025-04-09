@@ -23,7 +23,7 @@ export const Salones = () => {
   } = useClases();
   const { areas, isLoading: isLoadingAreas, isError: isErrorAreas } = useAreas();
   const { turnos, isLoading: isLoadingTurnos, isError: isErrorTurnos } = useTurnos();
-
+  const [aulaEditandoId, setAulaEditandoId] = useState(null);
   const [editandoId, setEditandoId] = useState(null);
   const [formData, setFormData] = useState({ name: "", areaId: 0, turnoId: 0 });
   const [vistaActual, setVistaActual] = useState("lista"); // Estado para cambiar entre lista y agregar
@@ -99,7 +99,8 @@ export const Salones = () => {
     }
   };
 
-  const handleEditarSalon = (id) => {
+  const handleEditarSalon = (aula) => {
+    setAulaEditandoId(aula.id);
     setVistaActual("asignarEditarSalon");
   };
 
@@ -111,7 +112,8 @@ export const Salones = () => {
       </div>
     ) : (
       <div className="inline-flex gap-10">
-        <Button onClick={() => handleEditarSalon(aula)}>Modificar</Button> 
+        <Button onClick={() => handleEditarSalon(aula)}>Modificar</Button>
+
         <ButtonNegative onClick={() => handleBorrar(aula.id)}>Borrar</ButtonNegative>
       </div>
     );
@@ -151,25 +153,32 @@ export const Salones = () => {
     return <AgregarSalon onAgregarSalon={handleAgregarSalon} setVistaActual={setVistaActual} areas={areas} turnos={turnos} />;
   }
 
-  if (vistaActual === "asignarEditarSalon") {
+  if (vistaActual === "EditarSalon") {
     return <EditarSalon />;
   }
 
   return (
     <div className="overflow-x-auto w-full text-center">
-      {/* Contenedor para el título y el botón */}
-      <div className="flex justify-between items-center mt-1 mb-6 px-4">
-        <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE SALONES</h2>
-        <Button onClick={() => setVistaActual("agregar")}>Agregar Salón</Button>
-      </div>
-
-      {/* Tabla reutilizable */}
-      {isLoadingAreas || isLoadingTurnos || isLoadingClases ? (
-        <SkeletonTabla />
-      ) : isErrorClases || isErrorAreas || isErrorTurnos ? (
-        <div>Error al cargar los salones</div>
+      {/* Verificamos si estamos en la vista de edición */}
+      {vistaActual === "asignarEditarSalon" ? (
+        <EditarSalon idAula={aulaEditandoId} setVistaActual={setVistaActual} />
       ) : (
-        <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
+        <>
+          {/* Contenedor para el título y el botón */}
+          <div className="flex justify-between items-center mt-1 mb-6 px-4">
+            <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE SALONES</h2>
+            <Button onClick={() => setVistaActual("agregar")}>Agregar Salón</Button>
+          </div>
+  
+          {/* Tabla reutilizable */}
+          {isLoadingAreas || isLoadingTurnos || isLoadingClases ? (
+            <SkeletonTabla />
+          ) : isErrorClases || isErrorAreas || isErrorTurnos ? (
+            <div>Error al cargar los salones</div>
+          ) : (
+            <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
+          )}
+        </>
       )}
     </div>
   );
