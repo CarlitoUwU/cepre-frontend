@@ -1,24 +1,49 @@
-import React from "react";
+import React, { useState } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Tabla } from "@/components/ui/Tabla";
-import supervisoresData from "@/data/supervisores.json"; // Importamos los supervisores
+import supervisoresData from "@/data/supervisores.json";
 
 export const AsignarSalonSup = ({ idSupervisor, setVista }) => {
-  // Obtener datos del supervisor por su ID
   const supervisor = supervisoresData.find((sup) => sup.id === idSupervisor);
   const supervisorNombre = supervisor ? supervisor.supervisor : "Desconocido";
 
-  // Obtener los salones asignados directamente del supervisor
+  // Estado local para los salones asignados
+  const [salonesAsignados, setSalonesAsignados] = useState(
+    supervisor?.salones_asignados || []
+  );
+
+  // Estado para el nuevo salón a asignar
+  const [nuevoSalon, setNuevoSalon] = useState("");
+
+  // Agregar salón
+  const handleAsignarSalon = () => {
+    if (nuevoSalon.trim() === "") return;
+    if (salonesAsignados.includes(nuevoSalon)) return;
+
+    setSalonesAsignados((prev) => [...prev, nuevoSalon.trim()]);
+    setNuevoSalon("");
+  };
+
+  // Eliminar salón
+  const handleEliminarSalon = (index) => {
+    const nuevosSalones = salonesAsignados.filter((_, i) => i !== index);
+    setSalonesAsignados(nuevosSalones);
+  };
+
+  // Convertir salones en formato para la tabla
   const getSalonesAsignados = () => {
-    return supervisor?.salones_asignados?.map((salon, index) => [
+    return salonesAsignados.map((salon, index) => [
       index + 1,
       salon,
-      "-", // Monitor no disponible desde supervisores.json
-      "-", // Enlace no disponible desde supervisores.json
-      <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
+      "-", // Monitor no disponible
+      "-", // Enlace no disponible
+      <button
+        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700"
+        onClick={() => handleEliminarSalon(index)}
+      >
         Eliminar
       </button>,
-    ]) || [];
+    ]);
   };
 
   return (
@@ -29,7 +54,25 @@ export const AsignarSalonSup = ({ idSupervisor, setVista }) => {
         </h2>
       </div>
 
-      {supervisor?.salones_asignados?.length > 0 ? (
+      {/* Formulario para agregar salón */}
+      <div className="flex justify-center gap-2 my-4">
+        <input
+          type="text"
+          placeholder="Nuevo salón"
+          value={nuevoSalon}
+          onChange={(e) => setNuevoSalon(e.target.value)}
+          className="border border-gray-300 rounded px-4 py-2"
+        />
+        <button
+          onClick={handleAsignarSalon}
+          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-700"
+        >
+          Asignar salón
+        </button>
+      </div>
+
+      {/* Tabla de salones */}
+      {salonesAsignados.length > 0 ? (
         <Tabla
           encabezado={["N°", "Aula", "Monitor", "Enlace", "Acciones"]}
           datos={getSalonesAsignados()}
