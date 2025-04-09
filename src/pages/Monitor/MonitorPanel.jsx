@@ -86,7 +86,7 @@ export const MonitorPanel = () => {
   const monitorInfo = { meetLink, classroomLink, openEditPage };
 
   return (
-    <div className="bg-gray-200 p-4 mt-25 m-5 text-center">
+    <div className="bg-gray-200 p-4 m-5 text-center">
       <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         {/* Lista de Cursos */}
         <div className="col-span-2 overflow-x-auto">
