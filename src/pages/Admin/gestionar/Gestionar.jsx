@@ -27,7 +27,7 @@ export const Gestionar = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-[85vh] m-5 mt-25">
+    <div className="flex flex-col md:flex-row h-[83vh] m-5 mt-25">
       {/* Barra lateral responsive */}
       <div className="w-full md:w-1/6 bg-gray-200 p-6 flex flex-wrap md:flex-col gap-4 md:gap-6 items-center justify-start rounded-lg h-full max-h-screen overflow-auto">
         {/* Botón Menú Principal ocupa todo el ancho */}
