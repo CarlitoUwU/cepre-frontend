@@ -4,7 +4,7 @@ import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 
-export const AgregarSalon = ({ onAgregarSalon, setVistaActual, areas, turnos }) => {
+export const AgregarSalon = ({ onAgregarSalon, regresar, areas, turnos }) => {
   const [nuevoSalon, setNuevoSalon] = useState({
     name: "",
     areaId: (areas && areas.length > 0) ? areas[0].id : 0,
@@ -55,7 +55,7 @@ export const AgregarSalon = ({ onAgregarSalon, setVistaActual, areas, turnos }) 
         <Select name="shiftId" value={nuevoSalon.shiftId} onChange={handleChange} options={turnos ? turnos : []} />
 
         <div className="flex justify-between mt-4">
-          <ButtonNegative onClick={() => setVistaActual("lista")}>Atrás</ButtonNegative>
+          <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
           <Button onClick={handleCrearSalon}>Crear Salón</Button>
         </div>
       </div>
