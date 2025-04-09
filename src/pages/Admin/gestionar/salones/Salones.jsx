@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Select } from "@/components/ui/Select";
 import { AgregarSalon } from "./AgregarSalon"; // Importa el componente de agregar salón
+import  EditarSalon  from "./EditarSalon"; // Importa la vista para editar salón
 import { toast } from "react-toastify";
 import { useClases } from "@/hooks/useClases";
 import { useAreas } from "@/hooks/useAreas";
@@ -28,7 +29,7 @@ export const Salones = () => {
   const [vistaActual, setVistaActual] = useState("lista"); // Estado para cambiar entre lista y agregar
 
   const filtro = useMemo(() => {
-    if (!areas.length || !turnos.length) return {};
+    if (!areas?.length || !turnos?.length) return {};
     return {
       1: areas.map((a) => a.name),
       2: turnos.map((t) => t.name),
@@ -115,33 +116,35 @@ export const Salones = () => {
       </div>
     );
 
-  const getDatosAulas = () => {
-    return clases.map((aula) => [
-      aula.name,
-      editandoId === aula.id ? (
-        <Select
-          name="areaId"
-          value={formData.areaId}
-          onChange={(e) => setFormData({ ...formData, areaId: e.target.value })}
-          options={areas}
-        />
-      ) : (
-        aula.area.name
-      ),
-      editandoId === aula.id ? (
-        <Select
-          name="turnoId"
-          value={formData.turnoId}
-          onChange={(e) => setFormData({ ...formData, turnoId: e.target.value })}
-          options={turnos}
-        />
-      ) : (
-        aula.shift.name
-      ),
-      aula.estado || "Sin estado",
-      getAcciones(aula),
-    ]);
-  };
+    const getDatosAulas = () => {
+      if (!clases || !Array.isArray(clases)) return [];
+    
+      return clases.map((aula) => [
+        aula.name,
+        editandoId === aula.id ? (
+          <Select
+            name="areaId"
+            value={formData.areaId}
+            onChange={(e) => setFormData({ ...formData, areaId: e.target.value })}
+            options={areas}
+          />
+        ) : (
+          aula.area?.name ?? "Sin área"
+        ),
+        editandoId === aula.id ? (
+          <Select
+            name="turnoId"
+            value={formData.turnoId}
+            onChange={(e) => setFormData({ ...formData, turnoId: e.target.value })}
+            options={turnos}
+          />
+        ) : (
+          aula.shift?.name ?? "Sin turno"
+        ),
+        aula.estado || "Sin estado",
+        getAcciones(aula),
+      ]);
+    };
 
   // Si la vista es "agregar", mostrar el formulario de AgregarSalon
   if (vistaActual === "agregar") {
