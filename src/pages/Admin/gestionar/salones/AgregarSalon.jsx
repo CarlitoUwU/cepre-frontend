@@ -3,14 +3,13 @@ import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
-import ClassesServices from "@/services/ClassesServices.js";
 
-export const AgregarSalon = ({ onAgregarSalon, setVistaActual, areas, turnos }) => {
+export const AgregarSalon = ({ onAgregarSalon, regresar, areas, turnos }) => {
   const [nuevoSalon, setNuevoSalon] = useState({
     name: "",
     areaId: (areas && areas.length > 0) ? areas[0].id : 0,
     shiftId: (turnos && turnos.length > 0) ? turnos[0].id : 0,
-  });  
+  });
 
   const [error, setError] = useState("");
 
@@ -35,16 +34,8 @@ export const AgregarSalon = ({ onAgregarSalon, setVistaActual, areas, turnos }) 
       capacity: 100,
     };
 
-    let salonCreado = await ClassesServices.createClass(dataSalon);
-    salonCreado = {
-      ...salonCreado,
-      area: salonCreado.area.name,
-      turno: salonCreado.shift.name,
-      estado: "Listo",
-    };
-
     setError("");
-    onAgregarSalon(salonCreado);
+    onAgregarSalon(dataSalon);
   };
 
   return (
@@ -58,13 +49,13 @@ export const AgregarSalon = ({ onAgregarSalon, setVistaActual, areas, turnos }) 
         <Input type="text" name="name" value={nuevoSalon.name} onChange={handleChange} />
 
         <label className="block font-semibold mt-3">Área:</label>
-        <Select name="areaId" value={nuevoSalon.areaId} onChange={handleChange} options={areas ? areas : []}/>
+        <Select name="areaId" value={nuevoSalon.areaId} onChange={handleChange} options={areas ? areas : []} />
 
         <label className="block font-semibold mt-3">Turno:</label>
         <Select name="shiftId" value={nuevoSalon.shiftId} onChange={handleChange} options={turnos ? turnos : []} />
 
         <div className="flex justify-between mt-4">
-          <ButtonNegative onClick={() => setVistaActual("lista")}>Atrás</ButtonNegative>
+          <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
           <Button onClick={handleCrearSalon}>Crear Salón</Button>
         </div>
       </div>

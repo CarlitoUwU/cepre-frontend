@@ -1,28 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { LabelForm } from "@/components/ui/LabelForm";
-import CursoService from "@/services/cursoServices";
+import { useCursos } from "@/hooks/useCursos";
 import { Select } from "@/components/ui/Select";
 
 export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuevoUsuario, setVista }) => {
   const [error, setError] = useState("");
-  const [cursos, setCursos] = useState([]);
-
-  useEffect(() => {
-    const fetchCursos = async () => {
-      try {
-        const data = await CursoService.getCursos();
-        setCursos(Array.isArray(data) ? data : []);
-      } catch (error) {
-        console.error("Error al obtener los cursos:", error);
-        setCursos([]);
-      }
-    };
-
-    fetchCursos();
-  }, []);
+  const {
+    cursos
+  } = useCursos();
 
   const handleDniChange = (e) => {
     const value = e.target.value;
@@ -79,7 +67,8 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
     }
 
     setError("");
-    handleGuardarNuevoUsuario();
+    handleGuardarNuevoUsuario(formData);
+    setVista("tabla");
   };
 
   return (

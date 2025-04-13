@@ -1,33 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { AgregarCurso } from "./AgregarCurso";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/button.tsx";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
-import CursoService from "@/services/cursoServices";
+import { toast } from 'react-toastify';
+import { useCursos } from "@/hooks/useCursos";
+import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 
 const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
 
 export const Cursos = () => {
-  const [cursos, setCursos] = useState([]);
+  const {
+    cursos,
+    isLoading,
+    crearCursoMutation,
+    actualizarCursoMutation,
+    eliminarCursoMutation,
+  } = useCursos();
+
   const [editandoId, setEditandoId] = useState(null);
   const [formData, setFormData] = useState({ name: "", color: "" });
   const [vistaActual, setVistaActual] = useState("lista"); // "lista" o "agregar"
-
-  useEffect(() => {
-    const fetchAreas = async () => {
-      try {
-        const data = await CursoService.getCursos();
-        if (Array.isArray(data)) {
-          setCursos(data);
-        }
-      } catch (error) {
-        console.error("Error al obtener las áreas:", error);
-      }
-    };
-
-    fetchAreas();
-  }, []);
 
   const handleModificar = (curso) => {
     setEditandoId(curso.id);
@@ -36,47 +30,50 @@ export const Cursos = () => {
 
   const handleGuardar = async (id) => {
     try {
-      const cursoActualizado = await CursoService.updateCurso({
+      const cursoActualizado = await actualizarCursoMutation.mutateAsync({
         id,
         name: formData.name,
         color: formData.color,
       });
 
       if (cursoActualizado) {
-        setCursos(
-          cursos.map((curso) =>
-            curso.id === id ? cursoActualizado : curso
-          )
-        );
+        toast.success(`Curso "${cursoActualizado.name}" actualizado correctamente`);
         setEditandoId(null);
         setFormData({ name: "", color: "" });
       }
     } catch (error) {
+      toast.error("Error al actualizar el curso");
       console.error("Error al actualizar el curso:", error);
     }
   };
 
-  const handleCancelar = () => { setEditandoId(null); setFormData({ name: "", color: "" }); };
+  const handleCancelar = () => {
+    setEditandoId(null);
+    setFormData({ name: "", color: "" });
+  };
+
   const handleBorrar = async (id) => {
     try {
-      const eliminado = await CursoService.deleteCurso(id);
-      if (eliminado) {
-        setCursos(cursos.filter((curso) => curso.id !== id));
+      const cursoEliminado = await eliminarCursoMutation.mutateAsync(id);
+      if (cursoEliminado) {
+        toast.success(`Curso eliminado correctamente`);
       }
     } catch (error) {
+      toast.error("Error al eliminar el curso");
       console.error("Error al eliminar el curso:", error);
     }
   };
 
-
   const handleAgregarCurso = async (nuevoCurso) => {
     try {
-      const cursoCreado = await CursoService.createCurso(nuevoCurso);
+      const cursoCreado = await crearCursoMutation.mutateAsync(nuevoCurso);
+
       if (cursoCreado) {
-        setCursos([...cursos, cursoCreado]); // Agrega el curso devuelto por el backend
+        toast.success(`Curso "${cursoCreado.name}" creado correctamente`);
         setVistaActual("lista");
       }
     } catch (error) {
+      toast.error("Error al crear el curso");
       console.error("Error al agregar el curso:", error);
     }
   };
@@ -105,7 +102,9 @@ export const Cursos = () => {
   const getAcciones = (curso) => {
     return editandoId === curso.id ? (
       <div className="inline-flex gap-10">
-        <Button onClick={() => handleGuardar(curso.id)}>Guardar</Button>
+        <Button onClick={() => handleGuardar(curso.id)} disabled={actualizarCursoMutation.isPending}>
+          {actualizarCursoMutation.isPending ? "Guardando..." : "Guardar"}
+        </Button>
         <ButtonNegative onClick={handleCancelar}>Cancelar</ButtonNegative>
       </div>
     ) : (
@@ -127,9 +126,9 @@ export const Cursos = () => {
         <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE CURSOS</h2>
         <Button onClick={() => setVistaActual("agregar")}>Agregar Curso</Button>
       </div>
-  
-      {/* Tabla reutilizable */}
-      <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
+      {isLoading ? <SkeletonTabla /> : (
+        <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
+      )}
     </div>
-  );  
+  );
 };

@@ -29,25 +29,23 @@ export const AuthProvider = ({ children }) => {
     loadUser();
   }, []);
 
-  const login = (token, navigate) => { // ✅ Pasar navigate como parámetro
+  const login = (token, navigate, shouldRedirect = true) => {
     try {
       const storedToken = localStorage.getItem("token");
-
-      // Si no se pasa un token como argumento, usar el del localStorage
+  
       if (!token) {
         token = storedToken;
       }
-
-      // Si hay token en localStorage y es diferente al que se pasa, usar el nuevo
+  
       if (token && token !== storedToken) {
         localStorage.setItem("token", token);
       }
-
+  
       if (!token) {
         console.error("No hay token disponible para autenticar.");
         return;
       }
-
+  
       const decoded = jwtDecode(token);
       const user = {
         id: decoded.id,
@@ -55,14 +53,18 @@ export const AuthProvider = ({ children }) => {
         role: decoded.role,
         token,
       };
-
+  
       setUser(user);
-
-      redirectByRole(decoded.role, navigate);
+  
+      if (shouldRedirect) {
+        redirectByRole(decoded.role, navigate);
+      }
+  
     } catch (error) {
       console.error("Error en login:", error);
     }
   };
+  
 
   const logout = (navigate) => {
     localStorage.removeItem("token");

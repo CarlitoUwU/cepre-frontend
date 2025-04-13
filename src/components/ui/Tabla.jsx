@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export const Tabla = ({ encabezado, datos, index_key = null, filtroDic = {} }) => {
+export const Tabla = ({ encabezado = [], datos = [], index_key = null, filtroDic = {} }) => {
   const [filtroActivo, setFiltroActivo] = useState(null);
   const [filtroPosicion, setFiltroPosicion] = useState({});
   const [seleccionados, setSeleccionados] = useState({});
