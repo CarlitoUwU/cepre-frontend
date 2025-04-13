@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Tabla } from "@/components/ui/Tabla";
-import SupervisorsServices from "@/services/SupervisorsServices";
+import { SupervisorsServices } from "@/services/SupervisorsServices";
 import { HorarioMonitorPanel } from "./HorarioMonitorPanel";
 import { DirectorioMonitorPanel } from "./DirectorioMonitorPanel";
 import { Button } from "@/components/ui/Button";
