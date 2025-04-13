@@ -91,8 +91,8 @@ export const DocenteUsuarios = () => {
         });
       }
     } catch (error) {
-      toast.error("Error al actualizar el curso");
-      console.error("Error al actualizar el curso:", error);
+      toast.error("Error al actualizar el docente");
+      console.error("Error al actualizar el docente:", error);
     }
   };
 
@@ -104,8 +104,8 @@ export const DocenteUsuarios = () => {
       }
     }
     catch (error) {
-      toast.error("Error al actualizar el curso");
-      console.error("Error al actualizar el curso:", error);
+      toast.error("Error al eliminar el docente");
+      console.error("Error al eliminar el docente:", error);
     }
   };
 
