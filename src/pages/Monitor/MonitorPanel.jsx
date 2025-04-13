@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
 import { ListaCursosMonitor } from "@/components/ListaCursosMonitor";
 import { FuncionesMonitor } from "./FuncionesMonitor";
-import MonitorServices from "@/services/monitorServices";
+import { MonitorsServices } from "@/services/MonitorsServices";
 import { DIAS } from "@/constants/dias";
 
 const formatTimeToHHMM = (isoString) => {
@@ -13,7 +13,7 @@ const formatTimeToHHMM = (isoString) => {
 
 const fetchHorarioData = async () => {
   try {
-    const horario = await MonitorServices.cargarHorario();
+    const horario = await MonitorsServices.cargarHorario();
     return horario.map((hora) => ({
       dia: DIAS[hora.weekday],
       hora_ini: formatTimeToHHMM(hora.startTime),
@@ -28,7 +28,7 @@ const fetchHorarioData = async () => {
 
 const fetchProfesoresData = async () => {
   try {
-    const profesores = await MonitorServices.cargarDocentes();
+    const profesores = await MonitorsServices.cargarDocentes();
     return profesores.map((profesor) => ({
       curso: profesor.courseName,
       docente: `${profesor.firstName} ${profesor.lastName}`,

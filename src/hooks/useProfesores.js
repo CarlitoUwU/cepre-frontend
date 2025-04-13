@@ -36,7 +36,6 @@ export const useProfesores = ({ page = 1, limit = 20 } = {}) => {
     },
   });
 
-
   // Mutación para actualizar un profesor
   const actualizarProfesorMutation = useMutation({
     mutationFn: TeachersServices.updateTeacher,
