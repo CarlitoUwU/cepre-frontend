@@ -4,9 +4,9 @@ import { Outlet } from "react-router-dom";
 
 export const MainLayout = () => {
   return (
-    <div>
+    <div className="w-full ">
       <Header />
-      <main className="w-full mt-20">
+      <main className="w-full  pt-20">
         <Outlet /> {/* Aquí se renderizarán las demás vistas */}
       </main>
     </div>

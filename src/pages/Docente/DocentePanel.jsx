@@ -3,15 +3,7 @@ import { AulaInfo } from "@/components/AulaInfo";
 import { ListaSalones } from "@/components/ListaSalones";
 import { TablaHorario } from "@/components/Horarios";
 import ClassesServices from "@/services/ClassesServices";
-
-const DIAS = {
-  "Lunes": "LUNES",
-  "Martes": "MARTES",
-  "Miércoles": "MIÉRCOLES",
-  "Jueves": "JUEVES",
-  "Viernes": "VIERNES",
-  "Sábado": "SÁBADO",
-};
+import { DIAS } from "@/constants/dias";
 
 const AREAS = {
   S: "Sociales",

@@ -29,8 +29,45 @@ const cursoColors = {
   "RAZ. LÓGICO": "#7887cb",
 };
 
-
 export const TablaHorarioMonitor = ({ horas = [] }) => {
+  const agruparCursosConsecutivos = (horas) => {
+    const horasOrdenadas = [...horas].sort((a, b) => {
+      if (a.dia !== b.dia) return dias.indexOf(a.dia) - dias.indexOf(b.dia);
+      return horasIni.indexOf(a.hora_ini) - horasIni.indexOf(b.hora_ini);
+    });
+  
+    const grupos = [];
+    let grupoActual = null;
+  
+    horasOrdenadas.forEach((hora) => {
+      const esAsignado = !hora.curso.toUpperCase().includes("SIN ASIGNAR"); // ⚡ Solo agrupa si NO es "SIN ASIGNAR"
+      
+      if (!grupoActual) {
+        grupoActual = { ...hora };
+      } else if (
+        grupoActual.dia === hora.dia &&
+        (grupoActual.curso.toUpperCase() === hora.curso.toUpperCase()) && // Mismo curso
+        esAsignado && // ⚡ Solo si es un curso asignado (no "SIN ASIGNAR")
+        horasFin.indexOf(grupoActual.hora_fin) + 1 === horasIni.indexOf(hora.hora_ini) // Horas consecutivas
+      ) {
+        // Son consecutivos y mismo curso (y no es "SIN ASIGNAR") → expandir el grupo
+        grupoActual.hora_fin = hora.hora_fin;
+      } else {
+        // No cumple las condiciones → cerrar grupo actual y empezar nuevo
+        grupos.push(grupoActual);
+        grupoActual = { ...hora };
+      }
+    });
+  
+    if (grupoActual) {
+      grupos.push(grupoActual);
+    }
+  
+    return grupos;
+  };
+
+  const horasAgrupadas = agruparCursosConsecutivos(horas);
+
   const horaMinima = horas.length ? horas.map((h) => h.hora_ini).sort()[0] : "07:00";
   const horaMaxima = horas.length ? horas.map((h) => h.hora_fin).sort().at(-1) : "12:10";
 
@@ -43,7 +80,6 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
 
   return (
     <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4">
-
       <div></div>
 
       {dias.map((dia, index) => (
@@ -65,24 +101,22 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
               gridColumn: i + 2,
               gridRow: k + 2,
               color: "#000",
-              minHeight: "3rem", // Aumenta el alto de la celda (ajusta según necesidad)
+              minHeight: "3rem",
             }}
           ></div>
         ))
       )}
 
-      {horas.map((hora) => (
+      {horasAgrupadas.map((hora) => (
         <Curso
           key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
-
           nombre={hora.curso}
           backgroundColor={cursoColors[hora.curso.toUpperCase()] || "#31A8E3"}
           gridColumn={getColumn(hora.dia)}
           gridRow={getRow(hora.hora_ini)}
           gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
-          style={{ minHeight: "6rem" }} // Ajuste del alto
+          style={{ minHeight: "6rem" }}
         />
-
       ))}
     </div>
   );

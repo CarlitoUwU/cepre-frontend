@@ -3,20 +3,12 @@ import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
 import MonitorServices from "@/services/monitorServices";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
+import { DIAS } from "@/constants/dias";
 
 const formatTimeToHHMM = (isoString) => {
   if (!isoString) return "00:00"; // Evita errores si el valor es null o undefined
   const date = new Date(isoString);
   return date.toISOString().substring(11, 16);
-};
-
-const DIAS = {
-  Lunes: "LUNES",
-  Martes: "MARTES",
-  Miércoles: "MIÉRCOLES",
-  Jueves: "JUEVES",
-  Viernes: "VIERNES",
-  Sábado: "SÁBADO",
 };
 
 export const HorarioMonitorPanel = ({ aula = {}, volver = () => { }, cambiarVista = () => { } }) => {
