@@ -1,6 +1,6 @@
 import { request } from "./api";
 
-const TeacherServices = {
+export const TeachersServices = {
   /**
    * Obtiene la lista de teachers.
    * @returns {Promise<Array<{ userId: string, courseId: string, maxHours: number, scheduledHours: number, isActive: boolean, jobShiftType: string, createdAt: string, updatedAt: string }>> | null}
@@ -25,7 +25,6 @@ const TeacherServices = {
    */
   async createTeacher({ email, personalEmail, maxHours = 30, scheduledHours = 0, jobStatus, courseId, dni, firstName, lastName, phone, phonesAdditional = [], isCoordinator = false }) {
     if (!email || !courseId || !firstName || !lastName) throw new Error("Faltan datos obligatorios");
-    console.log("TeacherServices.createTeacher", { email, personalEmail, maxHours, scheduledHours, jobStatus, courseId, dni, firstName, lastName, phone, phonesAdditional, isCoordinator });
     return request("post", "/teachers", { email, personalEmail, maxHours, scheduledHours, jobStatus, courseId, dni, firstName, lastName, phone, phonesAdditional, isCoordinator });
   },
 
@@ -59,5 +58,3 @@ const TeacherServices = {
     return request("get", "/teachers/csv", null);
   }
 };
-
-export default TeacherServices;
