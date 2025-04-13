@@ -115,9 +115,9 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
                 value={formData.disponibilidad || ""}
                 onChange={handleChange}
                 options={[
-                  { id: "full-time", name: "Full Time" },
-                  { id: "part-time", name: "Part Time" },
-                  { id: "free-time", name: "Free Time" }
+                  { id: "FullTime", name: "Full Time" },
+                  { id: "PartTime", name: "Part Time" },
+                  { id: "FreeTime", name: "Free Time" }
                 ]}
                 required
               />
