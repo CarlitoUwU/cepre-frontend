@@ -116,9 +116,6 @@ export const MonitorUsuarios = () => {
     <div className="overflow-x-auto w-full text-center">
       <div className="relative flex justify-center items-center py-2">
         <h2 className="text-2xl font-bold">GESTIÓN DE MONITORES</h2>
-        <div className="absolute right-4">
-          <Button onClick={handleAgregar}>Agregar Monitor</Button>
-        </div>
       </div>
       {datos.length > 0 ? (
         <Tabla encabezado={encabezado} datos={datos} />
