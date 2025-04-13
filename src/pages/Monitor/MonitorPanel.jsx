@@ -4,19 +4,11 @@ import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
 import { ListaCursosMonitor } from "@/components/ListaCursosMonitor";
 import { FuncionesMonitor } from "./FuncionesMonitor";
 import MonitorServices from "@/services/monitorServices";
+import { DIAS } from "@/constants/dias";
 
 const formatTimeToHHMM = (isoString) => {
   const date = new Date(isoString);
   return date.toISOString().substring(11, 16);
-};
-
-const DIAS = {
-  "Lunes": "LUNES",
-  "Martes": "MARTES",
-  "Miércoles": "MIÉRCOLES",
-  "Jueves": "JUEVES",
-  "Viernes": "VIERNES",
-  "Sábado": "SÁBADO",
 };
 
 const fetchHorarioData = async () => {

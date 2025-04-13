@@ -29,7 +29,6 @@ const cursoColors = {
   "RAZ. LÓGICO": "#7887cb",
 };
 
-
 export const TablaHorarioMonitor = ({ horas = [] }) => {
   const horaMinima = horas.length ? horas.map((h) => h.hora_ini).sort()[0] : "07:00";
   const horaMaxima = horas.length ? horas.map((h) => h.hora_fin).sort().at(-1) : "12:10";
