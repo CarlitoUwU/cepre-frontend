@@ -25,8 +25,8 @@ const TeacherServices = {
    */
   async createTeacher({ email, personalEmail, maxHours = 30, scheduledHours = 0, jobStatus, courseId, dni, firstName, lastName, phone, phonesAdditional = [], isCoordinator = false }) {
     if (!email || !courseId || !firstName || !lastName) throw new Error("Faltan datos obligatorios");
-    const now = new Date().toISOString();
-    return request("post", "/teachers", { email, personalEmail, maxHours, scheduledHours, jobStatus, courseId, dni, firstName, lastName, phone, phonesAdditional, isCoordinator, createdAt: now });
+    console.log("TeacherServices.createTeacher", { email, personalEmail, maxHours, scheduledHours, jobStatus, courseId, dni, firstName, lastName, phone, phonesAdditional, isCoordinator });
+    return request("post", "/teachers", { email, personalEmail, maxHours, scheduledHours, jobStatus, courseId, dni, firstName, lastName, phone, phonesAdditional, isCoordinator });
   },
 
   /**
@@ -35,10 +35,9 @@ const TeacherServices = {
    * @returns {Promise<{ Object } | null>}
    * @throws {Error} Si el ID del teacher no es válido.
    */
-  async updateTeacher({ userId, courseId, maxHours, scheduledHours, isActive, jobShiftType }) {
+  async updateTeacher({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    const now = new Date().toISOString();
-    return request("put", `/teachers/${userId}`, { userId, courseId, maxHours, scheduledHours, isActive, jobShiftType, updatedAt: now });
+    return request("put", `/teachers/${userId}`, { firstName, lastName, personalEmail, phone});
   },
 
   /**
@@ -59,8 +58,6 @@ const TeacherServices = {
   async teacherCsv() {
     return request("get", "/teachers/csv", null);
   }
-
-
 };
 
 export default TeacherServices;
