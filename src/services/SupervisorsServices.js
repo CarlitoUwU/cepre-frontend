@@ -37,11 +37,8 @@ const SupervisorsServices = {
   },
 
   async getMonitors() {
-    return request("get", "/supervisors/getMonitors", null, true);
+    return request("get", "/supervisors/getMonitors");
   }
-
-
-
 };
 
 export default SupervisorsServices;
