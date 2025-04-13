@@ -3,8 +3,8 @@ import { Tabla } from "@/components/ui/Tabla";
 import SupervisorsServices from "@/services/SupervisorsServices";
 import { HorarioMonitorPanel } from "./HorarioMonitorPanel";
 import { DirectorioMonitorPanel } from "./DirectorioMonitorPanel";
-import {Button} from "@/components/ui/Button";
-import {ButtonNegative} from "@/components/ui/ButtonNegative";
+import { Button } from "@/components/ui/Button";
+import { ButtonNegative } from "@/components/ui/ButtonNegative";
 
 const ESTADO = {
   "INDEX": "INDEX",
@@ -34,7 +34,7 @@ export const SupervisorPanel = () => {
       }
 
       const data = response.map((clase) => ({
-        id: "e4bd595e-9b1b-4c14-ad6e-d98a66dc6ffe", //clase?.id || "Sin ID",
+        id: clase?.user_id || "Sin ID",
         aula: clase?.classes?.name || "Sin clase",
         monitor: `${clase?.profile?.firstName || "Desconocido"} ${clase?.profile?.lastName || ""}`.trim(),
         enlace: clase?.classes?.urlMeet || "",
@@ -67,8 +67,8 @@ export const SupervisorPanel = () => {
         {aula.enlace}
       </a>,
       <div className="inline-flex gap-4">
-        <Button onClick={() => {setSelectedSalon(aula); setEstado(ESTADO.HORARIO);}}> Visualizar Horario </Button>
-        <ButtonNegative onClick={() => {setSelectedSalon(aula); setEstado(ESTADO.DIRECTORIO);}}> Visualizar Directorio </ButtonNegative>
+        <Button onClick={() => { setSelectedSalon(aula); setEstado(ESTADO.HORARIO); }}> Visualizar Horario </Button>
+        <ButtonNegative onClick={() => { setSelectedSalon(aula); setEstado(ESTADO.DIRECTORIO); }}> Visualizar Directorio </ButtonNegative>
       </div>,
     ]);
   }, [aulasData]);
@@ -79,17 +79,17 @@ export const SupervisorPanel = () => {
   return (
     <div className="p-5">
       <div className="bg-gray-100 p-5 rounded-md shadow-md overflow-x-auto text-center">
-      <h1 className="text-2xl font-bold text-center mb-6">Panel de Supervisor</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">Panel de Supervisor</h1>
 
-      {estado === ESTADO.INDEX &&
-        <Tabla encabezado={["N°", "Aula", "Monitor", "Enlace", "Acciones"]} datos={datosAulas} index_key={0} />}
+        {estado === ESTADO.INDEX &&
+          <Tabla encabezado={["N°", "Aula", "Monitor", "Enlace", "Acciones"]} datos={datosAulas} index_key={0} />}
 
-      {estado === ESTADO.HORARIO &&
-        <HorarioMonitorPanel aula={selectedSalon} cambiarVista={cambiarVistaDirectorio} volver={volverAlIndex} />}
+        {estado === ESTADO.HORARIO &&
+          <HorarioMonitorPanel aula={selectedSalon} cambiarVista={cambiarVistaDirectorio} volver={volverAlIndex} />}
 
-      {estado === ESTADO.DIRECTORIO &&
-        <DirectorioMonitorPanel aula={selectedSalon} cambiarVista={cambiarVistaHorario} volver={volverAlIndex} />}
-    </div>
+        {estado === ESTADO.DIRECTORIO &&
+          <DirectorioMonitorPanel aula={selectedSalon} cambiarVista={cambiarVistaHorario} volver={volverAlIndex} />}
+      </div>
     </div>
   );
 };
