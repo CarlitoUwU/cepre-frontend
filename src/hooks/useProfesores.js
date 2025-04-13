@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import TeachersServices from "@/services/teachersServices.js";
+import { TeachersServices } from "@/services/TeachersServices.js";
 
 export const useProfesores = ({ page = 1, limit = 20 } = {}) => {
   const queryClient = useQueryClient();
