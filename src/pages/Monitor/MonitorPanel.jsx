@@ -5,11 +5,7 @@ import { ListaCursosMonitor } from "@/components/ListaCursosMonitor";
 import { FuncionesMonitor } from "./FuncionesMonitor";
 import { MonitorsServices } from "@/services/MonitorsServices";
 import { DIAS } from "@/constants/dias";
-
-const formatTimeToHHMM = (isoString) => {
-  const date = new Date(isoString);
-  return date.toISOString().substring(11, 16);
-};
+import { formatTimeToHHMM } from "@/utils/formatTime";
 
 const fetchHorarioData = async () => {
   try {
@@ -59,11 +55,28 @@ export const MonitorPanel = () => {
 
   useEffect(() => {
     const loadHorario = async () => {
-      const data = await fetchHorarioData();
-      const profesores = await fetchProfesoresData();
-      setListaProfesores(profesores);
-      setHorario(data);
+      const cachedHorario = sessionStorage.getItem("horario");
+      const cachedProfesores = sessionStorage.getItem("profesores");
+
+      if (cachedHorario && cachedProfesores) {
+        // Usa los datos del cache
+        setHorario(JSON.parse(cachedHorario));
+        setListaProfesores(JSON.parse(cachedProfesores));
+      } else {
+        // Si no hay cache, obtener los datos del servidor
+        const data = await fetchHorarioData();
+        const profesores = await fetchProfesoresData();
+
+        // Guardar en el estado
+        setHorario(data);
+        setListaProfesores(profesores);
+
+        // Guardar en sessionStorage
+        sessionStorage.setItem("horario", JSON.stringify(data));
+        sessionStorage.setItem("profesores", JSON.stringify(profesores));
+      }
     };
+
     loadHorario();
   }, []);
 

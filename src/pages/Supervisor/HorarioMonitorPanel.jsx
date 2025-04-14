@@ -4,12 +4,7 @@ import { MonitorsServices } from "@/services/MonitorsServices";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { DIAS } from "@/constants/dias";
-
-const formatTimeToHHMM = (isoString) => {
-  if (!isoString) return "00:00"; // Evita errores si el valor es null o undefined
-  const date = new Date(isoString);
-  return date.toISOString().substring(11, 16);
-};
+import { formatTimeToHHMM } from "@/utils/formatTime";
 
 export const HorarioMonitorPanel = ({ aula = {}, volver = () => { }, cambiarVista = () => { } }) => {
   const [horario, setHorario] = useState([]);
