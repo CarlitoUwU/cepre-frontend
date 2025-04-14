@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tabla } from "@/components/ui/Tabla.jsx";
 import meetIcon from "@/assets/meet.png";
 import classroomIcon from "@/assets/classroom.png";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input.tsx";
 
 export const FuncionesMonitor = ({ monitorInfo }) => {
@@ -19,14 +19,14 @@ export const FuncionesMonitor = ({ monitorInfo }) => {
       "I-102",
       "Joel Antonio Chino Pari",
       editMeet ? (
-        <Input type="text" value={newMeetLink} onChange={(e) => setNewMeetLink(e.target.value)}/>
+        <Input type="text" value={newMeetLink} onChange={(e) => setNewMeetLink(e.target.value)} />
       ) : (
         <a href={newMeetLink} target="_blank" rel="noopener noreferrer">
           <img src={meetIcon} alt="Meet" className="mx-auto" style={{ maxWidth: "100px", maxHeight: "50px" }} />
         </a>
       ),
       editClassroom ? (
-        <Input type="text" value={newClassroomLink} onChange={(e) => setNewClassroomLink(e.target.value)}/>
+        <Input type="text" value={newClassroomLink} onChange={(e) => setNewClassroomLink(e.target.value)} />
       ) : (
         <a href={newClassroomLink} target="_blank" rel="noopener noreferrer">
           <img src={classroomIcon} alt="Classroom" className="mx-auto" style={{ maxWidth: "50px", maxHeight: "50px" }} />
