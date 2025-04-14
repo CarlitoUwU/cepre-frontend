@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Tabla } from "@/components/ui/Tabla";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
 import { AgregarUsuarios } from "../AgregarUsuarios";
