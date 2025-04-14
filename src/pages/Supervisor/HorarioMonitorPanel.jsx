@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
-import { MonitorsServices } from "@/services/monitorsServices";
+import { MonitorsServices } from "@/services/MonitorsServices";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { DIAS } from "@/constants/dias";
