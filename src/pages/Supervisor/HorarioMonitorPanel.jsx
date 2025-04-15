@@ -3,7 +3,7 @@ import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
 import { MonitorsServices } from "@/services/MonitorsServices";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { DIAS } from "@/constants/dias";
+import { DIAS_DIC } from "@/constants/dias";
 import { formatTimeToHHMM } from "@/utils/formatTime";
 
 export const HorarioMonitorPanel = ({ aula = {}, volver = () => { }, cambiarVista = () => { } }) => {
@@ -23,7 +23,7 @@ export const HorarioMonitorPanel = ({ aula = {}, volver = () => { }, cambiarVist
 
         setHorario(
           horarioData.map((hora) => ({
-            dia: DIAS[hora.weekday] || "Día desconocido",
+            dia: DIAS_DIC[hora.weekday] || "Día desconocido",
             hora_ini: formatTimeToHHMM(hora.startTime),
             hora_fin: formatTimeToHHMM(hora.endTime),
             curso: hora.courseName || "Curso desconocido",

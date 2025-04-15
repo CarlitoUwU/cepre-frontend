@@ -3,7 +3,7 @@ import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
 import { ListaCursosMonitor } from "@/components/ListaCursosMonitor";
 import { FuncionesMonitor } from "./FuncionesMonitor";
 import { MonitorsServices } from "@/services/MonitorsServices";
-import { DIAS } from "@/constants/dias";
+import { DIAS_DIC } from "@/constants/dias";
 import { formatTimeToHHMM } from "@/utils/formatTime";
 import { toast } from "react-toastify";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
@@ -19,7 +19,7 @@ const fetchHorarioData = async () => {
   try {
     const horario = await MonitorsServices.cargarHorario();
     return horario.map((hora) => ({
-      dia: DIAS[hora.weekday],
+      dia: DIAS_DIC[hora.weekday],
       hora_ini: formatTimeToHHMM(hora.startTime),
       hora_fin: formatTimeToHHMM(hora.endTime),
       curso: hora.courseName,
