@@ -105,7 +105,7 @@ const TablaTurno = ({
           ))}
 
         {/* Pintar los turnos correspondientes */}
-        {dias.flatMap((dia, i) =>
+        {DIAS.flatMap((dia, i) =>
           HORAS_INI.slice(minIndex, maxIndex + 1).map((hora) =>
             pintarPorTurnos(hora, HORAS_FIN[minIndex + i])
           )
