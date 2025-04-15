@@ -2,6 +2,7 @@ import { Dia } from "./Dia";
 import { Hora } from "./Hora";
 import { Curso } from "./Curso";
 import React from "react";
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const horasIni = [
   "07:00", "07:45", "08:30", "09:15", "10:00", "10:45", "11:30", "12:15", "13:00", "13:45", "14:30", "15:15", "16:00", "16:45", "17:30", "18:15", "19:00", "19:45", "20:30",
@@ -9,7 +10,8 @@ const horasIni = [
 const horasFin = [
   "07:40", "08:25", "09:10", "09:55", "10:40", "11:25", "12:10", "12:55", "13:40", "14:25", "15:10", "15:55", "16:40", "17:25", "18:10", "18:55", "19:40", "20:25", "21:10",
 ];
-const dias = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"];
+const diasFull = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"];
+const diasCorto = ["L", "M", "M", "J", "V", "S"];
 
 const cursoColors = {
   "RAZ. MATEMÁTICO": "#D50000",
@@ -30,18 +32,24 @@ const cursoColors = {
 };
 
 export const TablaHorarioMonitor = ({ horas = [] }) => {
+  const isMobile = useIsMobile(1024);
+
+  const dias = diasFull;
+  const diasHeader = isMobile ? diasCorto : dias;
+
+
   const agruparCursosConsecutivos = (horas) => {
     const horasOrdenadas = [...horas].sort((a, b) => {
       if (a.dia !== b.dia) return dias.indexOf(a.dia) - dias.indexOf(b.dia);
       return horasIni.indexOf(a.hora_ini) - horasIni.indexOf(b.hora_ini);
     });
-  
+
     const grupos = [];
     let grupoActual = null;
-  
+
     horasOrdenadas.forEach((hora) => {
       const esAsignado = !hora.curso.toUpperCase().includes("SIN ASIGNAR"); // ⚡ Solo agrupa si NO es "SIN ASIGNAR"
-      
+
       if (!grupoActual) {
         grupoActual = { ...hora };
       } else if (
@@ -58,11 +66,11 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
         grupoActual = { ...hora };
       }
     });
-  
+
     if (grupoActual) {
       grupos.push(grupoActual);
     }
-  
+
     return grupos;
   };
 
@@ -82,7 +90,7 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
     <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4">
       <div></div>
 
-      {dias.map((dia, index) => (
+      {diasHeader.map((dia, index) => (
         <Dia key={index} nombre={dia} />
       ))}
 

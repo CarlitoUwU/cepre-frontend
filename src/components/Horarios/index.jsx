@@ -2,6 +2,7 @@ import { Dia } from './Dia';
 import { Hora } from './Hora';
 import { Curso } from './Curso';
 import React from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const horasIni = [
   "07:00", "07:45", "08:30", "09:15", "10:00", "10:45", "11:30", "12:15", "13:00", "13:45", "14:30", "15:15", "16:00", "16:45", "17:30", "18:15", "19:00", "19:45", "20:30",
@@ -9,11 +10,15 @@ const horasIni = [
 const horasFin = [
   "07:40", "08:25", "09:10", "09:55", "10:40", "11:25", "12:10", "12:55", "13:40", "14:25", "15:10", "15:55", "16:40", "17:25", "18:10", "18:55", "19:40", "20:25", "21:10",
 ];
-const dias = [
-  "LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"
-];
+const diasFull = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"];
+const diasCorto = ["L", "M", "M", "J", "V", "S"];
 
 export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => { } }) => {
+  const isMobile = useIsMobile(1024);
+
+  const dias = diasFull;
+  const diasHeader = isMobile ? diasCorto : dias;
+
   // Obtener rango de horas basado en las clases disponibles
   const horas = listaSalones.flatMap(salon => salon.horas);
   const horaMinima = horas.length ? horas.map(h => h.hora_ini).sort()[0] : "07:00";
@@ -38,7 +43,7 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
       <div></div>
 
       {/*Encabezado de dias*/}
-      {dias.map((dia, index) => (
+      {diasHeader.map((dia, index) => (
         <Dia key={index} nombre={dia} />
       ))}
 
