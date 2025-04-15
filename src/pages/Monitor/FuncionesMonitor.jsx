@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabla } from "@/components/ui/Tabla.jsx";
 import meetIcon from "@/assets/meet.png";
 import classroomIcon from "@/assets/classroom.png";
@@ -13,6 +13,11 @@ export const FuncionesMonitor = ({ monitorInfo }) => {
   const [editClassroom, setEditClassroom] = useState(false);
   const [newMeetLink, setNewMeetLink] = useState(meetLink);
   const [newClassroomLink, setNewClassroomLink] = useState(classroomLink);
+
+  useEffect(() => {
+    setNewMeetLink(meetLink);
+    setNewClassroomLink(classroomLink);
+  }, [meetLink, classroomLink]);
 
   const datos = [
     [

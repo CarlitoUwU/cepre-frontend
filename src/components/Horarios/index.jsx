@@ -10,14 +10,14 @@ const horasFin = [
   "07:40", "08:25", "09:10", "09:55", "10:40", "11:25", "12:10", "12:55", "13:40", "14:25", "15:10", "15:55", "16:40", "17:25", "18:10", "18:55", "19:40", "20:25", "21:10",
 ];
 const dias = [
-  "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"
+  "LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"
 ];
 
 export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => { } }) => {
   // Obtener rango de horas basado en las clases disponibles
   const horas = listaSalones.flatMap(salon => salon.horas);
   const horaMinima = horas.length ? horas.map(h => h.hora_ini).sort()[0] : "07:00";
-  const horaMaxima = horas.length ? horas.map(h => h.hora_fin).sort().at(-1) : "21:00";
+  const horaMaxima = horas.length ? horas.map(h => h.hora_fin).sort().at(-1) : "12:10";
 
   const minIndex = horasIni.indexOf(horaMinima);
   const maxIndex = horasFin.indexOf(horaMaxima);
