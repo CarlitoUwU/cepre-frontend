@@ -73,6 +73,6 @@ export const MonitorsServices = {
   },
 
   async getInformacion() {
-    return request("get", "/monitors/informacion", null, true);
+    return request("get", "/monitors/information");
   }
 };
