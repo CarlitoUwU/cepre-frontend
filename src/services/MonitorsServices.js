@@ -70,5 +70,9 @@ export const MonitorsServices = {
   async cargarDocentes(id = null) {
     const url = id ? `/monitors/${id}/teachers` : "/monitors/datos/teachers";
     return request("get", url, null);
+  },
+
+  async getInformacion() {
+    return request("get", "/monitors/informacion", null, true);
   }
 };

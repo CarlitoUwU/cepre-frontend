@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input.tsx";
 
 export const FuncionesMonitor = ({ monitorInfo }) => {
-  const { meetLink, classroomLink } = monitorInfo; // Ya no usamos openEditPage
+  const { meetLink, classroomLink, salon, monitor } = monitorInfo;
   const encabezado = ["Aula", "Monitor", "Meet", "Classroom"];
 
   const [editMeet, setEditMeet] = useState(false);
@@ -16,8 +16,8 @@ export const FuncionesMonitor = ({ monitorInfo }) => {
 
   const datos = [
     [
-      "I-102",
-      "Joel Antonio Chino Pari",
+      `${salon}`,
+      `${monitor}`,
       editMeet ? (
         <Input type="text" value={newMeetLink} onChange={(e) => setNewMeetLink(e.target.value)} />
       ) : (
