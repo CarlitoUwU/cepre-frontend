@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
 import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
 import { ListaCursosMonitor } from "@/components/ListaCursosMonitor";
 import { FuncionesMonitor } from "./FuncionesMonitor";
@@ -48,7 +47,15 @@ const fetchProfesoresData = async () => {
 
 const fetchDatosMonitor = async () => {
   try {
-    return await MonitorsServices.getInformacion();
+    const data = await MonitorsServices.getInformacion();
+    return {
+      meetLink: data?.urlMeet || "",
+      classroomLink: data?.urlClassroom || "",
+      salon: data?.salon || "",
+      monitor: `${data?.nombres || ""} ${data?.apellidos || ""}`,
+      salon_id: data?.salon_id || "",
+      monitor_id: data?.monitorId || "",
+    };
   }
   catch (error) {
     console.error("Error fetching monitor data", error);
@@ -57,12 +64,10 @@ const fetchDatosMonitor = async () => {
 }
 
 export const MonitorPanel = () => {
-  //debugger
-  const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
   const [horario, setHorario] = useState([]);
   const [listaProfesores, setListaProfesores] = useState([]);
-  const [data, setData] = useState({});
+  const [monitorInfo, setMonitorInfo] = useState({});
 
   useEffect(() => {
     const loadHorario = async () => {
@@ -74,18 +79,18 @@ export const MonitorPanel = () => {
         // Usa los datos del cache
         setHorario(JSON.parse(cachedHorario));
         setListaProfesores(JSON.parse(cachedProfesores));
-        setData(JSON.parse(cachedData));
+        setMonitorInfo(JSON.parse(cachedData));
       } else {
         // Si no hay cache, obtener los datos del servidor
         try {
           const profesores = await fetchProfesoresData();
           const horario = await fetchHorarioData();
-          const data = await fetchDatosMonitor();
+          const monitor = await fetchDatosMonitor();
 
-          if (!horario.length || !profesores.length || !data) {
+          if (!horario.length || !profesores.length || !monitor) {
             setHorario([]);
             setListaProfesores([]);
-            setData({});
+            setMonitorInfo({});
             toast.error("No se encontraron datos para mostrar.");
             return;
           }
@@ -95,7 +100,7 @@ export const MonitorPanel = () => {
           // Guardar en el estado
           setHorario(horario);
           setListaProfesores(profesores);
-          setData(data);
+          setMonitorInfo(monitor);
 
           // Guardar en sessionStorage
           sessionStorage.setItem("horario", JSON.stringify(horario));
@@ -110,13 +115,6 @@ export const MonitorPanel = () => {
 
     loadHorario();
   }, []);
-
-  const monitorInfo = {
-    meetLink: data?.urlMeet || "",
-    classroomLink: data?.urlClassroom || "",
-    salon: data?.salon || "",
-    monitor: `${data?.nombres || ""} ${data?.apellidos || ""}`
-  };
 
   return (
     <div className="bg-gray-200 p-4 m-5 text-center">
@@ -133,7 +131,7 @@ export const MonitorPanel = () => {
 
         {/* Horario del Monitor */}
         <div className="col-span-3 overflow-x-auto">
-          <h2 className="text-2xl font-bold mb-4">HORARIO {data?.salon || ""}</h2>
+          <h2 className="text-2xl font-bold mb-4">HORARIO {monitorInfo?.salon || ""}</h2>
           <TablaHorarioMonitor horas={horario} />
 
           {/* Funciones del Monitor */}
