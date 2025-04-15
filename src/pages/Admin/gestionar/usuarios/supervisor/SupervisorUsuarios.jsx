@@ -108,7 +108,7 @@ export const SupervisorUsuarios = () => {
       supervisor.numero || supervisor.Número,
       <div className="flex gap-2 justify-center">
         <Button onClick={() => handleAsignarSalonSup(supervisor.id)}>Asignar Salón</Button>
-        <Button onClick={() => handleModificar(supervisor.id)}>Modificar</Button>
+        <Button onClick={() => handleModificar(supervisor.id)}>Editar</Button>
         <ButtonNegative onClick={() => handleBorrar(supervisor.id)}>Borrar</ButtonNegative>
       </div>,
     ];
