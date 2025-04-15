@@ -40,7 +40,7 @@ export const MonitorUsuarios = () => {
 
   useEffect(() => {
     if (isError && (!monitores || monitores.length === 0)) {
-      toast.error("Error al obtener los docentes");
+      toast.error("Error al obtener los monitores");
     }
   }, [isError, monitores]);
 
@@ -88,9 +88,9 @@ export const MonitorUsuarios = () => {
     }
   };
 
-  const handleBorrar = (id) => {
+  const handleBorrar = async (id) => {
     try {
-      const monitorEliminado = eliminarMonitorMutation.mutateAsync(id);
+      const monitorEliminado = await eliminarMonitorMutation.mutateAsync(id);
       if (monitorEliminado) {
         toast.success("Monitor eliminado correctamente");
       }
