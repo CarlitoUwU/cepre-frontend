@@ -1,26 +1,21 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { TablaHorarioMonitor } from "@/components/Horarios/indexMonitor";
-import MonitorServices from "@/services/monitorServices";
+import { MonitorsServices } from "@/services/MonitorsServices";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { DIAS } from "@/constants/dias";
-
-const formatTimeToHHMM = (isoString) => {
-  if (!isoString) return "00:00"; // Evita errores si el valor es null o undefined
-  const date = new Date(isoString);
-  return date.toISOString().substring(11, 16);
-};
+import { formatTimeToHHMM } from "@/utils/formatTime";
 
 export const HorarioMonitorPanel = ({ aula = {}, volver = () => { }, cambiarVista = () => { } }) => {
   const [horario, setHorario] = useState([]);
 
   useEffect(() => {
-    
+
     if (!aula || !aula.id) return; // Evita ejecutar si no hay aula válida
 
     const fetchHorarioData = async (salonId) => {
       try {
-        const horarioData = await MonitorServices.cargarHorario(salonId);
+        const horarioData = await MonitorsServices.cargarHorario(salonId);
         if (!Array.isArray(horarioData)) {
           console.error("Respuesta inválida de la API:", horarioData);
           return;

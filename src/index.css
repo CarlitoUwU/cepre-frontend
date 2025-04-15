@@ -7,3 +7,39 @@
 html, body, #root {
   @apply bg-white text-black;
 }
+
+/* Estilo de notificación exito  */
+.Toastify__toast--success {
+  background : #14974d !important;
+  color: white;
+}
+
+/* Icono de éxito blanco */
+.Toastify__toast--success .Toastify__toast-icon svg {
+  fill: white !important;
+}
+
+/* Barra de progreso blanca en toasts de éxito */
+.Toastify__toast--success .Toastify__progress-bar {
+  background-color: white !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+/* Estilo de notificación error  */
+.Toastify__toast--error {
+  background : #d9534f !important;
+  color: white;
+}
+
+/* Icono de error blanco */
+.Toastify__toast--error .Toastify__toast-icon svg {
+  fill: white !important;
+}
+
+/* Barra de progreso blanca en toasts de error */
+.Toastify__toast--error .Toastify__progress-bar {
+  background-color: white !important;
+  opacity: 1 !important;
+  filter: none !important;
+}

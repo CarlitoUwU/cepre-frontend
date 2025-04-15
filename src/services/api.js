@@ -78,8 +78,7 @@ export async function request(method, endpoint, data = {}, isList = false) {
       status: error.response?.status,
       message: error.response?.data?.message || error.message,
     });
-
-    return null;
+    throw error;
   }
 }
 

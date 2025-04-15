@@ -4,16 +4,12 @@ import { ListaSalones } from "@/components/ListaSalones";
 import { TablaHorario } from "@/components/Horarios";
 import ClassesServices from "@/services/ClassesServices";
 import { DIAS } from "@/constants/dias";
+import { formatTimeToHHMM } from "@/utils/formatTime";
 
 const AREAS = {
   S: "Sociales",
   I: "Ingenierías",
   B: "Biomédicas",
-};
-
-const formatTimeToHHMM = (isoString) => {
-  const date = new Date(isoString);
-  return date.toISOString().substring(11, 16);
 };
 
 const fetchHorarioData = async () => {

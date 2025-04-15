@@ -1,13 +1,13 @@
 import { request } from "./api";
 
-const SupervisorsServices = {
+export const SupervisorsServices = {
 
   /**
    * Obtiene la lista de supervisores.
    * @returns {Promise<Array<Object | null>} | null}
    */
-  async getSupervisors() {
-    return request("get", "/supervisors", null, true);
+  async getSupervisors(page = 1, limit = 20) {
+    return request("get", `/supervisors?page=${page}&limit=${limit}`, null, true);
   },
 
   /**
@@ -26,9 +26,9 @@ const SupervisorsServices = {
     return request("post", "/supervisors", { userId, createdAt: now, updatedAt: now });
   },
 
-  async updateSupervisor({ userId }) {
+  async updateSupervisor({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/supervisors/${userId}`, { userId });
+    return request("put", `/supervisors/${userId}/updateProfile`, { firstName, lastName, personalEmail, phone });
   },
 
   async deleteSupervisor(userId) {
@@ -37,11 +37,6 @@ const SupervisorsServices = {
   },
 
   async getMonitors() {
-    return request("get", "/supervisors/getMonitors", null, true);
+    return request("get", "/supervisors/getMonitors");
   }
-
-
-
 };
-
-export default SupervisorsServices;
