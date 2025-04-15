@@ -80,7 +80,7 @@ export const DocenteUsuarios = () => {
       const profeActualizado = await actualizarProfesorMutation.mutateAsync(profesor);
 
       if (profeActualizado) {
-        toast.success(`Profesor "${profeActualizado.name}" actualizado correctamente`);
+        toast.success(`Profesor "${profeActualizado.firstName}" actualizado correctamente`);
         setEditingId(null);
         setEditFormData({
           nombres: "",

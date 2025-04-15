@@ -45,7 +45,13 @@ export const useProfesores = ({ page = 1, limit = 20 } = {}) => {
         return {
           ...prev,
           data: prev.data.map((p) =>
-            p.id === profesorActualizado.id ? profesorActualizado : p
+            p.id === profesorActualizado.id ? {
+              ...p,
+              firstName: profesorActualizado.firstName || "-",
+              lastName: profesorActualizado.lastName || "-",
+              personalEmail: profesorActualizado.personalEmail || "-",
+              phone: profesorActualizado.phone || "-",
+            } : p
           ),
         };
       });
