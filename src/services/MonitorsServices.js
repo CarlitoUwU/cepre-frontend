@@ -37,9 +37,9 @@ export const MonitorsServices = {
    * @param {string} monitorData.userId - ID del monitor a actualizar.
    * @param {string} monitorData.supervisorId - ID del supervisor del monitor a actualizar.
    */
-  async updateMonitor({ userId, firstName, lastName, personalEmail, phone, supervisorId }) {
+  async updateMonitor({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/monitors/${userId}`, { firstName, lastName, personalEmail, phone, supervisorId });
+    return request("put", `/monitors/editAsAdmin/${userId}`, { firstName, lastName, personalEmail, phone });
   },
 
   /**
