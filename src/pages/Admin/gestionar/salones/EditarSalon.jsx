@@ -1,20 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { useClases } from "@/hooks/useClases";
+import { useSchedules } from "@/hooks/useSchedules"; // 👈 importamos el hook
 import { Horarios } from "@/components/Horarios/Horarios.jsx";
 
 export const EditarSalon = ({ idSalon, regresar }) => {
   const { clases } = useClases();
+  const { schedules, loading } = useSchedules(); // 👈 obtenemos los horarios
 
   const salon = clases ? clases.find((a) => a.id === idSalon) : null;
   const nombreAula = salon ? salon.name : "Aula no encontrada";
   const turno = salon?.shift;
   const turnoOriginal = turno?.name ?? "Turno no disponible";
 
-  // Normalizamos el turno (ej. "Turno 02" -> "Turno 2")
   const turnoNormalizado = turnoOriginal.replace(/0?([1-3])$/, "$1");
 
-  // Mapeo de turnos y sus horarios
   const turnos = {
     "Turno 1": { inicio: "07:00", fin: "12:10" },
     "Turno 2": { inicio: "11:30", fin: "16:40" },
@@ -22,6 +22,25 @@ export const EditarSalon = ({ idSalon, regresar }) => {
   };
 
   const rango = turnos[turnoNormalizado];
+
+  // Imprimir los horarios de este salón
+  useEffect(() => {
+    if (!loading && schedules.length > 0) {
+      // Filtrar los horarios correspondientes al salón actual
+      const horariosSalon = schedules.filter((h) => h.classId === idSalon);
+
+      // Imprimir los horarios en consola de manera legible
+      console.log("Horarios del salón:", horariosSalon);
+      console.table(
+        horariosSalon.map(horario => ({
+          Curso: horario.courseId,
+          Hora: horario.hourSessionId,
+          Clase: horario.classId,
+          Docente: horario.teacherId ? horario.teacherId : "No asignado",
+        }))
+      );
+    }
+  }, [schedules, loading, idSalon]);
 
   return (
     <div className="p-4 space-y-2 flex flex-col items-center justify-center max-w-4xl mx-auto">
@@ -31,7 +50,6 @@ export const EditarSalon = ({ idSalon, regresar }) => {
         {rango && <p>Horario: {rango.inicio} - {rango.fin}</p>}
       </div>
 
-      {/* Tabla de horarios en blanco con el turno correcto */}
       {rango ? (
         <Horarios
           listaSalones={[
