@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ButtonCabecera } from "@/components/ui/ButtonCabecera";
 import { useNavigate } from "react-router-dom";
 import CSV from "@/services/CSV";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 
 const roles = {
@@ -69,7 +69,7 @@ export const Importar = () => {
   };
 
   return (
-    <div className="w-full max-w-screen-lg mx-auto m-5 mt-25">
+    <div className="w-full max-w-screen-lg mx-auto m-5">
       <div className="flex w-full mb-3 gap-1">
         <ButtonCabecera text={roles.Profesor} handleClick={handleClick} data_role="Profesor" className={`${rol === roles.Profesor ? 'bg-gray-200' : ''}`} />
         <ButtonCabecera text={roles.Monitor} handleClick={handleClick} data_role="Monitor" className={`${rol === roles.Monitor ? 'bg-gray-200' : ''}`} />

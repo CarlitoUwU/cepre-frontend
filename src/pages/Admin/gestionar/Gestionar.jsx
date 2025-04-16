@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
-import { useSearchParams, useNavigate} from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Usuarios } from "./usuarios/Usuarios";
 import { Salones } from "./salones/Salones";
 import { Cursos } from "./cursos/Cursos";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/Button";
 
 const secciones = [
   { id: "usuarios", nombre: "Usuarios", icono: "/usuarios.png" },
@@ -27,7 +27,7 @@ export const Gestionar = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-[85vh] m-5 mt-25">
+    <div className="flex flex-col md:flex-row h-[83vh] m-5">
       {/* Barra lateral responsive */}
       <div className="w-full md:w-1/6 bg-gray-200 p-6 flex flex-wrap md:flex-col gap-4 md:gap-6 items-center justify-start rounded-lg h-full max-h-screen overflow-auto">
         {/* Botón Menú Principal ocupa todo el ancho */}
@@ -39,9 +39,8 @@ export const Gestionar = () => {
         {secciones.map(({ id, nombre, icono }) => (
           <button
             key={id}
-            className={`cursor-pointer flex flex-col justify-center items-center p-4 rounded-lg shadow-md w-full flex-1 transition-all ${
-              vistaActual === id ? "bg-gray-400" : "bg-white hover:bg-gray-200"
-            }`}
+            className={`cursor-pointer flex flex-col justify-center items-center p-4 rounded-lg shadow-md w-full flex-1 transition-all ${vistaActual === id ? "bg-gray-400" : "bg-white hover:bg-gray-200"
+              }`}
             onClick={() => cambiarVista(id)}
           >
             <img src={icono} alt={nombre} className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16" />

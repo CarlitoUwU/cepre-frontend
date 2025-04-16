@@ -1,12 +1,12 @@
 import { request } from "./api";
 
-const MonitorServices = {
+export const MonitorsServices = {
   /**
    * Obtiene la lista de monitores.
    * @returns {Promise<Array<{ userId: string, supervisorId: string, createdAt: string, updatedAt: string }>> | null}
    */
-  async getMonitors() {
-    return request("get", "/monitors", null, true);
+  async getMonitors(page = 1, limit = 20) {
+    return request("get", `/monitors?page=${page}&limit=${limit}`, null, true);
   },
 
   /**
@@ -37,9 +37,9 @@ const MonitorServices = {
    * @param {string} monitorData.userId - ID del monitor a actualizar.
    * @param {string} monitorData.supervisorId - ID del supervisor del monitor a actualizar.
    */
-  async updateMonitor({ userId, supervisorId }) {
+  async updateMonitor({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/monitors/${userId}`, { userId, supervisorId });
+    return request("put", `/monitors/editAsAdmin/${userId}`, { firstName, lastName, personalEmail, phone });
   },
 
   /**
@@ -70,7 +70,9 @@ const MonitorServices = {
   async cargarDocentes(id = null) {
     const url = id ? `/monitors/${id}/teachers` : "/monitors/datos/teachers";
     return request("get", url, null);
+  },
+
+  async getInformacion() {
+    return request("get", "/monitors/information");
   }
 };
-
-export default MonitorServices;

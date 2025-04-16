@@ -2,12 +2,12 @@ import React from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { useClases } from "@/hooks/useClases";  // Asegúrate de que useClases esté importado correctamente
 
-export const EditarSalon = ({ idAula, setVistaActual }) => {
+export const EditarSalon = ({ idSalon, regresar }) => {
   // Obtener las clases (salones) desde el hook useClases
   const { clases } = useClases(); // Si el hook devuelve un objeto con clases, asegúrate de que esté bien configurado
 
   // Buscar el aula por su id
-  const aula = clases ? clases.find((a) => a.id === idAula) : null;
+  const aula = clases ? clases.find((a) => a.id === idSalon) : null;
 
   const nombreAula = aula ? aula.name : "Aula no encontrada"; // Si no se encuentra, mostrar "Aula no encontrada"
 
@@ -20,7 +20,7 @@ export const EditarSalon = ({ idAula, setVistaActual }) => {
       </div>
 
       <div className="mt-4">
-        <ButtonNegative onClick={() => setVistaActual("lista")}> {/* Ajusta el valor aquí según el nombre correcto de la vista */}
+        <ButtonNegative onClick={regresar}> {/* Ajusta el valor aquí según el nombre correcto de la vista */}
           Atrás
         </ButtonNegative>
       </div>

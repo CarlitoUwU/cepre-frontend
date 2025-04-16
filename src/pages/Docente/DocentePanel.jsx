@@ -3,25 +3,13 @@ import { AulaInfo } from "@/components/AulaInfo";
 import { ListaSalones } from "@/components/ListaSalones";
 import { TablaHorario } from "@/components/Horarios";
 import ClassesServices from "@/services/ClassesServices";
-
-const DIAS = {
-  "Lunes": "LUNES",
-  "Martes": "MARTES",
-  "Miércoles": "MIÉRCOLES",
-  "Jueves": "JUEVES",
-  "Viernes": "VIERNES",
-  "Sábado": "SÁBADO",
-};
+import { DIAS_DIC} from "@/constants/dias";
+import { formatTimeToHHMM } from "@/utils/formatTime";
 
 const AREAS = {
   S: "Sociales",
   I: "Ingenierías",
   B: "Biomédicas",
-};
-
-const formatTimeToHHMM = (isoString) => {
-  const date = new Date(isoString);
-  return date.toISOString().substring(11, 16);
 };
 
 const fetchHorarioData = async () => {
@@ -36,7 +24,7 @@ const fetchHorarioData = async () => {
       enlace: clase.urlMeet || "Sin enlace",
       area: AREAS[clase.name.charAt(0)] || "Desconocido",
       horas: clase.schedules?.map((hora) => ({
-        dia: DIAS[hora.weekday] || "Día desconocido",
+        dia: DIAS_DIC[hora.weekday] || "Día desconocido",
         hora_ini: formatTimeToHHMM(hora.hourSession.startTime),
         hora_fin: formatTimeToHHMM(hora.hourSession.endTime),
       })) || [],
