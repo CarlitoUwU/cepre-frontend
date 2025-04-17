@@ -9,7 +9,7 @@ import { useSupervisores } from "@/hooks/useSupervisores";
 import { toast } from "react-toastify";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 
-const encabezado = ["N°", "Nombres y Apellidos", "Correo", "Número", "Acciones"];
+const encabezado = ["N°", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
 const VISTA = {
   TABLA: "tabla",
   ASIGNAR_SALON: "asignarSalonSup",

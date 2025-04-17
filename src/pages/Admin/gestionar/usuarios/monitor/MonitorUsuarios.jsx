@@ -109,7 +109,7 @@ export const MonitorUsuarios = () => {
 
       return [
         index + (page - 1) * limit + 1,
-        monitor.salon || "-",
+        monitor.className || "-",
         esEdicion ? (
           <Input type="text" name="nombres" value={editFormData.nombres} onChange={handleEditChange} />
         ) : (
