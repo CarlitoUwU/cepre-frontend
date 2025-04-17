@@ -38,5 +38,17 @@ export const SupervisorsServices = {
 
   async getMonitors() {
     return request("get", "/supervisors/getMonitors");
+  },
+
+  async supervisorJson(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/supervisors/json", formData, false, true);
+  },
+
+  async supervisorCsv(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/supervisors/csv", formData, false, true);
   }
 };

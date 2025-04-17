@@ -48,25 +48,32 @@ api.interceptors.response.use(
  * @param {boolean} [isList=false] - Indica si la respuesta es una lista y debe ordenarse.
  * @returns {Promise<any | null>}
  */
-export async function request(method, endpoint, data = {}, isList = false) {
+export async function request(method, endpoint, data = {}, isList = false, isFormData = false) {
   try {
-    const response = await api[method](endpoint, data);
+    const config = {};
+
+    // Solo agregamos el content-type si es FormData
+    if (isFormData) {
+      config.headers = {
+        ...config.headers,
+        "Content-Type": "multipart/form-data",
+      };
+    }
+
+    const response = method === "get" || method === "delete"
+      ? await api[method](endpoint, config)
+      : await api[method](endpoint, data, config);
+
     let result = response.data;
 
     if (isList && Array.isArray(result)) {
       result.sort((a, b) => {
         const isNumberA = !isNaN(a.id);
         const isNumberB = !isNaN(b.id);
-
-        if (isNumberA && isNumberB) {
-          // Orden numérico
-          return Number(a.id) - Number(b.id);
-        } else {
-          // Orden alfabético para UUIDs
-          return a.id.localeCompare(b.id);
-        }
+        return isNumberA && isNumberB
+          ? Number(a.id) - Number(b.id)
+          : a.id.localeCompare(b.id);
       });
-
     }
 
     return result;
@@ -81,5 +88,6 @@ export async function request(method, endpoint, data = {}, isList = false) {
     throw error;
   }
 }
+
 
 export default api;

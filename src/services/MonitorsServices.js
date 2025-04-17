@@ -74,5 +74,17 @@ export const MonitorsServices = {
 
   async getInformacion() {
     return request("get", "/monitors/information");
+  },
+
+  async monitorJson(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/monitors/json", formData, false, true);
+  },
+
+  async monitorCsv(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/monitors/csv", formData, false, true);
   }
 };
