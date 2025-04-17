@@ -107,6 +107,11 @@ export const SupervisorUsuarios = () => {
     setVista(VISTA.ASIGNAR_SALON);
   }
 
+  const handleRegresar = () => {
+    setEditingId(null);
+    setVista(VISTA.TABLA);
+  }
+
   const getDatosSupervisores = () => {
     if (!supervisores || supervisores.length === 0) return [];
 
@@ -154,7 +159,7 @@ export const SupervisorUsuarios = () => {
   if (vista === VISTA.ASIGNAR_SALON) {
     return (
       <AsignarSalonSup
-        setVista={setVista}
+        regresar={handleRegresar}
         idSupervisor={editingId}
       />
     )
