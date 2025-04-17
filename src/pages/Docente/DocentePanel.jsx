@@ -17,7 +17,7 @@ const fetchHorarioData = async () => {
     const clases = await ClassesServices.getClassOfTeacher();
 
     return clases.map((clase) => ({
-      aula: clase.name,
+      aula: clase.name.replace("-", " - "),
       monitor: clase.monitor?.user
         ? `${clase.monitor.user.firstName} ${clase.monitor.user.lastName}`
         : "No asignado",
