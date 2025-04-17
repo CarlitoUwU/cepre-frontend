@@ -8,6 +8,7 @@ import { useProfesores } from "@/hooks/useProfesores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { AsignarSalonDoc } from "./AsignarSalonDoc";
 import { toast } from "react-toastify";
+import { FaSyncAlt } from "react-icons/fa";
 
 const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
 const VISTA = {
@@ -28,6 +29,7 @@ export const DocenteUsuarios = () => {
     crearProfesorMutation,
     actualizarProfesorMutation,
     eliminarProfesorMutation,
+    refetch,
   } = useProfesores({ page, limit });
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
@@ -220,6 +222,9 @@ export const DocenteUsuarios = () => {
   return (
     <div className="overflow-x-auto w-full text-center">
       <div className="relative flex justify-center items-center py-2">
+        <Button onClick={refetch}>
+          <FaSyncAlt />
+        </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE DOCENTES</h2>
         <div className="absolute right-4">
           <Button onClick={handleAgregar}>Agregar Docente</Button>

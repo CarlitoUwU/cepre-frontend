@@ -7,6 +7,7 @@ import { AgregarUsuarios } from "../AgregarUsuarios";
 import { useMonitores } from "@/hooks/useMonitores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { toast } from "react-toastify";
+import { FaSyncAlt } from "react-icons/fa";
 
 const encabezado = ["N°", "Salón", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
 const VISTA = {
@@ -25,6 +26,7 @@ export const MonitorUsuarios = () => {
     isError,
     actualizarMonitorMutation,
     eliminarMonitorMutation,
+    refetch,
   } = useMonitores({ page, limit });
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
@@ -160,6 +162,9 @@ export const MonitorUsuarios = () => {
   return (
     <div className="overflow-x-auto w-full text-center">
       <div className="relative flex justify-center items-center py-2">
+        <Button onClick={refetch}>
+          <FaSyncAlt />
+        </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE MONITORES</h2>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :

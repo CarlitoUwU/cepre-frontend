@@ -8,6 +8,7 @@ import { AsignarSalonSup } from "./AsignarSalonSup";
 import { useSupervisores } from "@/hooks/useSupervisores";
 import { toast } from "react-toastify";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
+import { FaSyncAlt } from "react-icons/fa";
 
 const encabezado = ["N°", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
 const VISTA = {
@@ -26,6 +27,7 @@ export const SupervisorUsuarios = () => {
     isError,
     actualizarSupervisorMutation,
     eliminarSupervisorMutation,
+    refetch,
   } = useSupervisores({ page, limit });
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
@@ -168,6 +170,9 @@ export const SupervisorUsuarios = () => {
   return (
     <div className="overflow-x-auto w-full text-center">
       <div className="relative flex justify-center items-center py-2">
+        <Button onClick={refetch}>
+          <FaSyncAlt />
+        </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE SUPERVISORES</h2>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :
