@@ -28,7 +28,7 @@ export const SupervisorsServices = {
 
   async updateSupervisor({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/supervisors/${userId}/updateProfile`, { firstName, lastName, personalEmail, phone });
+    return request("put", `/supervisors/${userId}`, { firstName, lastName, personalEmail, phone });
   },
 
   async deleteSupervisor(userId) {

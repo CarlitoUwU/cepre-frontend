@@ -39,7 +39,7 @@ export const MonitorsServices = {
    */
   async updateMonitor({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/monitors/editAsAdmin/${userId}`, { firstName, lastName, personalEmail, phone });
+    return request("put", `/monitors/${userId}`, { firstName, lastName, personalEmail, phone });
   },
 
   /**
