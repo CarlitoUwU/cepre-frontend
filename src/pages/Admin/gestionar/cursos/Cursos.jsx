@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { AgregarCurso } from "./AgregarCurso";
 import { Tabla } from "@/components/ui/Tabla";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
 import { toast } from 'react-toastify';
 import { useCursos } from "@/hooks/useCursos";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
+import { FaSyncAlt } from "react-icons/fa";
 
 const encabezadoCursos = ["N°", "Curso", "Color", "Acciones"];
 
@@ -17,6 +18,7 @@ export const Cursos = () => {
     crearCursoMutation,
     actualizarCursoMutation,
     eliminarCursoMutation,
+    refetch,
   } = useCursos();
 
   const [editandoId, setEditandoId] = useState(null);
@@ -123,6 +125,9 @@ export const Cursos = () => {
     <div className="overflow-x-auto w-full text-center">
       {/* Contenedor del título y el botón */}
       <div className="flex justify-between items-center mb-6 px-4">
+        <Button onClick={refetch}>
+          <FaSyncAlt />
+        </Button>
         <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE CURSOS</h2>
         <Button onClick={() => setVistaActual("agregar")}>Agregar Curso</Button>
       </div>

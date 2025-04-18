@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import { Tabla } from "@/components/ui/Tabla";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { AgregarSalon } from "./AgregarSalon";
 import { toast } from "react-toastify";
@@ -9,6 +9,7 @@ import { useAreas } from "@/hooks/useAreas";
 import { useTurnos } from "@/hooks/useTurnos";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { EditarSalon } from "./EditarSalon";
+import { FaSyncAlt } from "react-icons/fa";
 
 const encabezadoCursos = ["N° de Aula", "Área", "Turno", "Estado", "Acciones"];
 const VISTAS = {
@@ -23,6 +24,7 @@ export const Salones = () => {
     isLoading: isLoadingClases,
     eliminarClaseMutation,
     crearClaseMutation,
+    refetch
   } = useClases();
 
   const {
@@ -119,6 +121,9 @@ export const Salones = () => {
     <div className="overflow-x-auto w-full text-center">
       {/* Contenedor para el título y el botón */}
       <div className="flex justify-between items-center mt-1 mb-6 px-4">
+        <Button onClick={refetch}>
+          <FaSyncAlt />
+        </Button>
         <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE SALONES</h2>
         <Button onClick={handleAgregar}>Agregar Salón</Button>
       </div>

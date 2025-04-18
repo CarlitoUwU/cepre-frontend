@@ -3,7 +3,7 @@ import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Tabla } from "@/components/ui/Tabla";
 import supervisoresData from "@/data/supervisores.json";
 
-export const AsignarSalonSup = ({ idSupervisor, setVista }) => {
+export const AsignarSalonSup = ({ idSupervisor, regresar }) => {
   const supervisor = supervisoresData.find((sup) => sup.id === idSupervisor);
   const supervisorNombre = supervisor ? supervisor.supervisor : "Desconocido";
 
@@ -82,7 +82,7 @@ export const AsignarSalonSup = ({ idSupervisor, setVista }) => {
       )}
 
       <div className="flex justify-center mt-4">
-        <ButtonNegative onClick={() => setVista("tabla")}>Atrás</ButtonNegative>
+        <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
       </div>
     </div>
   );

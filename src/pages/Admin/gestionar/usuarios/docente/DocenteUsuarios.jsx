@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabla } from "@/components/ui/Tabla";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Input } from "@/components/ui/Input";
 import { AgregarUsuarios } from "../AgregarUsuarios";
 import { useProfesores } from "@/hooks/useProfesores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { AsignarSalonDoc } from "./AsignarSalonDoc";
+import { toast } from "react-toastify";
+import { FaSyncAlt } from "react-icons/fa";
 
 const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
 const VISTA = {
@@ -23,10 +25,11 @@ export const DocenteUsuarios = () => {
     profesores,
     totalPages,
     isLoading,
-   // isError,
+    isError,
     crearProfesorMutation,
     actualizarProfesorMutation,
     eliminarProfesorMutation,
+    refetch,
   } = useProfesores({ page, limit });
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
@@ -36,6 +39,12 @@ export const DocenteUsuarios = () => {
     numero: "",
     extra: "",
   });
+
+  useEffect(() => {
+    if (isError && (!profesores || profesores.length === 0)) {
+      toast.error("Error al obtener los docentes");
+    }
+  }, [isError, profesores]);
 
   const handleNext = () => setPage((prev) => prev + 1);
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
@@ -59,33 +68,48 @@ export const DocenteUsuarios = () => {
     setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
   };
 
-  const handleGuardar = (id) => {
-    console.log({ id })
-    console.log({ editFormData })
-    return
-    crearProfesorMutation
-    const actualizados = profesores.map((docente) =>
-      docente.id === id
-        ? {
-          ...docente,
-          nombres: editFormData.nombres,
-          apellidos: editFormData.apellidos,
-          correo: editFormData.correo,
-          numero: editFormData.numero,
-          curso: editFormData.extra,
-        }
-        : docente
-    );
-    console.log(actualizados);
-    //setDocentes(actualizados);
-    setEditingId(null);
+  const handleGuardar = async () => {
+    try {
+      const profesor =
+      {
+        userId: editingId,
+        firstName: editFormData.nombres,
+        lastName: editFormData.apellidos,
+        personalEmail: editFormData.correo,
+        phone: editFormData.numero
+      }
+
+      const profeActualizado = await actualizarProfesorMutation.mutateAsync(profesor);
+
+      if (profeActualizado) {
+        toast.success(`Profesor "${profeActualizado.firstName}" actualizado correctamente`);
+        setEditingId(null);
+        setEditFormData({
+          nombres: "",
+          apellidos: "",
+          correo: "",
+          numero: "",
+          extra: "",
+        });
+      }
+    } catch (error) {
+      toast.error("Error al actualizar el docente");
+      console.error("Error al actualizar el docente:", error);
+    }
   };
 
-  const handleBorrar = (id) => {
-    console.log({ id })
-    //const nuevos = profesores.filter((d) => d.id !== id);
-    //console.log(nuevos);
-    //setDocentes(nuevos);
+  const handleBorrar = async (id) => {
+    try {
+      const profesorEliminado = await eliminarProfesorMutation.mutateAsync(id);
+      console.log({ profesorEliminado });
+      if (profesorEliminado || profesorEliminado === '') {
+        toast.success(`Profesor eliminado correctamente`);
+      }
+    }
+    catch (error) {
+      toast.error("Error al eliminar el docente");
+      console.error("Error al eliminar el docente:", error);
+    }
   };
 
   const handleAgregar = () => {
@@ -93,48 +117,36 @@ export const DocenteUsuarios = () => {
     setVista(VISTA.FORMULARIO);
   };
 
-  const handleNuevoUsuario = (formData) => {
-    console.log({ formData });
-    /*     {formData: {…}}
-    formData
-    : 
-    apellidos
-    : 
-    "asd"
-    coordinador
-    : 
-    true
-    correo
-    : 
-    "asd@cepr.unsa.pe"
-    correo_personal
-    : 
-    "asdsad@gmail.com"
-    curso
-    : 
-    "9"
-    disponibilidad
-    : 
-    "full-time"
-    dni
-    : 
-    "72307538"
-    docente
-    : 
-    "asd"
-    extra
-    : 
-    ""
-    nombres
-    : 
-    ""
-    numero
-    : 
-    "912345678"
-    [[Prototype]]
-    : 
-    Object
-    [[Prototype */
+  const handleNuevoUsuario = async (formData) => {
+    try {
+      const nuevoProfesor = {
+        email: formData.correo,
+        personalEmail: formData.correo_personal,
+        jobStatus: formData.disponibilidad,
+        courseId: parseInt(formData.curso),
+        dni: formData.dni,
+        firstName: formData.docente,
+        lastName: formData.apellidos,
+        phone: formData.numero,
+        phonesAdditional: formData.celular_adicional?.split(',') || [],
+        isCoordinator: formData.coordinador || false,
+      }
+
+      const profesorCreado = await crearProfesorMutation.mutateAsync(nuevoProfesor);
+
+      toast.success(`Profesor "${profesorCreado?.userProfile?.firstName || ""}" creado correctamente`);
+      setEditFormData({
+        nombres: "",
+        apellidos: "",
+        correo: "",
+        numero: "",
+        extra: "",
+      });
+    }
+    catch (error) {
+      toast.error("Error al crear el profesor");
+      console.error("Error al agregar el profesor:", error);
+    }
   }
 
   const handleAsignarSalon = (id) => {
@@ -143,6 +155,8 @@ export const DocenteUsuarios = () => {
   };
 
   const getDatosProfesor = () => {
+    if (!profesores || profesores.length === 0) return [];
+
     return profesores.map((profesor, index) => {
       const esEdicion = editingId === profesor.id;
 
@@ -185,9 +199,33 @@ export const DocenteUsuarios = () => {
     });
   }
 
-  return vista === "tabla" ? (
+  if (vista === VISTA.ASIGNAR_SALON) {
+    return (
+      <AsignarSalonDoc
+        id={editingId}
+        setVista={setVista}
+      />
+    )
+  }
+
+  if (vista === VISTA.FORMULARIO) {
+    return (
+      <AgregarUsuarios
+        rol="Docente"
+        formData={editFormData}
+        handleChange={(e) => setEditFormData({ ...editFormData, [e.target.name]: e.target.value })}
+        handleGuardarNuevoUsuario={handleNuevoUsuario}
+        setVista={setVista}
+      />
+    );
+  }
+
+  return (
     <div className="overflow-x-auto w-full text-center">
-      <div className="relative flex justify-center items-center py-2 mb-6">
+      <div className="relative flex justify-center items-center py-2">
+        <Button onClick={refetch}>
+          <FaSyncAlt />
+        </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE DOCENTES</h2>
         <div className="absolute right-4">
           <Button onClick={handleAgregar}>Agregar Docente</Button>
@@ -210,18 +248,5 @@ export const DocenteUsuarios = () => {
         </select>
       </div>
     </div>
-  ) : vista === "asignarSalonDoc" ? (
-    <AsignarSalonDoc
-      id={editingId}
-      setVista={setVista}
-    />
-  ) : (
-    <AgregarUsuarios
-      rol="Docente"
-      formData={editFormData}
-      handleChange={(e) => setEditFormData({ ...editFormData, [e.target.name]: e.target.value })}
-      handleGuardarNuevoUsuario={handleNuevoUsuario}
-      setVista={setVista}
-    />
-  );
+  )
 };

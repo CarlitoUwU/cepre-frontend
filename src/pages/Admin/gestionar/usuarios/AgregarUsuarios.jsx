@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/Input";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { LabelForm } from "@/components/ui/LabelForm";
 import { useCursos } from "@/hooks/useCursos";
@@ -115,9 +115,9 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
                 value={formData.disponibilidad || ""}
                 onChange={handleChange}
                 options={[
-                  { id: "full-time", name: "Full Time" },
-                  { id: "part-time", name: "Part Time" },
-                  { id: "free-time", name: "Free Time" }
+                  { id: "FullTime", name: "Full Time" },
+                  { id: "PartTime", name: "Part Time" },
+                  { id: "FreeTime", name: "Free Time" }
                 ]}
                 required
               />

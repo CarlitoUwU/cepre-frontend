@@ -1,13 +1,13 @@
 import { request } from "./api";
 
-const SupervisorsServices = {
+export const SupervisorsServices = {
 
   /**
    * Obtiene la lista de supervisores.
    * @returns {Promise<Array<Object | null>} | null}
    */
-  async getSupervisors() {
-    return request("get", "/supervisors", null, true);
+  async getSupervisors(page = 1, limit = 20) {
+    return request("get", `/supervisors?page=${page}&limit=${limit}`, null, true);
   },
 
   /**
@@ -26,9 +26,9 @@ const SupervisorsServices = {
     return request("post", "/supervisors", { userId, createdAt: now, updatedAt: now });
   },
 
-  async updateSupervisor({ userId }) {
+  async updateSupervisor({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/supervisors/${userId}`, { userId });
+    return request("put", `/supervisors/${userId}`, { firstName, lastName, personalEmail, phone });
   },
 
   async deleteSupervisor(userId) {
@@ -36,12 +36,24 @@ const SupervisorsServices = {
     return request("delete", `/supervisors/${userId}`);
   },
 
+  async deactivate(id){
+    if (!id) throw new Error("ID inválido");
+    return request("patch", `/supervisors/${id}/deactivate`);
+  },
+
   async getMonitors() {
-    return request("get", "/supervisors/getMonitors", null, true);
+    return request("get", "/supervisors/getMonitors");
+  },
+
+  async supervisorJson(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/supervisors/json", formData, false, true);
+  },
+
+  async supervisorCsv(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/supervisors/csv", formData, false, true);
   }
-
-
-
 };
-
-export default SupervisorsServices;

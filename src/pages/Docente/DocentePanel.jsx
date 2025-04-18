@@ -3,7 +3,8 @@ import { AulaInfo } from "@/components/AulaInfo";
 import { ListaSalones } from "@/components/ListaSalones";
 import { TablaHorario } from "@/components/Horarios";
 import ClassesServices from "@/services/ClassesServices";
-import { DIAS } from "@/constants/dias";
+import { DIAS_DIC} from "@/constants/dias";
+import { formatTimeToHHMM } from "@/utils/formatTime";
 
 const AREAS = {
   S: "Sociales",
@@ -11,24 +12,19 @@ const AREAS = {
   B: "Biomédicas",
 };
 
-const formatTimeToHHMM = (isoString) => {
-  const date = new Date(isoString);
-  return date.toISOString().substring(11, 16);
-};
-
 const fetchHorarioData = async () => {
   try {
     const clases = await ClassesServices.getClassOfTeacher();
 
     return clases.map((clase) => ({
-      aula: clase.name,
+      aula: clase.name.replace("-", " - "),
       monitor: clase.monitor?.user
         ? `${clase.monitor.user.firstName} ${clase.monitor.user.lastName}`
         : "No asignado",
       enlace: clase.urlMeet || "Sin enlace",
       area: AREAS[clase.name.charAt(0)] || "Desconocido",
       horas: clase.schedules?.map((hora) => ({
-        dia: DIAS[hora.weekday] || "Día desconocido",
+        dia: DIAS_DIC[hora.weekday] || "Día desconocido",
         hora_ini: formatTimeToHHMM(hora.hourSession.startTime),
         hora_fin: formatTimeToHHMM(hora.hourSession.endTime),
       })) || [],

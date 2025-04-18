@@ -18,6 +18,7 @@ export const Curso = ({ clase = null, backgroundColor, gridColumn, gridRow, grid
         alignItems: "center",
         justifyContent: "center",
         textAlign: "center",
+        whiteSpace: "pre-line" 
       }
       }
       {... (isClickable ? { onClick: handleClick } : {})}

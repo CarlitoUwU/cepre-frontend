@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Tabla } from "@/components/ui/Tabla";
-import MonitorServices from "@/services/monitorServices";
+import { MonitorsServices } from "@/services/MonitorsServices";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 
@@ -12,7 +12,7 @@ export const DirectorioMonitorPanel = ({ aula = {}, volver = () => { }, cambiarV
 
     const getDirectorioDocentes = async (salonId) => {
       try {
-        const docentesData = await MonitorServices.cargarDocentes(salonId);
+        const docentesData = await MonitorsServices.cargarDocentes(salonId);
         if (!Array.isArray(docentesData)) {
           console.error("Respuesta inválida de la API:", docentesData);
           return;
