@@ -159,6 +159,7 @@ export const SupervisorUsuarios = () => {
     });
   }
 
+<<<<<<< HEAD
   if (vista === VISTA.ASIGNAR_SALON) {
     return (
       <AsignarSalonSup
@@ -167,6 +168,20 @@ export const SupervisorUsuarios = () => {
       />
     )
   }
+=======
+    return [
+      index + 1,
+      supervisor.supervisor,
+      supervisor.correo,
+      supervisor.numero || supervisor.Número,
+      <div className="flex gap-2 justify-center">
+        <Button onClick={() => handleAsignarSalonSup(supervisor.id)}>Asignar Salón</Button>
+        <Button onClick={() => handleModificar(supervisor.id)}>Editar</Button>
+        <ButtonNegative onClick={() => handleBorrar(supervisor.id)}>Borrar</ButtonNegative>
+      </div>,
+    ];
+  });
+>>>>>>> 765338f4ec3c1464c47e062cf6e30557653ae5c7
 
   return (
     <div className="overflow-x-auto w-full text-center">
