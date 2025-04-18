@@ -94,7 +94,8 @@ export const SupervisorUsuarios = () => {
   const handleBorrar = async (id) => {
     try {
       const supervisorEliminado = await eliminarSupervisorMutation.mutateAsync(id);
-      if (supervisorEliminado) {
+      console.log({supervisorEliminado});
+      if (supervisorEliminado || supervisorEliminado === '') {
         toast.success("Supervisor eliminado correctamente");
       }
     }

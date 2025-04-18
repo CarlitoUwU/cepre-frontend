@@ -93,7 +93,8 @@ export const MonitorUsuarios = () => {
   const handleBorrar = async (id) => {
     try {
       const monitorEliminado = await eliminarMonitorMutation.mutateAsync(id);
-      if (monitorEliminado) {
+      console.log({monitorEliminado})
+      if (monitorEliminado || monitorEliminado === '') {
         toast.success("Monitor eliminado correctamente");
       }
     }

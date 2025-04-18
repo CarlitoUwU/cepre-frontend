@@ -98,10 +98,11 @@ export const DocenteUsuarios = () => {
     }
   };
 
-  const handleBorrar = (id) => {
+  const handleBorrar = async (id) => {
     try {
-      const profesorEliminado = eliminarProfesorMutation.mutateAsync(id);
-      if (profesorEliminado) {
+      const profesorEliminado = await eliminarProfesorMutation.mutateAsync(id);
+      console.log({ profesorEliminado });
+      if (profesorEliminado || profesorEliminado === '') {
         toast.success(`Profesor eliminado correctamente`);
       }
     }
