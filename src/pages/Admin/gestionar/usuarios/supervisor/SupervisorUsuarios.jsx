@@ -159,16 +159,6 @@ export const SupervisorUsuarios = () => {
     });
   }
 
-<<<<<<< HEAD
-  if (vista === VISTA.ASIGNAR_SALON) {
-    return (
-      <AsignarSalonSup
-        regresar={handleRegresar}
-        idSupervisor={editingId}
-      />
-    )
-  }
-=======
     return [
       index + 1,
       supervisor.supervisor,
@@ -181,7 +171,6 @@ export const SupervisorUsuarios = () => {
       </div>,
     ];
   });
->>>>>>> 765338f4ec3c1464c47e062cf6e30557653ae5c7
 
   return (
     <div className="overflow-x-auto w-full text-center">
