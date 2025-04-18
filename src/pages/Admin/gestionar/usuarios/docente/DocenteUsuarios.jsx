@@ -187,7 +187,7 @@ export const DocenteUsuarios = () => {
 
   return vista === "tabla" ? (
     <div className="overflow-x-auto w-full text-center">
-      <div className="relative flex justify-center items-center py-2">
+      <div className="relative flex justify-center items-center py-2 mb-6">
         <h2 className="text-2xl font-bold">GESTIÓN DE DOCENTES</h2>
         <div className="absolute right-4">
           <Button onClick={handleAgregar}>Agregar Docente</Button>
