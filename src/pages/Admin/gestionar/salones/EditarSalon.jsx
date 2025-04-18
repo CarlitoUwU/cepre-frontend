@@ -38,7 +38,7 @@ export const EditarSalon = ({ idSalon, regresar }) => {
         
         return {
           hora: bloque?.startTime || "Hora no asignada",
-          clase: horario.courseId || "Sin clase asignada",
+          curso: horario.courseId || "Sin clase asignada",
           docente: horario.teacherId || "No asignado",
         };
       });
