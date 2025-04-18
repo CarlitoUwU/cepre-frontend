@@ -227,9 +227,7 @@ export const DocenteUsuarios = () => {
           <FaSyncAlt />
         </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE DOCENTES</h2>
-        <div className="absolute right-4">
           <Button onClick={handleAgregar}>Agregar Docente</Button>
-        </div>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :
         <Tabla encabezado={encabezado} datos={getDatosProfesor()} />
