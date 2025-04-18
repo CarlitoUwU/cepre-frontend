@@ -54,7 +54,7 @@ export const useMonitores = ({ page = 1, limit = 20 } = {}) => {
 
   // Mutación: eliminar monitor
   const eliminarMonitorMutation = useMutation({
-    mutationFn: MonitorsServices.deleteMonitor,
+    mutationFn: MonitorsServices.deactivate,
     onSuccess: (_, idEliminado) => {
       queryClient.setQueryData(["monitores", page, limit], (prev) => {
         if (!prev) return;

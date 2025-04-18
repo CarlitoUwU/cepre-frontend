@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { ButtonCabecera } from "@/components/ui/ButtonCabecera";
 import { useNavigate } from "react-router-dom";
-import CSV from "@/services/CSV";
+import { MonitorsServices } from "@/services/MonitorsServices";
+import { SupervisorsServices } from "@/services/SupervisorsServices";
+import { TeachersServices } from "@/services/TeachersServices";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
+import { toast } from "react-toastify";
 
 const roles = {
   Profesor: "Profesor",
@@ -35,8 +38,11 @@ export const Importar = () => {
 
     const fileForm = e.target.files[0];
 
-    if (!fileForm.name.endsWith(".csv")) {
-      console.error("El archivo seleccionado no es un CSV.");
+    console.log("Archivo seleccionado:", fileForm);
+    console.log(!fileForm.name.endsWith(".csv"), !fileForm.name.endsWith(".json"));
+
+    if (!fileForm.name.endsWith(".csv") && !fileForm.name.endsWith(".json")) {
+      toast.error("El archivo seleccionado no es un CSV o JSON.");
       setAppEstado(app_estados.Error);
       return;
     }
@@ -46,25 +52,60 @@ export const Importar = () => {
     setAppEstado(app_estados.ConArchivo);
   };
 
+  const enviarArchivo = async () => {
+    if (rol === roles.Monitor) {
+      if (file.name.endsWith(".csv")) {
+        await MonitorsServices.monitorCsv(file);
+      }
+      else if (file.name.endsWith(".json")) {
+        await MonitorsServices.monitorJson(file);
+      }
+    }
+    else if (rol === roles.Supervisor) {
+      if (file.name.endsWith(".csv")) {
+        await SupervisorsServices.supervisorCsv(file);
+      }
+      else if (file.name.endsWith(".json")) {
+        await SupervisorsServices.supervisorJson(file);
+      }
+    }
+    else if (rol === roles.Profesor) {
+      if (file.name.endsWith(".csv")) {
+        await TeachersServices.teacherCsv(file);
+      }
+      else if (file.name.endsWith(".json")) {
+        await TeachersServices.teacherJson(file);
+      }
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!file) {
       console.error("No se ha seleccionado un archivo.");
+      toast.error("No se ha seleccionado un archivo.");
       setAppEstado(app_estados.Error);
+      setTimeout(() => {
+        setAppEstado(app_estados.SinArchivo);
+        setFile(null);
+      }, 2000);
       return;
     }
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("rol", rol);
-
     try {
-      const response = await CSV.create(formData);
-      console.log("Archivo enviado correctamente:", response);
+      await enviarArchivo();
+      setAppEstado(app_estados.ConArchivo);
+      toast.success("Archivo enviado correctamente.");
+      navigate('..');
     } catch (error) {
-      console.error("Error al subir el archivo:", error);
+      console.error("Error al enviar el archivo:", error);
+      toast.error("Error al enviar el archivo.");
       setAppEstado(app_estados.Error);
+      setTimeout(() => {
+        setAppEstado(app_estados.SinArchivo);
+        setFile(null);
+      }, 2000);
     }
   };
 
@@ -83,7 +124,7 @@ export const Importar = () => {
             <>
               <img src="../subir.png" alt="Upload icon" className="w-25 h-25 sm:w-45 sm:h-45" />
               <p>Haz clic para subir</p>
-              <input type="file" id="file-upload" className="hidden" accept=".csv" name="file" onChange={handleFileChange} />
+              <input type="file" id="file-upload" className="hidden" accept=".csv,application/json" name="file" onChange={handleFileChange} />
             </>
           ) : app_estado === app_estados.ConArchivo ? (
             <h1 className="text-2xl">{file.name}</h1>

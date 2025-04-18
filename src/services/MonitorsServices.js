@@ -39,7 +39,7 @@ export const MonitorsServices = {
    */
   async updateMonitor({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/monitors/editAsAdmin/${userId}`, { firstName, lastName, personalEmail, phone });
+    return request("put", `/monitors/${userId}`, { firstName, lastName, personalEmail, phone });
   },
 
   /**
@@ -51,6 +51,11 @@ export const MonitorsServices = {
   async deleteMonitor(userId) {
     if (!userId) throw new Error("ID inválido");
     return request("delete", `/monitors/${userId}`);
+  },
+
+  async deactivate(id) {
+    if (!id) throw new Error("ID inválido");
+    return request("patch", `/monitors/${id}/deactivate`);
   },
 
   /**
@@ -74,5 +79,17 @@ export const MonitorsServices = {
 
   async getInformacion() {
     return request("get", "/monitors/information");
+  },
+
+  async monitorJson(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/monitors/json", formData, false, true);
+  },
+
+  async monitorCsv(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/monitors/csv", formData, false, true);
   }
 };

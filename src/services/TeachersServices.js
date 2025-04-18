@@ -36,7 +36,7 @@ export const TeachersServices = {
    */
   async updateTeacher({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/teachers/${userId}`, { firstName, lastName, personalEmail, phone});
+    return request("put", `/teachers/${userId}`, { firstName, lastName, personalEmail, phone });
   },
 
   /**
@@ -50,11 +50,20 @@ export const TeachersServices = {
     return request("delete", `/teachers/${userId}`);
   },
 
-  async teacherJson() {
-    return request("get", "/teachers/json", null);
+  async deactivate(id) {
+    if (!id) throw new Error("ID inválido");
+    return request("patch", `/teachers/${id}/deactivate`);
   },
 
-  async teacherCsv() {
-    return request("get", "/teachers/csv", null);
+  async teacherJson(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/teachers/json", formData, false, true);
+  },
+
+  async teacherCsv(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/teachers/csv", formData, false, true);
   }
 };

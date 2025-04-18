@@ -54,7 +54,7 @@ export const useSupervisores = ({ page = 1, limit = 20 } = {}) => {
 
   // Mutación para eliminar un supervisor
   const eliminarSupervisorMutation = useMutation({
-    mutationFn: SupervisorsServices.deleteSupervisor,
+    mutationFn: SupervisorsServices.deactivate,
     onSuccess: (_, idEliminado) => {
       queryClient.setQueryData(["supervisores", page, limit], (prev) => {
         if (!prev) return;

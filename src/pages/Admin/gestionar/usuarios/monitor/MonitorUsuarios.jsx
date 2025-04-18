@@ -7,6 +7,7 @@ import { AgregarUsuarios } from "../AgregarUsuarios";
 import { useMonitores } from "@/hooks/useMonitores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { toast } from "react-toastify";
+import { FaSyncAlt } from "react-icons/fa";
 
 const encabezado = ["N°", "Salón", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
 const VISTA = {
@@ -25,6 +26,7 @@ export const MonitorUsuarios = () => {
     isError,
     actualizarMonitorMutation,
     eliminarMonitorMutation,
+    refetch,
   } = useMonitores({ page, limit });
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
@@ -91,7 +93,8 @@ export const MonitorUsuarios = () => {
   const handleBorrar = async (id) => {
     try {
       const monitorEliminado = await eliminarMonitorMutation.mutateAsync(id);
-      if (monitorEliminado) {
+      console.log({monitorEliminado})
+      if (monitorEliminado || monitorEliminado === '') {
         toast.success("Monitor eliminado correctamente");
       }
     }
@@ -109,7 +112,7 @@ export const MonitorUsuarios = () => {
 
       return [
         index + (page - 1) * limit + 1,
-        monitor.salon || "-",
+        monitor.className || "-",
         esEdicion ? (
           <Input type="text" name="nombres" value={editFormData.nombres} onChange={handleEditChange} />
         ) : (
@@ -160,6 +163,9 @@ export const MonitorUsuarios = () => {
   return (
     <div className="overflow-x-auto w-full text-center">
       <div className="relative flex justify-center items-center py-2">
+        <Button onClick={refetch}>
+          <FaSyncAlt />
+        </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE MONITORES</h2>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :

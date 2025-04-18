@@ -5,31 +5,14 @@ import React from "react";
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { HORAS_INI, HORAS_FIN } from '@/constants/horas';
 import { DIAS } from "@/constants/dias";
-
-const cursoColors = {
-  "RAZ. MATEMÁTICO": "#D50000",
-  "RAZ. VERBAL": "#F4511E",
-  "MATEMÁTICA": "#32b779",
-  "HISTORIA": "#039ae4",
-  "GEOGRAFÍA": "#7887cb",
-  "LENGUAJE": "#616161",
-  "LITERATURA": "#e67d72",
-  "QUÍMICA": "#f7be26",
-  "FÍSICA": "#0a8143",
-  "BIOLOGÍA": "#3f50b4",
-  "PSICOLOGÍA": "#8f24ab",
-  "FILOSOFÍA": "#8f24ab",
-  "CÍVICA": "#e67d72",
-  "INGLÉS": "#f7be26",
-  "RAZ. LÓGICO": "#7887cb",
-};
+import { useCursos } from "@/hooks/useCursos";
 
 export const TablaHorarioMonitor = ({ horas = [] }) => {
+  const { cursos } = useCursos();
   const isMobile = useIsMobile(1024);
 
   const dias = DIAS;
   const diasHeader = isMobile ? DIAS.map(dia => dia.charAt(0)) : dias;
-
 
   const agruparCursosConsecutivos = (horas) => {
     const horasOrdenadas = [...horas].sort((a, b) => {
@@ -79,6 +62,26 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
   const getRowSpan = (horaIni, horaFin) => HORAS_FIN.indexOf(horaFin) - HORAS_INI.indexOf(horaIni) + 1;
   const getColumn = (dia) => dias.indexOf(dia) + 2;
 
+  const getColor = (curso) => {
+    return cursos.find(
+      c => c.name.toUpperCase() === curso.toUpperCase()
+    )?.color || "#31A8E3";
+  }
+
+  const acortarNombreCurso = (nombre) => {
+    if (!isMobile) return nombre;
+
+    const nombreSinTildes = nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    const palabras = nombreSinTildes.trim().split(" ");
+
+    if (palabras.length === 1) {
+      return palabras[0].slice(0, 3).toUpperCase().split("").join("\n");
+    }
+
+    return palabras.map(p => p[0]?.toUpperCase()).join("\n");
+  };
+
   return (
     <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4">
       <div></div>
@@ -111,8 +114,8 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
       {horasAgrupadas.map((hora) => (
         <Curso
           key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
-          nombre={hora.curso}
-          backgroundColor={cursoColors[hora.curso.toUpperCase()] || "#31A8E3"}
+          nombre={acortarNombreCurso(hora.curso)}
+          backgroundColor={getColor(hora.curso)}
           gridColumn={getColumn(hora.dia)}
           gridRow={getRow(hora.hora_ini)}
           gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}

@@ -60,7 +60,7 @@ export const useProfesores = ({ page = 1, limit = 20 } = {}) => {
 
   // Mutación para eliminar un profesor
   const eliminarProfesorMutation = useMutation({
-    mutationFn: TeachersServices.deleteTeacher,
+    mutationFn: TeachersServices.deactivate,
     onSuccess: (_, idEliminado) => {
       queryClient.setQueryData(["profesores", page, limit], (prev) => {
         if (!prev) return;

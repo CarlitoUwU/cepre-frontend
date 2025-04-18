@@ -28,7 +28,7 @@ export const SupervisorsServices = {
 
   async updateSupervisor({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/supervisors/${userId}/updateProfile`, { firstName, lastName, personalEmail, phone });
+    return request("put", `/supervisors/${userId}`, { firstName, lastName, personalEmail, phone });
   },
 
   async deleteSupervisor(userId) {
@@ -36,7 +36,24 @@ export const SupervisorsServices = {
     return request("delete", `/supervisors/${userId}`);
   },
 
+  async deactivate(id){
+    if (!id) throw new Error("ID inválido");
+    return request("patch", `/supervisors/${id}/deactivate`);
+  },
+
   async getMonitors() {
     return request("get", "/supervisors/getMonitors");
+  },
+
+  async supervisorJson(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/supervisors/json", formData, false, true);
+  },
+
+  async supervisorCsv(archivo) {
+    const formData = new FormData();
+    formData.append("archivo", archivo);
+    return request("post", "/supervisors/csv", formData, false, true);
   }
 };

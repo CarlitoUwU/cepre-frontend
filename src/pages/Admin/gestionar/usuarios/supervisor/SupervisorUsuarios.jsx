@@ -8,8 +8,9 @@ import { AsignarSalonSup } from "./AsignarSalonSup";
 import { useSupervisores } from "@/hooks/useSupervisores";
 import { toast } from "react-toastify";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
+import { FaSyncAlt } from "react-icons/fa";
 
-const encabezado = ["N°", "Nombres y Apellidos", "Correo", "Número", "Acciones"];
+const encabezado = ["N°", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
 const VISTA = {
   TABLA: "tabla",
   ASIGNAR_SALON: "asignarSalonSup",
@@ -26,6 +27,7 @@ export const SupervisorUsuarios = () => {
     isError,
     actualizarSupervisorMutation,
     eliminarSupervisorMutation,
+    refetch,
   } = useSupervisores({ page, limit });
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
@@ -92,7 +94,8 @@ export const SupervisorUsuarios = () => {
   const handleBorrar = async (id) => {
     try {
       const supervisorEliminado = await eliminarSupervisorMutation.mutateAsync(id);
-      if (supervisorEliminado) {
+      console.log({supervisorEliminado});
+      if (supervisorEliminado || supervisorEliminado === '') {
         toast.success("Supervisor eliminado correctamente");
       }
     }
@@ -105,6 +108,11 @@ export const SupervisorUsuarios = () => {
   const handleAsignarSalonSup = (id) => {
     setEditingId(id);
     setVista(VISTA.ASIGNAR_SALON);
+  }
+
+  const handleRegresar = () => {
+    setEditingId(null);
+    setVista(VISTA.TABLA);
   }
 
   const getDatosSupervisores = () => {
@@ -154,7 +162,7 @@ export const SupervisorUsuarios = () => {
   if (vista === VISTA.ASIGNAR_SALON) {
     return (
       <AsignarSalonSup
-        setVista={setVista}
+        regresar={handleRegresar}
         idSupervisor={editingId}
       />
     )
@@ -163,6 +171,9 @@ export const SupervisorUsuarios = () => {
   return (
     <div className="overflow-x-auto w-full text-center">
       <div className="relative flex justify-center items-center py-2">
+        <Button onClick={refetch}>
+          <FaSyncAlt />
+        </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE SUPERVISORES</h2>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :
