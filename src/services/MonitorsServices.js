@@ -53,6 +53,11 @@ export const MonitorsServices = {
     return request("delete", `/monitors/${userId}`);
   },
 
+  async deactivate(id) {
+    if (!id) throw new Error("ID inválido");
+    return request("patch", `/monitors/${id}/deactivate`);
+  },
+
   /**
    * Obtiene el horario de un monitor por su ID.
    * @param {string|null} id - ID del monitor. Si es null, obtiene el horario de con el id del token

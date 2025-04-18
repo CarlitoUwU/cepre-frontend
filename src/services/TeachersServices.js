@@ -50,6 +50,11 @@ export const TeachersServices = {
     return request("delete", `/teachers/${userId}`);
   },
 
+  async deactivate(id) {
+    if (!id) throw new Error("ID inválido");
+    return request("patch", `/teachers/${id}/deactivate`);
+  },
+
   async teacherJson(archivo) {
     const formData = new FormData();
     formData.append("archivo", archivo);

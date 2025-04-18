@@ -36,6 +36,11 @@ export const SupervisorsServices = {
     return request("delete", `/supervisors/${userId}`);
   },
 
+  async deactivate(id){
+    if (!id) throw new Error("ID inválido");
+    return request("patch", `/supervisors/${id}/deactivate`);
+  },
+
   async getMonitors() {
     return request("get", "/supervisors/getMonitors");
   },
