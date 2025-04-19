@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
-import logo from "@/assets/Unsa_logo.png";
+import logoCeprunsa from "@/assets/CEPRUNSA_LOGO.jpg";
+import logoUnsa from "@/assets/LOGO_UNSA.png";
 import escudo from "@/assets/escudo-unsa.jpeg";
 import { useNavigate } from 'react-router-dom';
 
@@ -28,7 +29,7 @@ export const Login = () => {
       }
       if (event.data.token) {
         localStorage.setItem("token", event.data.token);
-        navigate("/"); // Redirigir a la página 
+        navigate("/");
       }
     };
     window.addEventListener("message", receiveMessage);
@@ -36,35 +37,41 @@ export const Login = () => {
   }, [navigate]);
 
   return (
-    <div className="h-screen p-5 flex flex-col items-left justify-center space-y-10">
-
-      <div className="bg-white shadow-lg p-2 max-w-md  rounded-tl-[10px] rounded-tr-[20px] rounded-bl-[20px] rounded-br-[20px]">
-        <img src={logo} alt="UNSA CEPRUNSA" className="h-20" />
-      </div>
-
-      <div className="bg-white p-4 rounded-lg shadow-lg max-w-md w-full text-center">
-
-        {/* Texto de inicio de sesión */}
-        <div className="mb-4 text-lg font-semibold">
-          Identifíquese usando su cuenta en:
+    <div className="h-screen p-5 flex flex-col items-start justify-center"> {/* Cambiado a items-start */}
+      {/* Contenedor único blanco con margen izquierdo */}
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full space-y-6 ml-8"> {/* Añadido ml-8 y aumentado p-6 a p-8 */}
+        {/* Contenedor de logos con espacio superior */}
+        <div className="flex justify-start items-center space-x-6 pt-4"> {/* Cambiado a justify-start y añadido pt-4 */}
+          <img src={logoUnsa} alt="UNSA" className="h-14 object-contain" />
+          <img src={logoCeprunsa} alt="CEPRUNSA" className="h-14 object-contain" />
         </div>
 
-        {/* Botón con imagen y texto */}
+        {/* Línea divisoria horizontal con más espacio */}
+        <div className="border-t-2 border-gray-300 w-full my-4"></div> {/* Aumentado my-2 a my-4 */}
+
+        {/* Texto de inicio de sesión con más espacio superior */}
+        <div className="text-left pt-2"> {/* Cambiado a text-left y añadido pt-2 */}
+          <h2 className="text-lg font-semibold">
+            Identifíquese usando su cuenta en:
+          </h2>
+        </div>
+
+        {/* Botón de login más grueso */}
         <button
-          className="flex items-center space-x-2 text-black px-4 py-2 rounded-lg shadow-md hover:bg-gray-200 transition w-full"
+          className="flex items-center justify-center space-x-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-4 px-6 rounded-lg w-full transition-colors" /* Aumentado py-3 a py-4 y px-4 a px-6 */
           onClick={handleLogin}
         >
-          <img src={escudo} alt="Escudo UNSA" className="h-6 w-6" />
-          <span>Ingrese con su correo CEPRUNSA</span>
+          <img src={escudo} alt="Escudo UNSA" className="h-7 w-7" /> {/* Aumentado tamaño del icono */}
+          <span className="font-semibold text-base">Ingrese con su correo CEPRUNSA</span> {/* Aumentado tamaño texto */}
         </button>
 
-        {/* Botón de aviso de cookies alineado a la derecha */}
-        <div className="mt-4 flex justify-end">
-          <a href="#" className="text-blue-500 hover:underline text-sm">Aviso de Cookies</a>
+        {/* Botón de cookies */}
+        <div className="flex justify-end pt-4"> {/* Aumentado pt-2 a pt-4 */}
+          <button className="text-blue-500 hover:text-blue-700 text-sm font-medium px-3 py-1 rounded hover:bg-blue-50 transition-colors">
+            Aviso de Cookies
+          </button>
         </div>
-
       </div>
-
     </div>
   );
 };
