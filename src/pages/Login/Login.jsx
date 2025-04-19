@@ -58,7 +58,7 @@ export const Login = () => {
 
         {/* Botón de login responsive */}
         <button
-          className="flex items-center justify-center space-x-2 md:space-x-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 md:py-4 px-4 md:px-6 rounded-lg w-full transition-colors mt-4"
+          className="flex items-center justify-center space-x-2 md:space-x-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 md:py-4 px-4 md:px-6 rounded-lg w-full transition-colors mt-4 cursor-pointer select-none"
           onClick={handleLogin}
         >
           <img src={escudo} alt="Escudo UNSA" className="h-6 md:h-7 w-6 md:w-7" />
@@ -67,7 +67,7 @@ export const Login = () => {
 
         {/* Botón de cookies */}
         <div className="flex justify-end pt-3 md:pt-4">
-          <button className="text-blue-500 hover:text-blue-700 text-xs md:text-sm font-medium px-2 md:px-3 py-1 rounded hover:bg-blue-50 transition-colors">
+          <button className="text-blue-500 hover:text-blue-700 text-xs md:text-sm font-medium px-2 md:px-3 py-1 rounded hover:bg-blue-50 transition-colors cursor-pointer select-none">
             Aviso de Cookies
           </button>
         </div>
