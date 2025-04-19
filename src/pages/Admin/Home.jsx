@@ -26,9 +26,9 @@ export const Home = () => {
   };
 
   return (
-    <div className="m-5">
-      <div className="w-full min-h-[83vh] flex flex-col items-center justify-center bg-[#F4F4F4] rounded-lg">  
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-16 p-8">
+    <div className="md:m-5"> {/* Margen solo en desktop */}
+      <div className="w-full min-h-screen md:min-h-[83vh] flex flex-col items-center justify-center bg-[#F4F4F4] md:rounded-lg">  
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-16 gap-y-16 p-4 md:p-8 w-full">
           {options.map((option, index) => (
             <Button
               key={index}
