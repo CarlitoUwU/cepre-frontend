@@ -39,7 +39,7 @@ export const Login = () => {
   return (
     <div className="h-screen p-4 flex flex-col items-center md:items-start justify-center">
       {/* Contenedor único blanco - responsive */}
-      <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md md:ml-8 mx-auto">
+      <div className="bg-white p-6 md:p-8 rounded-lg shadow-lg w-full max-w-md md:ml-8 mx-auto mt-10">
         {/* Contenedor de logos responsive */}
         <div className="flex justify-center md:justify-start items-center space-x-4 md:space-x-6 pt-2 md:pt-4">
           <img src={logoUnsa} alt="UNSA" className="h-12 md:h-14 object-contain" />
