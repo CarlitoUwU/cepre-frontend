@@ -27,8 +27,8 @@ export const Gestionar = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-[83vh] m-5">
-      {/* Barra lateral (se mantiene igual para desktop) */}
+    <div className="flex flex-col md:flex-row h-screen md:h-[83vh] md:m-5">
+      {/* Barra lateral (solo desktop) */}
       <div className="hidden md:flex md:w-1/6 bg-gray-200 p-6 flex-col gap-6 items-center justify-start rounded-lg h-full overflow-auto">
         <div className="w-full text-center">
           <Button onClick={() => navigate("..")}>
@@ -49,26 +49,26 @@ export const Gestionar = () => {
         ))}
       </div>
 
-      {/* Espacio para desktop (se mantiene igual) */}
+      {/* Espacio para desktop */}
       <div className="hidden md:block mx-3"></div>
 
-      {/* Contenido principal */}
-      <div className="w-full md:w-5/6 shadow-md rounded-lg flex-grow flex overflow-auto bg-gray-200 p-4 pb-16 md:pb-4">
-        {componentes[vistaActual]}
+      {/* Contenido principal con pequeño margen interno en móvil */}
+      <div className="w-full md:w-5/6 flex-grow flex overflow-auto bg-gray-200 md:shadow-md md:rounded-lg px-2 md:p-4 pb-16 md:pb-4">
+        <div className="w-full"> {/* Contenedor interno para el margen */}
+          {componentes[vistaActual]}
+        </div>
       </div>
 
-      {/* Versión Mobile: Menú inferior más ancho */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300 shadow-lg">
-        <div className="flex p-1">
+      {/* Menú inferior móvil (pegado pero con pequeño margen interno) */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300">
+        <div className="flex px-1"> {/* Pequeño margen horizontal */}
           {secciones.map(({ id, nombre, icono }) => (
             <button
               key={id}
               onClick={() => cambiarVista(id)}
-              className={`flex-1 flex flex-col items-center p-3 mx-0.5 rounded-lg ${
-                vistaActual === id ? "bg-gray-200" : ""
-              }`}
+              className={`flex-1 flex flex-col items-center py-3 mx-0.5 rounded-t-lg ${vistaActual === id ? "bg-gray-200" : ""}`}
             >
-              <img src={icono} alt={nombre} className="w-8 h-8" />
+              <img src={icono} alt={nombre} className="w-6 h-6" />
               <span className="text-xs mt-1">{nombre}</span>
             </button>
           ))}
