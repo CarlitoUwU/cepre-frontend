@@ -22,7 +22,7 @@ export const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full bg-[#D6AD65] h-20 shadow-md flex items-center z-50">
+    <header className="fixed top-0 left-0 w-full bg-[#78211E] h-20 shadow-md flex items-center z-50">
       {/* Sección izquierda: Logo + Texto alineados */}
       <div className="flex items-center h-full pl-0">
         <img 
@@ -35,13 +35,13 @@ export const Header = () => {
         </p>
       </div>
 
-      {/* Botón de salida alineado a la derecha */}
+      {/* Botón de salida - Versión ligeramente más grande */}
       <button
         onClick={handleLogout}
         className="ml-auto flex items-center text-white space-x-2 hover:opacity-80 pr-4 cursor-pointer"
       >
         <span className="text-sm md:text-base">Salir</span>
-        <FaSignOutAlt size={18} className="md:size-20" />
+        <FaSignOutAlt size={18} className="md:size-5" />
       </button>
     </header>
   );
