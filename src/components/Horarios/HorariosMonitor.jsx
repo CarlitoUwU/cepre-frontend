@@ -2,134 +2,154 @@ import React from "react";
 import { Dia } from "./Dia";
 import { Hora } from "./Hora";
 import { Curso } from "./Curso";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { HORAS_INI, HORAS_FIN } from "@/constants/horas";
 import { DIAS } from "@/constants/dias";
-import { useCursos } from "@/hooks/useCursos";
 
-// Este es el nuevo componente basado en la API que mencionaste.
-export const HorariosMonitor = ({ horarios = [] }) => {
-  const { cursos } = useCursos();
-  const isMobile = useIsMobile(1024);
+const TablaTurnoMonitor = ({
+  nombreTurno,
+  listaSalones,
+  setClaseSeleccionada,
+  horaInicio,
+  horaFin,
+}) => {
+  const minIndex = HORAS_INI.indexOf(horaInicio);
+  const maxIndex = HORAS_FIN.indexOf(horaFin);
 
-  const dias = DIAS;
-  const diasHeader = isMobile ? DIAS.map(dia => dia.charAt(0)) : dias;
+  const getRow = (horaIni) => HORAS_INI.indexOf(horaIni) - minIndex + 2;
+  const getRowSpan = (horaIni, horaFin) =>
+    HORAS_FIN.indexOf(horaFin) - HORAS_INI.indexOf(horaIni) + 1;
+  const getColumn = (dia) => DIAS.indexOf(dia) + 2;
 
-  // Agrupar cursos consecutivos, al igual que en el componente anterior
-  const agruparCursosConsecutivos = (horarios) => {
-    const horariosOrdenados = [...horarios].sort((a, b) => {
-      if (a.weekDay !== b.weekDay) return dias.indexOf(a.weekDay) - dias.indexOf(b.weekDay);
-      return HORAS_INI.indexOf(a.startTime) - HORAS_INI.indexOf(b.startTime);
-    });
+  // Función para pintar las celdas según el turno
+  const pintarPorTurnos = (horaIni, horaFin) => {
+    const turnos = [
+      { nombre: "Turno 1", inicio: "07:00", fin: "12:10" },
+      { nombre: "Turno 2", inicio: "11:30", fin: "16:40" },
+      { nombre: "Turno 3", inicio: "16:00", fin: "21:10" },
+    ];
 
-    const grupos = [];
-    let grupoActual = null;
+    const celdasPintadas = [];
 
-    horariosOrdenados.forEach((hora) => {
-      const esAsignado = !hora.courseName.toUpperCase().includes("SIN ASIGNAR");
+    turnos.forEach((turno) => {
+      const inicioTurno = Math.max(horaIni, turno.inicio);
+      const finTurno = Math.min(horaFin, turno.fin);
 
-      if (!grupoActual) {
-        grupoActual = { ...hora };
-      } else if (
-        grupoActual.weekDay === hora.weekDay &&
-        grupoActual.courseName.toUpperCase() === hora.courseName.toUpperCase() &&
-        esAsignado &&
-        HORAS_FIN.indexOf(grupoActual.endTime) + 1 === HORAS_INI.indexOf(hora.startTime)
-      ) {
-        // Agrupamos si son consecutivos y son del mismo curso
-        grupoActual.endTime = hora.endTime;
-      } else {
-        grupos.push(grupoActual);
-        grupoActual = { ...hora };
+      if (inicioTurno < finTurno) {
+        celdasPintadas.push(
+          <div
+            key={turno.nombre}
+            className="rounded-lg"
+            style={{
+              backgroundColor: "#e2e8f0", // gris claro
+              gridColumn: getColumn(dia),
+              gridRow: getRow(inicioTurno),
+              gridRowEnd: `span ${getRowSpan(inicioTurno, finTurno)}`,
+            }}
+          />
+        );
       }
     });
 
-    if (grupoActual) {
-      grupos.push(grupoActual);
-    }
-
-    return grupos;
-  };
-
-  const horariosAgrupados = agruparCursosConsecutivos(horarios);
-
-  const horaMinima = horarios.length ? horarios.map((h) => h.startTime).sort()[0] : "07:00";
-  const horaMaxima = horarios.length ? horarios.map((h) => h.endTime).sort().at(-1) : "12:10";
-
-  const minIndex = HORAS_INI.indexOf(horaMinima);
-  const maxIndex = HORAS_FIN.indexOf(horaMaxima);
-
-  const getRow = (horaIni) => HORAS_INI.indexOf(horaIni) - minIndex + 2;
-  const getRowSpan = (horaIni, horaFin) => HORAS_FIN.indexOf(horaFin) - HORAS_INI.indexOf(horaIni) + 1;
-  const getColumn = (dia) => dias.indexOf(dia) + 2;
-
-  // Modificación aquí: solo se muestra el color del curso si tiene docente asignado
-  const getColor = (curso) => {
-    const cursoEncontrado = cursos.find(
-      c => c.name.toUpperCase() === curso.toUpperCase()
-    );
-
-    if (cursoEncontrado && !curso.toUpperCase().includes("SIN ASIGNAR")) {
-      return cursoEncontrado.color; // Si tiene docente asignado, usamos su color
-    }
-
-    return "#f4f0f0"; // Gris para "sin asignar"
-  };
-
-  const acortarNombreCurso = (nombre) => {
-    if (!isMobile) return nombre;
-
-    const nombreSinTildes = nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-    const palabras = nombreSinTildes.trim().split(" ");
-
-    if (palabras.length === 1) {
-      return palabras[0].slice(0, 3).toUpperCase().split("").join("\n");
-    }
-
-    return palabras.map(p => p[0]?.toUpperCase()).join("\n");
+    return celdasPintadas;
   };
 
   return (
-    <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4">
-      <div></div>
+    <div className="mb-12">
+      <h2 className="text-xl font-semibold mb-4 text-gray-800">{nombreTurno}</h2>
+      <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4 relative">
+        <div></div>
+        {DIAS.map((dia, index) => (
+          <Dia key={index} nombre={dia} />
+        ))}
 
-      {diasHeader.map((dia, index) => (
-        <Dia key={index} nombre={dia} />
-      ))}
+        {HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, index) => (
+          <Hora key={index} hora={`${hora} - ${HORAS_FIN[minIndex + index]}`} />
+        ))}
 
-      {HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, index) => (
-        <Hora key={index} hora={`${hora} - ${HORAS_FIN[minIndex + index]}`} />
-      ))}
+        {/* Pintar todas las celdas grises claras */}
+        {DIAS.flatMap((_, i) =>
+          HORAS_INI.slice(minIndex, maxIndex + 1).map((_, k) => (
+            <div
+              key={`bg-${i}-${k}`}
+              className="rounded-lg"
+              style={{
+                backgroundColor: "#f8fafc",
+                gridColumn: i + 2,
+                gridRow: k + 2,
+              }}
+            />
+          ))
+        )}
 
-      {dias.flatMap((_, i) =>
-        HORAS_INI.slice(minIndex, maxIndex + 1).map((_, k) => (
-          <div
-            key={`${i}-${k}`}
-            className="rounded-lg"
-            style={{
-              backgroundColor: "#f4f0fb", // Fondo general
-              borderRadius: ".2vw",
-              gridColumn: i + 2,
-              gridRow: k + 2,
-              color: "#000",
-              minHeight: "3rem",
-            }}
-          ></div>
-        ))
-      )}
+        {/* Pintar los turnos correspondientes */}
+        {DIAS.flatMap((dia, i) =>
+          HORAS_INI.slice(minIndex, maxIndex + 1).map((hora) =>
+            pintarPorTurnos(hora, HORAS_FIN[minIndex + i])
+          )
+        )}
 
-      {horariosAgrupados.map((hora) => (
-        <Curso
-          key={`${hora.weekDay}-${hora.startTime}-${hora.endTime}`}
-          nombre={acortarNombreCurso(hora.courseName)}
-          backgroundColor={getColor(hora.courseName)} // Aquí usamos la función getColor modificada
-          gridColumn={getColumn(hora.weekDay)}
-          gridRow={getRow(hora.startTime)}
-          gridSpan={getRowSpan(hora.startTime, hora.endTime)}
-          style={{ minHeight: "6rem" }}
+        {/* Pintar asignaciones de salones/monitores */}
+        {listaSalones.flatMap((salon) =>
+          salon.horas
+            .filter(
+              (h) =>
+                HORAS_INI.indexOf(h.hora_ini) >= minIndex &&
+                HORAS_FIN.indexOf(h.hora_fin) <= maxIndex
+            )
+            .map((hora) => (
+              <Curso
+                key={`${salon.aula}-${hora.dia}-${hora.hora_ini}`}
+                clase={{
+                  aula: salon.aula,
+                  monitor: salon.monitor,
+                  numHoras: salon.numHoras,
+                  enlace: salon.enlace,
+                }}
+                nombre={salon.aula}
+                backgroundColor="#93c5fd" // azul claro consistente
+                gridColumn={getColumn(hora.dia)}
+                gridRow={getRow(hora.hora_ini)}
+                gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
+                setClaseSeleccionada={setClaseSeleccionada}
+              />
+            ))
+        )}
+      </div>
+    </div>
+  );
+};
+
+export const HorariosMonitor = ({
+  listaSalones = [],
+  setClaseSeleccionada = () => {},
+  turno = "",
+}) => {
+  return (
+    <div className="p-4 space-y-10">
+      {turno === "Turno 1" && (
+        <TablaTurnoMonitor
+          listaSalones={listaSalones}
+          setClaseSeleccionada={setClaseSeleccionada}
+          horaInicio="07:00"
+          horaFin="12:10"
         />
-      ))}
+      )}
+      {turno === "Turno 2" && (
+        <TablaTurnoMonitor
+          listaSalones={listaSalones}
+          setClaseSeleccionada={setClaseSeleccionada}
+          horaInicio="11:30"
+          horaFin="16:40"
+        />
+      )}
+      {turno === "Turno 3" && (
+        <TablaTurnoMonitor
+          listaSalones={listaSalones}
+          setClaseSeleccionada={setClaseSeleccionada}
+          horaInicio="16:00"
+          horaFin="21:10"
+        />
+      )}
     </div>
   );
 };

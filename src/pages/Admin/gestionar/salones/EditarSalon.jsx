@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { useClases } from "@/hooks/useClases";
 import { useInfoClases } from "@/hooks/useInfoClases";
-import { Horarios } from "@/components/Horarios/Horarios";
+import { HorariosMonitor } from "@/components/Horarios/HorariosMonitor";
 
 export const EditarSalon = ({ idSalon, regresar }) => {
   const { clases } = useClases();
   const { schedules: infoClases, teachers, loading } = useInfoClases(idSalon);
-
 
   const salon = clases ? clases.find((a) => a.id === idSalon) : null;
   const nombreAula = salon ? salon.name : "Aula no encontrada";
@@ -28,6 +27,10 @@ export const EditarSalon = ({ idSalon, regresar }) => {
     if (!loading) {
       console.log("📅 Horarios del salón:", infoClases);
       console.log("👨‍🏫 Docentes asignados:", teachers);
+      // Actualizamos los horarios del salón si hay información disponible
+      if (infoClases) {
+        setHorariosSalon(infoClases);
+      }
     }
   }, [infoClases, teachers, loading]);
 
@@ -44,13 +47,12 @@ export const EditarSalon = ({ idSalon, regresar }) => {
       </div>
 
       {rango ? (
-        <Horarios
+        <HorariosMonitor
           listaSalones={[
             {
               aula: nombreAula,
               horas: horariosSalon,
               monitor: null,
-              area: "General",
               numHoras: horariosSalon.length,
               enlace: "",
             },
