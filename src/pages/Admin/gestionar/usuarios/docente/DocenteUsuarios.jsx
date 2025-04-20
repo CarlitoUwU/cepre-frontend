@@ -189,14 +189,14 @@ export const DocenteUsuarios = () => {
           onChange={handleEditChange}
         />,
         esEdicion ? (
-          <div className="flex gap-2 justify-center">
+          <div className="flex gap-2 justify-center min-w-[300px]">
             <Button onClick={() => handleGuardar(profesor.id)}>Guardar</Button>
             <ButtonNegative onClick={() => setEditingId(null)}>Cancelar</ButtonNegative>
           </div>
         ) : (
-          <div className="flex gap-2 justify-center">
+          <div className="flex gap-2 justify-center min-w-[300px]">
             <Button onClick={() => handleAsignarSalon(profesor.id)}>Asignar Salón</Button>
-            <Button onClick={() => handleModificar(profesor.id)}>Modificar</Button>
+            <Button onClick={() => handleModificar(profesor.id)}>Editar</Button>
             <ButtonNegative onClick={() => handleBorrar(profesor.id)}>Borrar</ButtonNegative>
           </div>
         )
@@ -232,9 +232,7 @@ export const DocenteUsuarios = () => {
           <FaSyncAlt />
         </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE DOCENTES</h2>
-        <div className="absolute right-4">
           <Button onClick={handleAgregar}>Agregar Docente</Button>
-        </div>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :
         <Tabla encabezado={encabezado} datos={getDatosProfesor()} />

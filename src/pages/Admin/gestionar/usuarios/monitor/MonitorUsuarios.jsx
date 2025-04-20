@@ -145,7 +145,7 @@ export const MonitorUsuarios = () => {
           </div>
         ) : (
           <div className="flex gap-2 justify-center">
-            <Button onClick={() => handleModificar(monitor.id)}>Modificar</Button>
+            <Button onClick={() => handleModificar(monitor.id)}>Editar</Button>
             <ButtonNegative onClick={() => handleBorrar(monitor.id)}>Borrar</ButtonNegative>
           </div>
         )
