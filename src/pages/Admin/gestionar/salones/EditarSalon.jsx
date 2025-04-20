@@ -3,6 +3,8 @@ import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { useClases } from "@/hooks/useClases";
 import { useInfoClases } from "@/hooks/useInfoClases";
 import { HorariosMonitor } from "@/components/Horarios/HorariosMonitor";
+import { formatTimeToHHMM } from "@/utils/formatTime";
+import { DIAS_DIC } from "@/constants/dias";
 
 export const EditarSalon = ({ idSalon, regresar }) => {
   const { clases } = useClases();
@@ -29,7 +31,15 @@ export const EditarSalon = ({ idSalon, regresar }) => {
       console.log("👨‍🏫 Docentes asignados:", teachers);
       // Actualizamos los horarios del salón si hay información disponible
       if (infoClases) {
-        setHorariosSalon(infoClases);
+        const data = infoClases.map((clase) => {
+          return {
+            hora_ini: formatTimeToHHMM(clase.startTime),
+            hora_fin: formatTimeToHHMM(clase.endTime),
+            dia: DIAS_DIC[clase.weekDay] || "Día desconocido",
+            curso: clase.courseName || "Curso desconocido",
+          }
+        })
+        setHorariosSalon(data);
       }
     }
   }, [infoClases, teachers, loading]);
@@ -57,7 +67,7 @@ export const EditarSalon = ({ idSalon, regresar }) => {
               enlace: "",
             },
           ]}
-          setClaseSeleccionada={() => {}}
+          setClaseSeleccionada={() => { }}
           turno={turnoNormalizado}
         />
       ) : (

@@ -105,7 +105,7 @@ const TablaTurnoMonitor = ({
                   numHoras: salon.numHoras,
                   enlace: salon.enlace,
                 }}
-                nombre={salon.aula}
+                nombre={hora?.curso?.toUpperCase()}
                 backgroundColor="#93c5fd" // azul claro consistente
                 gridColumn={getColumn(hora.dia)}
                 gridRow={getRow(hora.hora_ini)}
@@ -121,7 +121,7 @@ const TablaTurnoMonitor = ({
 
 export const HorariosMonitor = ({
   listaSalones = [],
-  setClaseSeleccionada = () => {},
+  setClaseSeleccionada = () => { },
   turno = "",
 }) => {
   return (
