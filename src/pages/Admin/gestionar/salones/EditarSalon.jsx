@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { useClases } from "@/hooks/useClases"; // importamos el hook de las clases
-import { useSchedules } from "@/hooks/useSchedules"; // importamos el hook
-import { useHoras } from "@/hooks/useHoras"; // importamos el hook de las sesiones de hora
+import { useClases } from "@/hooks/useClases";
+import { useHoras } from "@/hooks/useHoras";
+import { useInfoClases } from "@/hooks/useInfoClases"; // nuevo hook
 import { Horarios } from "@/components/Horarios/Horarios";
 
 export const EditarSalon = ({ idSalon, regresar }) => {
   const { clases } = useClases();
-  const { schedules, loading } = useSchedules(); // obtenemos los horarios
-  const { horas, loading: loadingHoras, error } = useHoras(); // obtenemos las sesiones de hora
-  
+  const { schedules: infoClases, loading } = useInfoClases(idSalon); // ahora se llama infoClases
+  const { horas, loading: loadingHoras } = useHoras();
+
   const salon = clases ? clases.find((a) => a.id === idSalon) : null;
   const nombreAula = salon ? salon.name : "Aula no encontrada";
   const turno = salon?.shift;
-  const turnoOriginal = turno?.name ?? "Turno no disponible";
+  const turnoOriginal = turno?.name ? turno.name : "Turno no disponible";
 
+  // Normalización del turno
   const turnoNormalizado = turnoOriginal.replace(/0?([1-3])$/, "$1");
 
   const turnos = {
@@ -28,28 +29,26 @@ export const EditarSalon = ({ idSalon, regresar }) => {
   const [horariosSalon, setHorariosSalon] = useState([]);
 
   useEffect(() => {
-    if (!loading && !loadingHoras && schedules.length > 0 && horas.length > 0) {
-      // Filtrar los horarios correspondientes al salón actual
-      const horariosSalon = schedules.filter((h) => h.classId === idSalon);
+    // Verificación de datos cargados
+    if (!loading && !loadingHoras) {
+      if (Array.isArray(infoClases) && infoClases.length > 0 && Array.isArray(horas) && horas.length > 0) {
+        const horariosCompletos = infoClases.map((horario) => {
+          const bloque = horas.find((bloque) => bloque.id === horario.hourSessionId);
+          return {
+            hora: bloque?.startTime || "Hora no asignada",
+            curso: horario.courseId || "Sin clase asignada",
+            docente: horario.teacherId || "No asignado",
+          };
+        });
 
-      // Crear un objeto con los horarios completos
-      const horariosCompletos = horariosSalon.map((horario) => {
-        const bloque = horas.find((bloque) => bloque.id === horario.hourSessionId);
-        
-        return {
-          hora: bloque?.startTime || "Hora no asignada",
-          curso: horario.courseId || "Sin clase asignada",
-          docente: horario.teacherId || "No asignado",
-        };
-      });
-
-      // Guardamos los horarios completos
-      setHorariosSalon(horariosCompletos);
-
-      // Imprimimos los horarios completos en la consola
-      console.log("Horarios del salón:", horariosCompletos);
+        setHorariosSalon(horariosCompletos);
+      }
     }
-  }, [schedules, loading, idSalon, horas, loadingHoras]);
+  }, [infoClases, loading, horas, loadingHoras]);
+
+  if (loading || loadingHoras) {
+    return <div className="text-center">Cargando...</div>;
+  }
 
   return (
     <div className="p-4 space-y-2 flex flex-col items-center justify-center max-w-4xl mx-auto">
@@ -61,10 +60,10 @@ export const EditarSalon = ({ idSalon, regresar }) => {
 
       {rango ? (
         <Horarios
-          listaSalones={[ 
+          listaSalones={[
             {
               aula: nombreAula,
-              horas: horariosSalon, // Pasamos los horarios completos
+              horas: horariosSalon,
               monitor: null,
               area: "General",
               numHoras: horariosSalon.length,
