@@ -1,10 +1,11 @@
 import { request } from "./api";
 
 export const SupervisorsServices = {
-
   /**
    * Obtiene la lista de supervisores.
-   * @returns {Promise<Array<Object | null>} | null}
+   * @param {number} page
+   * @param {number} limit
+   * @returns {Promise<{ data: Array<Object>, total: number, page: number, limit: number }>}
    */
   async getSupervisors(page = 1, limit = 20) {
     return request("get", `/supervisors?page=${page}&limit=${limit}`, null, true);
@@ -12,37 +13,77 @@ export const SupervisorsServices = {
 
   /**
    * Obtiene un supervisor por su ID.
-   * @param {string} userId - ID del supervisor a obtener.
-   * @returns {Promise<{ Object} | null>}
-   * @throws {Error} Si el ID no es válido.
+   * @param {string} id - ID del supervisor a obtener.
+   * @returns {Promise<Object>}
    */
-  async getSupervisorById(userId) {
-    if (!userId) throw new Error("ID inválido");
-    return request("get", `/supervisors/${userId}`);
+  async getSupervisorById(id) {
+    if (!id) throw new Error("ID inválido");
+    return request("get", `/supervisors/${id}`);
   },
 
-  async createSupervisor({ userId }) {
-    const now = new Date().toISOString();
-    return request("post", "/supervisors", { userId, createdAt: now, updatedAt: now });
+  /**
+   * Crea un nuevo supervisor.
+   * @param {Object} data - Datos del supervisor a crear.
+   * @returns {Promise<Object>}
+   */
+  async createSupervisor({ email, dni, firstName, lastName, phone, phonesAdditional = [], personalEmail, shiftId }) {
+    if (!email || !dni || !firstName || !lastName) throw new Error("Faltan datos obligatorios");
+    return request("post", "/supervisors", {
+      email,
+      dni,
+      firstName,
+      lastName,
+      phone,
+      phonesAdditional,
+      personalEmail,
+      shiftId
+    });
   },
 
-  async updateSupervisor({ userId, firstName, lastName, personalEmail, phone }) {
-    if (!userId) throw new Error("ID inválido");
-    return request("put", `/supervisors/${userId}`, { firstName, lastName, personalEmail, phone });
+  /**
+   * Actualiza datos del supervisor.
+   * @param {Object} data - Datos a actualizar.
+   * @returns {Promise<Object>}
+   */
+  async updateSupervisor({ id, firstName, lastName, personalEmail, phone, shiftId }) {
+    if (!id) throw new Error("ID inválido");
+    return request("put", `/supervisors/${id}`, {
+      firstName,
+      lastName,
+      personalEmail,
+      phone,
+      shiftId
+    });
   },
 
-  async deleteSupervisor(userId) {
-    if (!userId) throw new Error("ID inválido");
-    return request("delete", `/supervisors/${userId}`);
+  /**
+   * Elimina un supervisor.
+   * @param {string} id
+   * @returns {Promise<Object>}
+   */
+  async deleteSupervisor(id) {
+    if (!id) throw new Error("ID inválido");
+    return request("delete", `/supervisors/${id}`);
   },
 
-  async deactivate(id){
+  /**
+   * Desactiva a un supervisor.
+   * @param {string} id
+   * @returns {Promise<Object>}
+   */
+  async deactivate(id) {
     if (!id) throw new Error("ID inválido");
     return request("patch", `/supervisors/${id}/deactivate`);
   },
 
-  async getMonitors() {
-    return request("get", "/supervisors/getMonitors");
+  /**
+   * Obtiene los monitores asociados al supervisor autenticado.
+   * @param {string} userId
+   * @returns {Promise<Array>}
+   */
+  async getMonitors(userId) {
+    if (!userId) throw new Error("ID inválido");
+    return request("get", `/supervisors/${userId}/monitors`);
   },
 
   async supervisorJson(archivo) {

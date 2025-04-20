@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import docentesData from "@/data/docentes.json";
 import TurnosSelector from "@/components/Horarios/TurnosSelector.jsx";
-import DisponibilidadModal from "@/components/Horarios/DisponibilidadModal";
 
 export const AsignarSalonDoc = ({ idDocente, setVista }) => {
   const docente = docentesData.find((doc) => doc.id === idDocente);
@@ -11,17 +10,34 @@ export const AsignarSalonDoc = ({ idDocente, setVista }) => {
   const listaSalones = [];
 
   const [disponibilidadDocentes, setDisponibilidadDocentes] = useState({});
-  const [mostrarModal, setMostrarModal] = useState(false);
 
-  const handleGuardarDisponibilidad = (nuevaDisponibilidad) => {
-    setDisponibilidadDocentes((prev) => ({
-      ...prev,
-      [idDocente]: [
-        ...(prev[idDocente] || []),
-        ...nuevaDisponibilidad,
-      ],
-    }));
-    setMostrarModal(false);
+  // Cargar disponibilidad desde localStorage al montar el componente
+  useEffect(() => {
+    const data = localStorage.getItem(`disponibilidad-${idDocente}`);
+    if (data) {
+      setDisponibilidadDocentes((prev) => ({
+        ...prev,
+        [idDocente]: JSON.parse(data),
+      }));
+    }
+  }, [idDocente]);
+
+  // Actualizar disponibilidad específica para el docente
+  const handleDisponibilidadChange = (nuevaDisponibilidad) => {
+    setDisponibilidadDocentes((prev) => {
+      const updatedDisponibilidad = {
+        ...prev,
+        [idDocente]: nuevaDisponibilidad,  // Filtramos solo el docente actual
+      };
+
+      // Guardar en localStorage la disponibilidad del docente específico
+      localStorage.setItem(
+        `disponibilidad-${idDocente}`,
+        JSON.stringify(nuevaDisponibilidad)
+      );
+
+      return updatedDisponibilidad;
+    });
   };
 
   return (
@@ -31,32 +47,18 @@ export const AsignarSalonDoc = ({ idDocente, setVista }) => {
           Asignación de Salones Docente - {nombreDocente}
         </h2>
 
-        <div className="flex justify-center">
-          <button
-            onClick={() => setMostrarModal(true)}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded shadow"
-          >
-            Ingresar Disponibilidad
-          </button>
-        </div>
-
+        {/* Aquí estamos pasando el idDocente a TurnosSelector */}
         <TurnosSelector
           listaSalones={listaSalones}
-          disponibilidad={disponibilidadDocentes[idDocente] || []}
-          setClaseSeleccionada={(clase) => {
-            console.log("Clase seleccionada:", clase);
-          }}
+          disponibilidad={disponibilidadDocentes[idDocente] || []}  // Aseguramos que se pasa la disponibilidad específica
+          idDocente={idDocente}  // Pasamos el idDocente a TurnosSelector
+          setDisponibilidadDocentes={handleDisponibilidadChange}  // Pasamos la función para actualizar disponibilidad
         />
 
         <ButtonNegative onClick={() => setVista("tabla")}>Atrás</ButtonNegative>
       </div>
-
-      {mostrarModal && (
-        <DisponibilidadModal
-          onClose={() => setMostrarModal(false)}
-          onSave={handleGuardarDisponibilidad}
-        />
-      )}
     </div>
   );
-}
+};
+
+
