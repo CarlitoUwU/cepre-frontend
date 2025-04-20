@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { Input } from "@/components/ui/Input";
+import { EditableCell } from "@/components/ui/EditableCell";
 import { AgregarUsuarios } from "../AgregarUsuarios";
 import { useMonitores } from "@/hooks/useMonitores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
@@ -93,7 +93,7 @@ export const MonitorUsuarios = () => {
   const handleBorrar = async (id) => {
     try {
       const monitorEliminado = await eliminarMonitorMutation.mutateAsync(id);
-      console.log({monitorEliminado})
+      console.log({ monitorEliminado })
       if (monitorEliminado || monitorEliminado === '') {
         toast.success("Monitor eliminado correctamente");
       }
@@ -113,26 +113,31 @@ export const MonitorUsuarios = () => {
       return [
         index + (page - 1) * limit + 1,
         monitor.className || "-",
-        esEdicion ? (
-          <Input type="text" name="nombres" value={editFormData.nombres} onChange={handleEditChange} />
-        ) : (
-          monitor.firstName || "-"
-        ),
-        esEdicion ? (
-          <Input type="text" name="apellidos" value={editFormData.apellidos} onChange={handleEditChange} />
-        ) : (
-          monitor.lastName || "-"
-        ),
-        esEdicion ? (
-          <Input type="email" name="correo" value={editFormData.correo} onChange={handleEditChange} />
-        ) : (
-          monitor.personalEmail || "-"
-        ),
-        esEdicion ? (
-          <Input type="text" name="numero" value={editFormData.numero} onChange={handleEditChange} />
-        ) : (
-          monitor.phone || "-"
-        ),
+        <EditableCell
+          editable={esEdicion}
+          name="nombres"
+          value={esEdicion ? editFormData.nombres : monitor.firstName}
+          onChange={handleEditChange}
+        />,
+        <EditableCell
+          editable={esEdicion}
+          name="apellidos"
+          value={esEdicion ? editFormData.apellidos : monitor.lastName}
+          onChange={handleEditChange}
+        />,
+        <EditableCell
+          editable={esEdicion}
+          name="correo"
+          value={esEdicion ? editFormData.correo : monitor.personalEmail}
+          onChange={handleEditChange}
+          type="email"
+        />,
+        <EditableCell
+          editable={esEdicion}
+          name="numero"
+          value={esEdicion ? editFormData.numero : monitor.phone}
+          onChange={handleEditChange}
+        />,
         esEdicion ? (
           <div className="flex gap-2 justify-center">
             <Button onClick={() => handleGuardar(monitor.id)}>Guardar</Button>
