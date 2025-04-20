@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { useClases } from "@/hooks/useClases";
-import { useHoras } from "@/hooks/useHoras";
-import { useInfoClases } from "@/hooks/useInfoClases"; // nuevo hook
+import { useInfoClases } from "@/hooks/useInfoClases";
 import { Horarios } from "@/components/Horarios/Horarios";
 
 export const EditarSalon = ({ idSalon, regresar }) => {
   const { clases } = useClases();
-  const { schedules: infoClases, loading } = useInfoClases(idSalon); // ahora se llama infoClases
-  const { horas, loading: loadingHoras } = useHoras();
+  const { schedules: infoClases, teachers, loading } = useInfoClases(idSalon);
+
 
   const salon = clases ? clases.find((a) => a.id === idSalon) : null;
   const nombreAula = salon ? salon.name : "Aula no encontrada";
   const turno = salon?.shift;
   const turnoOriginal = turno?.name ? turno.name : "Turno no disponible";
-
-  // Normalización del turno
   const turnoNormalizado = turnoOriginal.replace(/0?([1-3])$/, "$1");
 
   const turnos = {
@@ -25,28 +22,16 @@ export const EditarSalon = ({ idSalon, regresar }) => {
   };
 
   const rango = turnos[turnoNormalizado];
-
   const [horariosSalon, setHorariosSalon] = useState([]);
 
   useEffect(() => {
-    // Verificación de datos cargados
-    if (!loading && !loadingHoras) {
-      if (Array.isArray(infoClases) && infoClases.length > 0 && Array.isArray(horas) && horas.length > 0) {
-        const horariosCompletos = infoClases.map((horario) => {
-          const bloque = horas.find((bloque) => bloque.id === horario.hourSessionId);
-          return {
-            hora: bloque?.startTime || "Hora no asignada",
-            curso: horario.courseId || "Sin clase asignada",
-            docente: horario.teacherId || "No asignado",
-          };
-        });
-
-        setHorariosSalon(horariosCompletos);
-      }
+    if (!loading) {
+      console.log("📅 Horarios del salón:", infoClases);
+      console.log("👨‍🏫 Docentes asignados:", teachers);
     }
-  }, [infoClases, loading, horas, loadingHoras]);
+  }, [infoClases, teachers, loading]);
 
-  if (loading || loadingHoras) {
+  if (loading) {
     return <div className="text-center">Cargando...</div>;
   }
 
