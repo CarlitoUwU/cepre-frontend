@@ -2,6 +2,7 @@ import React from "react";
 import { Dia } from "./Dia";
 import { Hora } from "./Hora";
 import { Curso } from "./Curso";
+import { useCursos } from "@/hooks/useCursos";
 import { HORAS_INI, HORAS_FIN } from "@/constants/horas";
 import { DIAS } from "@/constants/dias";
 
@@ -12,14 +13,22 @@ const TablaTurnoMonitor = ({
   horaInicio,
   horaFin,
 }) => {
+  const { cursos } = useCursos();
   const minIndex = HORAS_INI.indexOf(horaInicio);
   const maxIndex = HORAS_FIN.indexOf(horaFin);
-
+  
   const getRow = (horaIni) => HORAS_INI.indexOf(horaIni) - minIndex + 2;
   const getRowSpan = (horaIni, horaFin) =>
     HORAS_FIN.indexOf(horaFin) - HORAS_INI.indexOf(horaIni) + 1;
   const getColumn = (dia) => DIAS.indexOf(dia) + 2;
 
+  //Colores de curso
+  const getColor = (curso) => {
+    return cursos.find(
+      c => c.name.toUpperCase() === curso.toUpperCase()
+    )?.color || "#31A8E3";
+  }
+  
   // Función para pintar las celdas según el turno
   const pintarPorTurnos = (horaIni, horaFin) => {
     const turnos = [
@@ -126,8 +135,16 @@ const TablaTurnoMonitor = ({
                 HORAS_FIN.indexOf(h.hora_fin) <= maxIndex
             )
           ).map((hora) => {
-              const tieneDocente = !!salon.docente;
-              const colorFondo = tieneDocente ? salon.color : "#393b3d";
+              
+              const tieneDocente = listaSalones[0]?.cursosDoc?.some(
+                (docente) =>{ 
+                  
+                  return docente.curso?.toUpperCase() === hora.curso?.toUpperCase();
+
+                }
+              );
+              
+              const colorFondo = tieneDocente ? getColor(hora?.curso) : "#393b3d";
 
               return (
                 <Curso

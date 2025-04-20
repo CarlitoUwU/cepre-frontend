@@ -3,6 +3,7 @@ import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { useClases } from "@/hooks/useClases";
 import { useInfoClases } from "@/hooks/useInfoClases";
 import { HorariosMonitor } from "@/components/Horarios/HorariosMonitor";
+import { TablaCursos } from "./TablaCursos"; 
 import { formatTimeToHHMM } from "@/utils/formatTime";
 import { DIAS_DIC } from "@/constants/dias";
 
@@ -65,6 +66,8 @@ export const EditarSalon = ({ idSalon, regresar }) => {
               monitor: null,
               numHoras: horariosSalon.length,
               enlace: "",
+              cursosDoc: teachers.map((docente) => ({
+              curso: docente.courseName,}))
             },
           ]}
           setClaseSeleccionada={() => { }}
@@ -73,6 +76,11 @@ export const EditarSalon = ({ idSalon, regresar }) => {
       ) : (
         <p className="text-center text-red-500">Turno inválido o no definido.</p>
       )}
+
+      {/* Tabla de cursos*/}
+      <div className="mt-1 overflow-x-auto w-full">
+        <TablaCursos docentes={teachers}/>         
+      </div>
 
       <div className="mt-4 flex justify-center">
         <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
