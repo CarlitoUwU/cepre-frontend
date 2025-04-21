@@ -3,6 +3,7 @@ import { request } from "./api";
 export const MonitorsServices = {
   /**
    * Obtiene un listado paginado de monitores activos con información resumida.
+   * @returns {Promise<Array<Object>>}
    */
   async getMonitors(page = 1, limit = 20) {
     return request("get", `/monitors?page=${page}&limit=${limit}`, null, true);
@@ -19,18 +20,19 @@ export const MonitorsServices = {
   /**
    * Crea un nuevo monitor con información básica.
    */
-  async createMonitor(data) {
-    return request("post", "/monitors", data);
+  async createMonitor({ userId, supervisorId }) {
+    const now = new Date().toISOString();
+    return request("post", "/monitors", { userId, supervisorId, createdAt: now, updatedAt: now });
   },
 
   /**
    * Actualiza los datos de un monitor desde un rol administrador.
    * @param {Object} data - Contiene: id, firstName, lastName, personalEmail, phone, className, classId.
    */
-  async updateMonitorAsAdmin(data) {
-    const { id, ...rest } = data;
-    if (!id) throw new Error("ID inválido");
-    return request("put", `/monitors/admin/${id}`, rest);
+  async updateMonitor({ userId, firstName, lastName, personalEmail, phone }) {
+    if (!userId) throw new Error("ID inválido");
+    return request("put", `/monitors/${userId}`, { firstName, lastName, personalEmail, phone });
+
   },
 
   /**
@@ -53,7 +55,7 @@ export const MonitorsServices = {
    * Obtiene el horario del monitor. Si no se pasa ID, obtiene el del monitor autenticado.
    */
   async cargarHorario(id = null) {
-    const url = id ? `/monitors/${id}/horario` : "/monitors/horario";
+    const url = id ? `/monitors/${id}/horario` : "/monitors/cargar/horario";
     return request("get", url);
   },
 
@@ -61,7 +63,7 @@ export const MonitorsServices = {
    * Obtiene los docentes asociados a un monitor.
    */
   async cargarDocentes(id = null) {
-    const url = id ? `/monitors/${id}/teachers` : "/monitors/teachers";
+    const url = id ? `/monitors/${id}/teachers` : "/monitors/datos/teachers";
     return request("get", url);
   },
 
