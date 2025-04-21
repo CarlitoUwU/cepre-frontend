@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Button } from "@/components/ui/Button"; // Asegúrate de tener este botón base
-import docentesData from "@/data/docentes.json";
 import { TurnosSelector } from "@/components/Horarios/TurnosSelector.jsx";
+import { TeachersServices } from "@/services/TeachersServices.js";
 
-
-export const AsignarSalonDoc = ({ idDocente, setVista }) => {
-  const docente = docentesData.find((doc) => doc.id === idDocente);
+export const AsignarSalonDoc = ({ idDocente, regresar }) => {
+  console.log({idDocente})
+  const [docente, setDocente] = useState({});
   const nombreDocente = docente ? docente.docente : "Desconocido";
 
   const listaSalones = [
@@ -29,22 +29,36 @@ export const AsignarSalonDoc = ({ idDocente, setVista }) => {
   const [disponibilidadDocentes, setDisponibilidadDocentes] = useState({});
   const [modoEdicionDisponibilidad, setModoEdicionDisponibilidad] = useState(false);
 
+  const objApi = {
+    id_course: docente?.courseId,
+    disponibilidad: disponibilidadDocentes[idDocente],
+  }
+
+  console.log({objApi})
+
   useEffect(() => {
-    const data = localStorage.getItem(`disponibilidad-${idDocente}`);
+    const fetchData = async () => {
+      const data = localStorage.getItem(`disponibilidad-${idDocente}`);
   
-    try {
-      const parsed = JSON.parse(data);
-      if (parsed && typeof parsed === "object") {
-        setDisponibilidadDocentes((prev) => ({
-          ...prev,
-          [idDocente]: parsed,
-        }));
+      try {
+        const dataDocente = await TeachersServices.getTeacherById(idDocente);
+        console.log({ dataDocente });
+        setDocente(dataDocente);
+  
+        const parsed = JSON.parse(data);
+        if (parsed && typeof parsed === "object") {
+          setDisponibilidadDocentes((prev) => ({
+            ...prev,
+            [idDocente]: parsed,
+          }));
+        }
+      } catch (e) {
+        console.warn(`Error al parsear disponibilidad de ${idDocente}`, e);
+        localStorage.removeItem(`disponibilidad-${idDocente}`);
       }
-    } catch (e) {
-      console.warn(`Error al parsear disponibilidad de ${idDocente}`, e);
-      // En caso de error, podemos limpiar el localStorage corrupto:
-      localStorage.removeItem(`disponibilidad-${idDocente}`);
-    }
+    };
+  
+    fetchData();
   }, [idDocente]);
 
   const handleDisponibilidadChange = (nuevaDisponibilidad) => {
@@ -113,7 +127,7 @@ export const AsignarSalonDoc = ({ idDocente, setVista }) => {
             {modoEdicionDisponibilidad ? "Finalizar edición" : "Modificar disponibilidad"}
           </Button>
 
-          <ButtonNegative onClick={() => setVista("tabla")}>Atrás</ButtonNegative>
+          <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
         </div>
       </div>
     </div>
