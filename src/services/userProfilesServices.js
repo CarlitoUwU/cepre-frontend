@@ -32,29 +32,8 @@ const UserProfilesServices = {
    * @param {boolean} [newUserProfile.isActive=true] - Estado del usuario.
    * @returns {Promise<Object | null>}
    */
-  async createUserProfile({
-    dni,
-    firstName,
-    lastName,
-    phone,
-    phonesAdditional = [],
-    address,
-    personalEmail,
-    isActive = true,
-  }) {
-    const payload = {
-      firstName,
-      lastName,
-      phone,
-      phonesAdditional,
-      address,
-      personalEmail,
-      isActive,
-    };
-
-    if (dni) payload.dni = dni;
-
-    return request("post", "/user-profiles", payload);
+  async createUserProfile({ dni, firsName, lastName, phone, phoneAdditional = [], address, personalEmail, isActive = true }) {
+    return request("post", "/user-profiles", { dni, firsName, lastName, phone, phoneAdditional, address, personalEmail, isActive });
   },
 
   /**
@@ -71,30 +50,8 @@ const UserProfilesServices = {
    * @param {boolean} userProfileData.isActive - Estado del perfil.
    * @returns {Promise<Object | null>}
    */
-  async updateUserProfile({
-    id,
-    dni,
-    firstName,
-    lastName,
-    phone,
-    phonesAdditional,
-    address,
-    personalEmail,
-    isActive,
-  }) {
-    const payload = {
-      firstName,
-      lastName,
-      phone,
-      phonesAdditional,
-      address,
-      personalEmail,
-      isActive,
-    };
-
-    if (dni) payload.dni = dni;
-
-    return request("patch", `/user-profiles/${id}`, payload);
+  async updateUserProfile({ id, dni, firsName, lastName, phone, phoneAdditional, address, personalEmail, isActive }) {
+    return request("patch", `/user-profiles/${id}`, { dni, firsName, lastName, phone, phoneAdditional, address, personalEmail, isActive });
   },
 
   /**

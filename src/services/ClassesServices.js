@@ -6,12 +6,7 @@ const ClassesServices = {
    * @returns {Promise<Array<Object>>}
    */
   async getClasses() {
-    try {
-      return await request("get", "/classes", null, true);
-    } catch (error) {
-      console.error("Error al obtener las clases:", error);
-      throw error;
-    }
+    return request("get", "/classes", null, true);
   },
 
   /**
@@ -20,13 +15,8 @@ const ClassesServices = {
    * @returns {Promise<Object>}
    */
   async getClassById(id) {
-    if (!id) throw new Error("ID inválido");
-    try {
-      return await request("get", `/classes/${id}`);
-    } catch (error) {
-      console.error(`Error al obtener la clase con ID ${id}:`, error);
-      throw error;
-    }
+    return request("get", `/classes/${id}`);
+
   },
 
   /**
@@ -39,21 +29,7 @@ const ClassesServices = {
       throw new Error("Datos incompletos para crear la clase");
     }
 
-    try {
-      return await request("post", "/classes", {
-        name,
-        idSede,
-        areaId,
-        shiftId,
-        capacity,
-        urlMeet,
-        urlClassroom,
-        monitorId
-      });
-    } catch (error) {
-      console.error("Error al crear la clase:", error);
-      throw error;
-    }
+    return request("post", "/classes", { name, idSede, areaId, shiftId, capacity, urlMeet, urlClassroom, monitorId });
   },
 
   /**
@@ -63,22 +39,7 @@ const ClassesServices = {
    */
   async updateClass({ id, name, idSede, areaId, shiftId, capacity, urlMeet, urlClassroom, monitorId }) {
     if (!id) throw new Error("ID de clase inválido");
-
-    try {
-      return await request("put", `/classes/${id}`, {
-        name,
-        idSede,
-        areaId,
-        shiftId,
-        capacity,
-        urlMeet,
-        urlClassroom,
-        monitorId
-      });
-    } catch (error) {
-      console.error(`Error al actualizar la clase con ID ${id}:`, error);
-      throw error;
-    }
+    return request("put", `/classes/${id}`, { name, idSede, areaId, shiftId, capacity, urlMeet, urlClassroom, monitorId });
   },
 
   /**
@@ -88,13 +49,7 @@ const ClassesServices = {
    */
   async deleteClass(id) {
     if (!id) throw new Error("ID inválido");
-
-    try {
-      return await request("delete", `/classes/${id}`);
-    } catch (error) {
-      console.error(`Error al eliminar la clase con ID ${id}:`, error);
-      throw error;
-    }
+    return request("delete", `/classes/${id}`);
   },
 
   /**
@@ -102,12 +57,7 @@ const ClassesServices = {
    * @returns {Promise<Array<Object>>}
    */
   async getClassesOfTeacher() {
-    try {
-      return await request("get", "/classes/teacher", null, true);
-    } catch (error) {
-      console.error("Error al obtener las clases del profesor:", error);
-      throw error;
-    }
+    return request("get", "/classes/teacher");
   },
 
   /**
@@ -117,12 +67,7 @@ const ClassesServices = {
    */
   async getSchedulesByClassId(classId) {
     if (!classId) throw new Error("ID de clase inválido");
-    try {
-      return await request("get", `/classes/${classId}/schedules`);
-    } catch (error) {
-      console.error(`Error al obtener los horarios de la clase con ID ${classId}:`, error);
-      throw error;
-    }
+    return request("get", `/classes/${classId}/schedules`);
   },
 
   /**
@@ -132,12 +77,7 @@ const ClassesServices = {
    */
   async getTeachersByClassId(classId) {
     if (!classId) throw new Error("ID de clase inválido");
-    try {
-      return await request("get", `/classes/${classId}/teachers`);
-    } catch (error) {
-      console.error(`Error al obtener los docentes de la clase con ID ${classId}:`, error);
-      throw error;
-    }
+    return request("get", `/classes/${classId}/teachers`);
   },
 };
 

@@ -62,29 +62,9 @@ export const TeachersServices = {
    * @param {Object} teacherData - Datos del teacher a actualizar.
    * @returns {Promise<Object>}
    */
-  async updateTeacher({
-    id,
-    firstName,
-    lastName,
-    personalEmail,
-    phone,
-    courseId,
-    isCoordinator,
-    jobStatus,
-  }) {
-    if (!id) throw new Error("ID inválido");
-
-    const data = {
-      ...(firstName && { firstName }),
-      ...(lastName && { lastName }),
-      ...(personalEmail && { personalEmail }),
-      ...(phone && { phone }),
-      ...(typeof isCoordinator === "boolean" && { isCoordinator }),
-      ...(jobStatus && { jobStatus }),
-      ...(courseId && { courseId }),
-    };
-
-    return request("put", `/teachers/${id}`, data);
+  async updateTeacher({ userId, firstName, lastName, personalEmail, phone }) {
+    if (!userId) throw new Error("ID inválido");
+    return request("put", `/teachers/${userId}`, { firstName, lastName, personalEmail, phone });
   },
 
   /**

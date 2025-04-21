@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { Input } from "@/components/ui/Input";
+import { EditableCell } from "@/components/ui/EditableCell";
 import { AgregarUsuarios } from "../AgregarUsuarios";
 import { useProfesores } from "@/hooks/useProfesores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
@@ -163,26 +163,31 @@ export const DocenteUsuarios = () => {
       return [
         index + (page - 1) * limit + 1,
         profesor.courseName || "-",
-        esEdicion ? (
-          <Input type="text" name="nombres" value={editFormData.nombres} onChange={handleEditChange} />
-        ) : (
-          profesor.firstName || "-"
-        ),
-        esEdicion ? (
-          <Input type="text" name="apellidos" value={editFormData.apellidos} onChange={handleEditChange} />
-        ) : (
-          profesor.lastName || "-"
-        ),
-        esEdicion ? (
-          <Input type="email" name="correo" value={editFormData.correo} onChange={handleEditChange} />
-        ) : (
-          profesor.personalEmail || "-"
-        ),
-        esEdicion ? (
-          <Input type="text" name="numero" value={editFormData.numero} onChange={handleEditChange} />
-        ) : (
-          profesor.phone || "-"
-        ),
+        <EditableCell
+          editable={esEdicion}
+          name="nombres"
+          value={esEdicion ? editFormData.nombres : profesor.firstName}
+          onChange={handleEditChange}
+        />,
+        <EditableCell
+          editable={esEdicion}
+          name="apellidos"
+          value={esEdicion ? editFormData.apellidos : profesor.lastName}
+          onChange={handleEditChange}
+        />,
+        <EditableCell
+          editable={esEdicion}
+          name="correo"
+          value={esEdicion ? editFormData.correo : profesor.personalEmail}
+          onChange={handleEditChange}
+          type="email"
+        />,
+        <EditableCell
+          editable={esEdicion}
+          name="numero"
+          value={esEdicion ? editFormData.numero : profesor.phone}
+          onChange={handleEditChange}
+        />,
         esEdicion ? (
           <div className="flex gap-2 justify-center min-w-[300px]">
             <Button onClick={() => handleGuardar(profesor.id)}>Guardar</Button>

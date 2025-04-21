@@ -31,6 +31,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 401) {
+      debugger
       console.warn("⚠️ Token expirado. Redirigiendo al login...");
       localStorage.removeItem("token"); // Eliminar token
       token = null;

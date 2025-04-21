@@ -28,16 +28,7 @@ export const SupervisorsServices = {
    */
   async createSupervisor({ email, dni, firstName, lastName, phone, phonesAdditional = [], personalEmail, shiftId }) {
     if (!email || !dni || !firstName || !lastName) throw new Error("Faltan datos obligatorios");
-    return request("post", "/supervisors", {
-      email,
-      dni,
-      firstName,
-      lastName,
-      phone,
-      phonesAdditional,
-      personalEmail,
-      shiftId
-    });
+    return request("post", "/supervisors", { email, dni, firstName, lastName, phone, phonesAdditional, personalEmail, shiftId });
   },
 
   /**
@@ -47,13 +38,7 @@ export const SupervisorsServices = {
    */
   async updateSupervisor({ id, firstName, lastName, personalEmail, phone, shiftId }) {
     if (!id) throw new Error("ID inválido");
-    return request("put", `/supervisors/${id}`, {
-      firstName,
-      lastName,
-      personalEmail,
-      phone,
-      shiftId
-    });
+    return request("put", `/supervisors/${id}`, { firstName, lastName, personalEmail, phone, shiftId });
   },
 
   /**
@@ -81,9 +66,9 @@ export const SupervisorsServices = {
    * @param {string} userId
    * @returns {Promise<Array>}
    */
-  async getMonitors(userId) {
-    if (!userId) throw new Error("ID inválido");
-    return request("get", `/supervisors/${userId}/monitors`);
+  async getMonitors(userId = null) {
+    const url = userId ? `/supervisors/${userId}` : "/supervisors/getMonitors";
+    return request("get", url);
   },
 
   async supervisorJson(archivo) {
