@@ -4,17 +4,13 @@ import { Button } from "@/components/ui/Button"; // Asegúrate de tener este bot
 import docentesData from "@/data/docentes.json";
 import { TurnosSelector } from "@/components/Horarios/TurnosSelector.jsx";
 
-const ESTADO_COLOR = {
-  "DISPONIBLE": "bg-green-200",
-  "OCUPADO": "bg-red-200",
-}
 
 export const AsignarSalonDoc = ({ idDocente, setVista }) => {
   const docente = docentesData.find((doc) => doc.id === idDocente);
   const nombreDocente = docente ? docente.docente : "Desconocido";
 
   const listaSalones = [
-    {
+    /* {
       id: "salon-102",
       nombre: "Salón 102",
       horas: [
@@ -27,7 +23,7 @@ export const AsignarSalonDoc = ({ idDocente, setVista }) => {
       horas: [
         { dia: "LUNES", hora_ini: "08:30", hora_fin: "09:10" }, // ✅ dentro del rango
       ],
-    }
+    } */
   ];
 
   const [disponibilidadDocentes, setDisponibilidadDocentes] = useState({});
