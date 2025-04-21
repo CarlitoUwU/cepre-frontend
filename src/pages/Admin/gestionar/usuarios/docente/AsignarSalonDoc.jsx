@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/Button"; // Asegúrate de tener este bot
 import docentesData from "@/data/docentes.json";
 import { TurnosSelector } from "@/components/Horarios/TurnosSelector.jsx";
 
-
 export const AsignarSalonDoc = ({ idDocente, setVista }) => {
+  
   const docente = docentesData.find((doc) => doc.id === idDocente);
   const nombreDocente = docente ? docente.docente : "Desconocido";
 

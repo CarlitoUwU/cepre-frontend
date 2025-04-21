@@ -202,7 +202,7 @@ export const DocenteUsuarios = () => {
   if (vista === VISTA.ASIGNAR_SALON) {
     return (
       <AsignarSalonDoc
-        id={editingId}
+        idDocente={editingId}
         setVista={setVista}
       />
     )
