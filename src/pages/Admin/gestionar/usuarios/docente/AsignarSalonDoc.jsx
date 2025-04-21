@@ -15,11 +15,19 @@ export const AsignarSalonDoc = ({ idDocente, setVista }) => {
 
   useEffect(() => {
     const data = localStorage.getItem(`disponibilidad-${idDocente}`);
-    if (data) {
-      setDisponibilidadDocentes((prev) => ({
-        ...prev,
-        [idDocente]: JSON.parse(data),
-      }));
+  
+    try {
+      const parsed = JSON.parse(data);
+      if (parsed && typeof parsed === "object") {
+        setDisponibilidadDocentes((prev) => ({
+          ...prev,
+          [idDocente]: parsed,
+        }));
+      }
+    } catch (e) {
+      console.warn(`Error al parsear disponibilidad de ${idDocente}`, e);
+      // En caso de error, podemos limpiar el localStorage corrupto:
+      localStorage.removeItem(`disponibilidad-${idDocente}`);
     }
   }, [idDocente]);
 
