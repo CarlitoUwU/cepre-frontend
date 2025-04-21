@@ -151,8 +151,14 @@ export const DocenteUsuarios = () => {
 
   const handleAsignarSalon = (id) => {
     console.log("Asignar salón al docente con ID:", id);
+    setEditingId(id);
     setVista(VISTA.ASIGNAR_SALON);
   };
+
+  const handleRegresar = () => {
+    setEditingId(null);
+    setVista(VISTA.TABLA)
+  }
 
   const getDatosProfesor = () => {
     if (!profesores || profesores.length === 0) return [];
@@ -208,7 +214,7 @@ export const DocenteUsuarios = () => {
     return (
       <AsignarSalonDoc
         idDocente={editingId}
-        setVista={setVista}
+        regresar={handleRegresar}
       />
     )
   }
