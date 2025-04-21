@@ -66,8 +66,14 @@ export const EditarSalon = ({ idSalon, regresar }) => {
               monitor: null,
               numHoras: horariosSalon.length,
               enlace: "",
-              cursosDoc: teachers.map((docente) => ({
-              curso: docente.courseName,}))
+              cursosDoc: teachers
+              .map((docente) => {
+                if (docente.firstName !== "no asignado") {
+                  return { curso: docente.courseName };
+                }
+                return undefined;
+              })
+              .filter(Boolean),
             },
           ]}
           setClaseSeleccionada={() => { }}
