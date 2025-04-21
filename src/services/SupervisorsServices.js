@@ -67,7 +67,6 @@ export const SupervisorsServices = {
    * @returns {Promise<Array>}
    */
   async getMonitors(userId = null) {
-    if (!userId) throw new Error("ID inválido");
     const url = userId ? `/supervisors/${userId}` : "/supervisors/getMonitors";
     return request("get", url);
   },
