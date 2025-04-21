@@ -24,15 +24,7 @@ const TablaTurno = ({
   const getRowSpan = (horaIni, horaFin) =>
     HORAS_FIN.indexOf(horaFin) - HORAS_INI.indexOf(horaIni) + 1;
   const getColumn = (dia) => DIAS.indexOf(dia) + 2;
-
-  const limitarHora = (hora, toMin) => {
-    const lista = toMin ? HORAS_INI : HORAS_FIN;
-    const idx = lista.indexOf(hora);
-    if (toMin && idx < minIndex) return HORAS_INI[minIndex];
-    if (!toMin && idx > maxIndex) return HORAS_FIN[maxIndex];
-    return hora;
-  };
-
+  
   return (
     <div className="mb-12">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">{nombreTurno}</h2>
@@ -52,35 +44,35 @@ const TablaTurno = ({
           />
         ))}
 
-{DIAS.flatMap((dia, i) =>
-  HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, k) => {
-    const horaIndex = HORAS_INI.indexOf(hora);
-    const horaFin = HORAS_FIN[horaIndex];
+        {DIAS.flatMap((dia, i) =>
+          HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, k) => {
+            const horaIndex = HORAS_INI.indexOf(hora);
+            const horaFin = HORAS_FIN[horaIndex];
 
-    const estaDisponible = disponibilidad.some(
-      (d) => d.dia === dia && d.hora_ini === hora && d.hora_fin === horaFin
-    );
+            const estaDisponible = disponibilidad.some(
+              (d) => d.dia === dia && d.hora_ini === hora && d.hora_fin === horaFin
+            );
 
-    return (
-      <div
-        key={`bg-${dia}-${hora}`}
-        className="rounded-lg cursor-pointer"
-        onClick={() =>
-          handleCeldaClick({
-            dia,
-            hora_ini: hora,
-            hora_fin: horaFin,
+            return (
+              <div
+                key={`bg-${dia}-${hora}`}
+                className="rounded-lg cursor-pointer"
+                onClick={() =>
+                  handleCeldaClick({
+                    dia,
+                    hora_ini: hora,
+                    hora_fin: horaFin,
+                  })
+                }
+                style={{
+                  backgroundColor: estaDisponible ? "#b5e6b5" : "#f4f4f4",
+                  gridColumn: i + 2,
+                  gridRow: k + 2,
+                }}
+              />
+            );
           })
-        }
-        style={{
-          backgroundColor: estaDisponible ? "#b5e6b5" : "#f4f4f4",
-          gridColumn: i + 2,
-          gridRow: k + 2,
-        }}
-      />
-    );
-  })
-)}
+        )}
 
 
         {listaSalones.flatMap((salon) =>

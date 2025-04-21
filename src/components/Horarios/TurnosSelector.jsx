@@ -42,16 +42,7 @@ export const TurnosSelector = ({
 
     setDisponibilidadDocentes(nuevaDisponibilidad);
   };
-
-  const handleClickDia = (dia) => {
-    // Aquí podrías implementar lógica para seleccionar por día completo si deseas
-    console.log("Click en día:", dia);
-  };
-
-  const handleClickHora = (hora_ini, hora_fin) => {
-    // Aquí podrías implementar lógica para seleccionar por hora específica
-    console.log("Click en hora:", hora_ini, hora_fin);
-  };
+ 
 
   return (
     <div className="p-4 space-y-10">
