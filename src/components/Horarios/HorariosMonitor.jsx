@@ -138,9 +138,7 @@ const TablaTurnoMonitor = ({
               
               const tieneDocente = listaSalones[0]?.cursosDoc?.some(
                 (docente) =>{ 
-                  
-                  return docente.curso?.toUpperCase() === hora.curso?.toUpperCase();
-
+                      return docente.curso?.toUpperCase() === hora.curso?.toUpperCase();
                 }
               );
               

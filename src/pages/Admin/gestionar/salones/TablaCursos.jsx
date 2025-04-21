@@ -20,7 +20,6 @@ export const TablaCursos = ({ docentes = [] }) => {
   }
   
 
-  // Crea un mapa rápido de cursoId => docente asignado
   const docentesPorCurso = {}
   docentes.map((docente) => {
     if (docente.teacherId !== "no asignado"){
@@ -31,9 +30,7 @@ export const TablaCursos = ({ docentes = [] }) => {
             email: docente.email,
         };
     }
-  }, {});
-
-  
+  }, {});  
 
 
   const datos = cursos.map((curso) => {
