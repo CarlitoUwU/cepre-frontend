@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import ClassesServices from "@/services/ClassesServices.js";
+import { ClassesServices } from "@/services/ClassesServices.js";
 
 export const useClases = () => {
   const queryClient = useQueryClient();

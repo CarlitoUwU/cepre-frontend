@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ClassesServices from '../services/ClassesServices';  // Asegúrate de que la ruta esté correcta
+import { ClassesServices } from '../services/ClassesServices';  // Asegúrate de que la ruta esté correcta
 
 export function useInfoClases(classId) {
   const [schedules, setSchedules] = useState([]);

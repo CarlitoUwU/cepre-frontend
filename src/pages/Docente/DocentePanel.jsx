@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AulaInfo } from "@/components/AulaInfo";
 import { ListaSalones } from "@/components/ListaSalones";
 import { TablaHorario } from "@/components/Horarios";
-import ClassesServices from "@/services/ClassesServices";
+import { ClassesServices } from "@/services/ClassesServices";
 import { DIAS_DIC} from "@/constants/dias";
 import { formatTimeToHHMM } from "@/utils/formatTime";
 
@@ -14,7 +14,7 @@ const AREAS = {
 
 const fetchHorarioData = async () => {
   try {
-    const clases = await ClassesServices.getClassOfTeacher();
+    const clases = await ClassesServices.getClassesOfTeacher();
 
     return clases.map((clase) => ({
       aula: clase.name.replace("-", " - "),
