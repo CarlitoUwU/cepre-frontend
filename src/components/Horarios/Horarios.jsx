@@ -9,7 +9,6 @@ import { DIAS } from "@/constants/dias";
 const TablaTurno = ({
   nombreTurno,
   listaSalones,
-  setClaseSeleccionada,
   horaInicio,
   horaFin,
   disponibilidad = [],
@@ -24,7 +23,7 @@ const TablaTurno = ({
   const getRowSpan = (horaIni, horaFin) =>
     HORAS_FIN.indexOf(horaFin) - HORAS_INI.indexOf(horaIni) + 1;
   const getColumn = (dia) => DIAS.indexOf(dia) + 2;
-  
+
   return (
     <div className="mb-12">
       <h2 className="text-xl font-semibold mb-4 text-gray-800">{nombreTurno}</h2>
@@ -74,7 +73,6 @@ const TablaTurno = ({
           })
         )}
 
-
         {listaSalones.flatMap((salon) =>
           salon.horas
             .filter(
@@ -85,19 +83,12 @@ const TablaTurno = ({
             .map((hora) => (
               <Curso
                 key={`${salon.aula}-${hora.dia}-${hora.hora_ini}`}
-                clase={{
-                  aula: salon.aula,
-                  monitor: salon.monitor,
-                  area: salon.area,
-                  numHoras: salon.numHoras,
-                  enlace: salon.enlace,
-                }}
+                clase={{ aula: salon.aula }}
                 nombre={salon.aula}
                 backgroundColor={AREA_COLORS[salon.area] || "#f4351c"}
                 gridColumn={getColumn(hora.dia)}
                 gridRow={getRow(hora.hora_ini)}
                 gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
-                setClaseSeleccionada={setClaseSeleccionada}
               />
             ))
         )}
@@ -108,7 +99,6 @@ const TablaTurno = ({
 
 export const Horarios = ({
   listaSalones = [],
-  setClaseSeleccionada = () => {},
   turno = "",
   disponibilidad = [],
   handleCeldaClick,
@@ -121,7 +111,6 @@ export const Horarios = ({
         <TablaTurno
           nombreTurno="Turno 1"
           listaSalones={listaSalones}
-          setClaseSeleccionada={setClaseSeleccionada}
           horaInicio="07:00"
           horaFin="12:10"
           disponibilidad={disponibilidad}
@@ -134,7 +123,6 @@ export const Horarios = ({
         <TablaTurno
           nombreTurno="Turno 2"
           listaSalones={listaSalones}
-          setClaseSeleccionada={setClaseSeleccionada}
           horaInicio="11:30"
           horaFin="16:40"
           disponibilidad={disponibilidad}
@@ -147,7 +135,6 @@ export const Horarios = ({
         <TablaTurno
           nombreTurno="Turno 3"
           listaSalones={listaSalones}
-          setClaseSeleccionada={setClaseSeleccionada}
           horaInicio="16:00"
           horaFin="21:10"
           disponibilidad={disponibilidad}
