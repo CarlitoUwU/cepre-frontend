@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { Button } from "@/components/ui/Button"; // Asegúrate de tener este botón base
+import { Button } from "@/components/ui/Button"; 
+import { TablaAsignar } from "./TablaAsignar"
 import { TurnosSelector } from "@/components/Horarios/TurnosSelector.jsx";
 import { TeachersServices } from "@/services/TeachersServices.js";
 
@@ -80,16 +81,16 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
     return hora_ini_salon >= hora_ini_disp && hora_fin_salon <= hora_fin_disp;
   };
 
-  const disponibilidad = disponibilidadDocentes[idDocente] || [];
+   /*const disponibilidad = disponibilidadDocentes[idDocente] || [];
 
-  const salonesDisponibles = listaSalones.filter((salon) =>
+ const salonesDisponibles = listaSalones.filter((salon) =>
   salon.horas.some(({ dia, hora_ini: hs_ini, hora_fin: hs_fin }) =>
     disponibilidad.some(
       ({ dia: dia_disp, hora_ini: hd_ini, hora_fin: hd_fin }) =>
         dia === dia_disp && horaEnRango(hs_ini, hs_fin, hd_ini, hd_fin)
     )
   )
-);
+);*/
 
 
   return (
@@ -99,35 +100,27 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
           Asignación de Salones Docente - {docente?.firstName} {docente?.lastName}
         </h2>
 
-        <div className="flex w-full justify-center items-start gap-4">
+        
           <TurnosSelector
             listaSalones={listaSalones}
             disponibilidad={disponibilidadDocentes[idDocente] || []}
             idDocente={idDocente}
             setDisponibilidadDocentes={handleDisponibilidadChange}
             modoEdicion={modoEdicionDisponibilidad}
-          />
+          />              
 
-        <div className="flex flex-col items-start pt-2">
-          <label htmlFor="select-salon" className="mb-1 font-medium">Salones disponibles:</label>
-          <select id="select-salon" className="border rounded px-3 py-1 w-48">
-            <option value="">Selecciona un salón</option>
-            {salonesDisponibles.map((salon) => (
-              <option key={salon.id} value={salon.id}>
-                {salon.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
-        </div>
-
-        <div className="flex gap-4">
+        
           <Button onClick={() => setModoEdicionDisponibilidad(!modoEdicionDisponibilidad)}>
             {modoEdicionDisponibilidad ? "Finalizar edición" : "Modificar disponibilidad"}
           </Button>
 
+          <TablaAsignar
+            disponibilidad={disponibilidadDocentes[idDocente] || []}
+            listaSalones={listaSalones}
+          />
+
           <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
-        </div>
+        
       </div>
     </div>
   );
