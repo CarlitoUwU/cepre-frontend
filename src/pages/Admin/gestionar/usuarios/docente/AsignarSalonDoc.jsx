@@ -7,8 +7,7 @@ import { TeachersServices } from "@/services/TeachersServices.js";
 export const AsignarSalonDoc = ({ idDocente, regresar }) => {
   console.log({idDocente})
   const [docente, setDocente] = useState({});
-  const nombreDocente = docente ? docente.docente : "Desconocido";
-
+  
   const listaSalones = [
     /* {
       id: "salon-102",
@@ -97,7 +96,7 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
     <div className="overflow-x-auto w-full text-center p-2">
       <div className="flex flex-col items-center space-y-6">
         <h2 className="text-2xl font-bold">
-          Asignación de Salones Docente - {nombreDocente}
+          Asignación de Salones Docente - {docente?.firstName} {docente?.lastName}
         </h2>
 
         <div className="flex w-full justify-center items-start gap-4">
