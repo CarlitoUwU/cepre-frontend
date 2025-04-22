@@ -2,6 +2,7 @@ import React from "react";
 import { Dia } from "./Dia";
 import { Hora } from "./Hora";
 import { Curso } from "./Curso";
+import { useCursos } from "@/hooks/useCursos";
 import { HORAS_INI, HORAS_FIN } from "@/constants/horas";
 import { DIAS } from "@/constants/dias";
 
@@ -12,14 +13,22 @@ const TablaTurnoMonitor = ({
   horaInicio,
   horaFin,
 }) => {
+  const { cursos } = useCursos();
   const minIndex = HORAS_INI.indexOf(horaInicio);
   const maxIndex = HORAS_FIN.indexOf(horaFin);
-
+  
   const getRow = (horaIni) => HORAS_INI.indexOf(horaIni) - minIndex + 2;
   const getRowSpan = (horaIni, horaFin) =>
     HORAS_FIN.indexOf(horaFin) - HORAS_INI.indexOf(horaIni) + 1;
   const getColumn = (dia) => DIAS.indexOf(dia) + 2;
 
+  //Colores de curso
+  const getColor = (curso) => {
+    return cursos.find(
+      c => c.name.toUpperCase() === curso.toUpperCase()
+    )?.color || "#31A8E3";
+  }
+  
   // Función para pintar las celdas según el turno
   const pintarPorTurnos = (horaIni, horaFin) => {
     const turnos = [
@@ -40,7 +49,7 @@ const TablaTurnoMonitor = ({
             key={turno.nombre}
             className="rounded-lg"
             style={{
-              backgroundColor: "#e2e8f0", // gris claro
+              backgroundColor: "#e2e8f0",
               gridColumn: getColumn(dia),
               gridRow: getRow(inicioTurno),
               gridRowEnd: `span ${getRowSpan(inicioTurno, finTurno)}`,
@@ -52,6 +61,35 @@ const TablaTurnoMonitor = ({
 
     return celdasPintadas;
   };
+
+  const agruparHoras = (horas) => {
+    const horasOrdenadas = [...horas].sort((a, b) => {
+      if (a.dia !== b.dia) return DIAS.indexOf(a.dia) - DIAS.indexOf(b.dia);
+      return HORAS_INI.indexOf(a.hora_ini) - HORAS_INI.indexOf(b.hora_ini);
+    });
+  
+    const grupos = [];
+    let grupoActual = null;
+  
+    horasOrdenadas.forEach((hora) => {
+      if (
+        grupoActual &&
+        grupoActual.dia === hora.dia &&
+        grupoActual.curso === hora.curso &&
+        HORAS_FIN.indexOf(grupoActual.hora_fin) + 1 === HORAS_INI.indexOf(hora.hora_ini)
+      ) {
+        // Agrupar si es misma asignatura y hora consecutiva
+        grupoActual.hora_fin = hora.hora_fin;
+      } else {
+        if (grupoActual) grupos.push(grupoActual);
+        grupoActual = { ...hora };
+      }
+    });
+  
+    if (grupoActual) grupos.push(grupoActual);
+    return grupos;
+  };
+  
 
   return (
     <div className="mb-12">
@@ -90,30 +128,46 @@ const TablaTurnoMonitor = ({
 
         {/* Pintar asignaciones de salones/monitores */}
         {listaSalones.flatMap((salon) =>
-          salon.horas
-            .filter(
+          agruparHoras(
+            salon.horas.filter(
               (h) =>
                 HORAS_INI.indexOf(h.hora_ini) >= minIndex &&
                 HORAS_FIN.indexOf(h.hora_fin) <= maxIndex
             )
-            .map((hora) => (
-              <Curso
-                key={`${salon.aula}-${hora.dia}-${hora.hora_ini}`}
-                clase={{
-                  aula: salon.aula,
-                  monitor: salon.monitor,
-                  numHoras: salon.numHoras,
-                  enlace: salon.enlace,
-                }}
-                nombre={salon.aula}
-                backgroundColor="#93c5fd" // azul claro consistente
-                gridColumn={getColumn(hora.dia)}
-                gridRow={getRow(hora.hora_ini)}
-                gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
-                setClaseSeleccionada={setClaseSeleccionada}
-              />
-            ))
+          ).map((hora) => {
+              
+              const tieneDocente = listaSalones[0]?.cursosDoc?.some(
+                (docente) =>{ 
+                      return docente.curso?.toUpperCase() === hora.curso?.toUpperCase();
+                }
+              );
+              
+              const colorFondo = tieneDocente ? getColor(hora?.curso) : "#393b3d";
+
+              return (
+                <Curso
+                  key={`${salon.aula}-${hora.dia}-${hora.hora_ini}`}
+                  clase={{
+                    aula: salon.aula,
+                    docente: salon.docente,
+                    numHoras: salon.numHoras,
+                    enlace: salon.enlace,
+                  }}
+                  nombre={
+                    tieneDocente
+                      ? hora?.curso?.toUpperCase()
+                      : hora?.curso // sin modificar si no hay docente
+                  }
+                  backgroundColor={colorFondo}
+                  gridColumn={getColumn(hora.dia)}
+                  gridRow={getRow(hora.hora_ini)}
+                  gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
+                  setClaseSeleccionada={setClaseSeleccionada}
+                />
+              );
+            })
         )}
+
       </div>
     </div>
   );
@@ -121,7 +175,7 @@ const TablaTurnoMonitor = ({
 
 export const HorariosMonitor = ({
   listaSalones = [],
-  setClaseSeleccionada = () => {},
+  setClaseSeleccionada = () => { },
   turno = "",
 }) => {
   return (
