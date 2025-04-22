@@ -2,8 +2,8 @@ import { request } from "./api";
 
 export const TeachersServices = {
   /**
-   * Obtiene la lista de teachers.
-   * @returns {Promise<Array<{ userId: string, courseId: string, maxHours: number, scheduledHours: number, isActive: boolean, jobShiftType: string, createdAt: string, updatedAt: string }>> | null}
+   * Obtiene la lista de teachers paginada (solo activos).
+   * @returns {Promise<{ data: Array, total: number, page: number, limit: number }>}
    */
   async getTeachers(page = 1, limit = 20) {
     return request("get", `/teachers?page=${page}&limit=${limit}`, null, true);
@@ -11,28 +11,56 @@ export const TeachersServices = {
 
   /**
    * Obtiene un teacher por su ID.
-   * @param {string} userId - ID del teacher a obtener.
+   * @param {string} id - ID del teacher.
    */
-  async getTeacherById(userId) {
-    if (!userId) throw new Error("ID inválido");
-    return request("get", `/teachers/${userId}`);
+  async getTeacherById(id) {
+    if (!id) throw new Error("ID inválido");
+    return request("get", `/teachers/${id}`);
   },
 
   /**
    * Crea un nuevo teacher.
    * @param {Object} newTeacher - Datos del teacher a crear.
-   * @returns {Promise<{ Object } | null>}
+   * @returns {Promise<Object>}
    */
-  async createTeacher({ email, personalEmail, maxHours = 30, scheduledHours = 0, jobStatus, courseId, dni, firstName, lastName, phone, phonesAdditional = [], isCoordinator = false }) {
-    if (!email || !courseId || !firstName || !lastName) throw new Error("Faltan datos obligatorios");
-    return request("post", "/teachers", { email, personalEmail, maxHours, scheduledHours, jobStatus, courseId, dni, firstName, lastName, phone, phonesAdditional, isCoordinator });
+  async createTeacher({
+    email,
+    personalEmail,
+    maxHours = 30,
+    scheduledHours = 0,
+    jobStatus,
+    courseId,
+    dni,
+    firstName,
+    lastName,
+    phone,
+    phonesAdditional = [],
+    isCoordinator = false,
+  }) {
+    if (!email || !courseId || !firstName || !lastName || !dni) {
+      throw new Error("Faltan datos obligatorios");
+    }
+
+    return request("post", "/teachers", {
+      email,
+      personalEmail,
+      maxHours,
+      scheduledHours,
+      jobStatus,
+      courseId,
+      dni,
+      firstName,
+      lastName,
+      phone,
+      phonesAdditional,
+      isCoordinator,
+    });
   },
 
   /**
    * Actualiza un teacher existente.
    * @param {Object} teacherData - Datos del teacher a actualizar.
-   * @returns {Promise<{ Object } | null>}
-   * @throws {Error} Si el ID del teacher no es válido.
+   * @returns {Promise<Object>}
    */
   async updateTeacher({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
@@ -41,29 +69,43 @@ export const TeachersServices = {
 
   /**
    * Elimina un teacher por su ID.
-   * @param {string} userId - ID del teacher a eliminar.
-   * @returns {Promise<boolean>}
-   * @throws {Error} Si el ID no es válido.
+   * @param {string} id - ID del teacher.
+   * @returns {Promise<Object>}
    */
-  async deleteTeacher(userId) {
-    if (!userId) throw new Error("ID inválido");
-    return request("delete", `/teachers/${userId}`);
+  async deleteTeacher(id) {
+    if (!id) throw new Error("ID inválido");
+    return request("delete", `/teachers/${id}`);
   },
 
+  /**
+   * Desactiva un teacher (soft delete del usuario relacionado).
+   * @param {string} id - ID del teacher.
+   * @returns {Promise<Object>}
+   */
   async deactivate(id) {
     if (!id) throw new Error("ID inválido");
     return request("patch", `/teachers/${id}/deactivate`);
   },
 
+  /**
+   * Crea múltiples teachers desde archivo JSON.
+   * @param {File} archivo - Archivo JSON.
+   * @returns {Promise<Object>}
+   */
   async teacherJson(archivo) {
     const formData = new FormData();
     formData.append("archivo", archivo);
     return request("post", "/teachers/json", formData, false, true);
   },
 
+  /**
+   * Crea múltiples teachers desde archivo CSV.
+   * @param {File} archivo - Archivo CSV.
+   * @returns {Promise<Object>}
+   */
   async teacherCsv(archivo) {
     const formData = new FormData();
     formData.append("archivo", archivo);
     return request("post", "/teachers/csv", formData, false, true);
-  }
+  },
 };

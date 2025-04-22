@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { Input } from "@/components/ui/Input";
-import { AgregarUsuarios } from "../AgregarUsuarios";
+import { EditableCell } from "@/components/ui/EditableCell";
 import { AsignarSalonSup } from "./AsignarSalonSup";
 import { useSupervisores } from "@/hooks/useSupervisores";
 import { toast } from "react-toastify";
@@ -94,7 +93,7 @@ export const SupervisorUsuarios = () => {
   const handleBorrar = async (id) => {
     try {
       const supervisorEliminado = await eliminarSupervisorMutation.mutateAsync(id);
-      console.log({supervisorEliminado});
+      console.log({ supervisorEliminado });
       if (supervisorEliminado || supervisorEliminado === '') {
         toast.success("Supervisor eliminado correctamente");
       }
@@ -123,26 +122,31 @@ export const SupervisorUsuarios = () => {
 
       return [
         index + (page - 1) * limit + 1,
-        esEdicion ? (
-          <Input type="text" name="nombres" value={editFormData.nombres} onChange={handleEditChange} />
-        ) : (
-          supervisor.firstName || "-"
-        ),
-        esEdicion ? (
-          <Input type="text" name="apellidos" value={editFormData.apellidos} onChange={handleEditChange} />
-        ) : (
-          supervisor.lastName || "-"
-        ),
-        esEdicion ? (
-          <Input type="email" name="correo" value={editFormData.correo} onChange={handleEditChange} />
-        ) : (
-          supervisor.personalEmail || "-"
-        ),
-        esEdicion ? (
-          <Input type="text" name="numero" value={editFormData.numero} onChange={handleEditChange} />
-        ) : (
-          supervisor.phone || "-"
-        ),
+        <EditableCell
+          editable={esEdicion}
+          name="nombres"
+          value={esEdicion ? editFormData.nombres : supervisor.firstName}
+          onChange={handleEditChange}
+        />,
+        <EditableCell
+          editable={esEdicion}
+          name="apellidos"
+          value={esEdicion ? editFormData.apellidos : supervisor.lastName}
+          onChange={handleEditChange}
+        />,
+        <EditableCell
+          editable={esEdicion}
+          name="correo"
+          value={esEdicion ? editFormData.correo : supervisor.personalEmail}
+          onChange={handleEditChange}
+          type="email"
+        />,
+        <EditableCell
+          editable={esEdicion}
+          name="numero"
+          value={esEdicion ? editFormData.numero : supervisor.phone}
+          onChange={handleEditChange}
+        />,
         esEdicion ? (
           <div className="flex gap-2 justify-center">
             <Button onClick={() => handleGuardar(supervisor.id)}>Guardar</Button>

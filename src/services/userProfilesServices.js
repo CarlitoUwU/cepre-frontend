@@ -1,10 +1,9 @@
 import { request } from "./api";
 
 const UserProfilesServices = {
-
   /**
-   * Obtiene la lista de perfiles de usuario.
-   * @returns {Promise<Array<{ id: number, dni: string, firsName: string, lastName: string, phone: string, phoneAdditional: string, address: string, personalEmail: string, isActive: boolean }>> | null}
+   * Obtiene la lista de perfiles de usuario activos.
+   * @returns {Promise<Array<{ id: string, dni?: string, firstName: string, lastName: string, phone: string, phonesAdditional: string[], address: string, personalEmail: string, isActive: boolean }>>}
    */
   async getUserProfiles() {
     return request("get", "/user-profiles", null, true);
@@ -23,15 +22,15 @@ const UserProfilesServices = {
   /**
    * Crea un nuevo perfil de usuario.
    * @param {Object} newUserProfile - Datos del perfil de usuario a crear.
-   * @param {string} newUserProfile.dni - DNI del usuario.
-   * @param {string} newUserProfile.firsName - Primer nombre del usuario.
+   * @param {string} [newUserProfile.dni] - DNI del usuario (opcional).
+   * @param {string} newUserProfile.firstName - Primer nombre del usuario.
    * @param {string} newUserProfile.lastName - Apellido del usuario.
    * @param {string} newUserProfile.phone - Teléfono del usuario.
-   * @param {Array<string>} newUserProfile.phoneAdditional - Teléfono adicional del usuario.
+   * @param {Array<string>} newUserProfile.phonesAdditional - Teléfonos adicionales.
    * @param {string} newUserProfile.address - Dirección del usuario.
-   * @param {string} newUserProfile.personalEmail - Correo electrónico personal del usuario.
-   * @param {boolean} newUserProfile.isActive - Estado del usuario.
-   * @returns {Promise<{ id: number, dni: string, firsName: string, lastName: string, phone: string, phoneAdditional: string, address: string, personalEmail: string, isActive: boolean } | null>}
+   * @param {string} newUserProfile.personalEmail - Correo personal.
+   * @param {boolean} [newUserProfile.isActive=true] - Estado del usuario.
+   * @returns {Promise<Object | null>}
    */
   async createUserProfile({ dni, firsName, lastName, phone, phoneAdditional = [], address, personalEmail, isActive = true }) {
     return request("post", "/user-profiles", { dni, firsName, lastName, phone, phoneAdditional, address, personalEmail, isActive });
@@ -39,17 +38,17 @@ const UserProfilesServices = {
 
   /**
    * Actualiza un perfil de usuario existente.
-   * @param {Object} userProfileData - Datos del perfil de usuario a actualizar.
-   * @param {string} userProfileData.id - ID del perfil de usuario a actualizar.
-   * @param {string} userProfileData.dni - DNI del usuario. 
-   * @param {string} userProfileData.firsName - Primer nombre del usuario.
-   * @param {string} userProfileData.lastName - Apellido del usuario.
-   * @param {string} userProfileData.phone - Teléfono del usuario.
-   * @param {Array<string>} userProfileData.phoneAdditional - Teléfono adicional del usuario.
-   * @param {string} userProfileData.address - Dirección del usuario.
-   * @param {string} userProfileData.personalEmail - Correo electrónico personal del usuario.
-   * @param {boolean} userProfileData.isActive - Estado del usuario.
-   * @returns {Promise<{ id: number, dni: string, firsName: string, lastName: string, phone: string, phoneAdditional: string, address: string, personalEmail: string, isActive: boolean } | null>}
+   * @param {Object} userProfileData - Datos a actualizar.
+   * @param {string} userProfileData.id - ID del perfil.
+   * @param {string} [userProfileData.dni] - DNI del usuario (opcional).
+   * @param {string} userProfileData.firstName - Primer nombre.
+   * @param {string} userProfileData.lastName - Apellido.
+   * @param {string} userProfileData.phone - Teléfono.
+   * @param {Array<string>} userProfileData.phonesAdditional - Teléfonos adicionales.
+   * @param {string} userProfileData.address - Dirección.
+   * @param {string} userProfileData.personalEmail - Correo personal.
+   * @param {boolean} userProfileData.isActive - Estado del perfil.
+   * @returns {Promise<Object | null>}
    */
   async updateUserProfile({ id, dni, firsName, lastName, phone, phoneAdditional, address, personalEmail, isActive }) {
     return request("patch", `/user-profiles/${id}`, { dni, firsName, lastName, phone, phoneAdditional, address, personalEmail, isActive });
@@ -57,9 +56,8 @@ const UserProfilesServices = {
 
   /**
    * Elimina un perfil de usuario por su ID.
-   * @param {number} id - ID del perfil de usuario a eliminar.
+   * @param {string} id - ID del perfil.
    * @returns {Promise<boolean>}
-   * @throws {Error} Si el ID no es válido.
    */
   async deleteUserProfile(id) {
     if (!id) throw new Error("ID inválido");
@@ -68,15 +66,13 @@ const UserProfilesServices = {
 
   /**
    * Desactiva un perfil de usuario por su ID.
-   * @param {number} id - ID del perfil de usuario a desactivar.
+   * @param {string} id - ID del perfil.
    * @returns {Promise<boolean>}
-   * @throws {Error} Si el ID no es válido.
    */
-  async desactivateUserProfile(id) {
+  async deactivateUserProfile(id) {
     if (!id) throw new Error("ID inválido");
     return request("patch", `/user-profiles/${id}/deactivate`);
   }
-
 };
 
 export default UserProfilesServices;
