@@ -107,17 +107,18 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
             idDocente={idDocente}
             setDisponibilidadDocentes={handleDisponibilidadChange}
             modoEdicion={modoEdicionDisponibilidad}
-          />              
+          />           
 
-        
           <Button onClick={() => setModoEdicionDisponibilidad(!modoEdicionDisponibilidad)}>
             {modoEdicionDisponibilidad ? "Finalizar edición" : "Modificar disponibilidad"}
           </Button>
 
-          <TablaAsignar
-            disponibilidad={disponibilidadDocentes[idDocente] || []}
-            listaSalones={listaSalones}
-          />
+          <TablaAsignar            
+            isLoading={false}
+            isError={false}
+            error={false}
+          />     
+                    
 
           <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
         

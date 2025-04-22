@@ -6,8 +6,7 @@ import { Tabla } from "@/components/ui/Tabla";
 const encabezado = ["Nº", "Aula Disponible", "Área", "Turno", "Acciones"];
 
 export const TablaAsignar = ({
-  docentes = [],
-  isLoading = false,
+   isLoading = false,
   isError = false,
   error = {},
 }) => {
