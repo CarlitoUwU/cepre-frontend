@@ -71,6 +71,25 @@ export const SupervisorsServices = {
     return request("get", url);
   },
 
+  /**
+   * Asigna un monitor a un supervisor.
+   * @param {string} idSupervisor
+   * @param {string} idMonitor
+   * @returns {Promise<JSON{mensaje: El monitor fue asignado correctamente}>}
+   */
+  async asignarMonitor(idSupervisor, idMonitor) {
+    return request("patch", 'supervisors/assignMonitor', { idSupervisor, idMonitor });
+  },
+
+  /**
+   * Desasigna un monitor de un supervisor.
+   * @param {string} idMonitor
+   * @returns {Promise<JSON{mensaje: El monitor fue desasignado correctamente}>}
+   */
+  async quitarMonitor(idMonitor) {
+    return request("patch", 'supervisors/assignMonitor', { idMonitor });
+  },
+
   async supervisorJson(archivo) {
     const formData = new FormData();
     formData.append("archivo", archivo);
