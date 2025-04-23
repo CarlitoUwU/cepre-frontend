@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "@/components/ui/Button";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { Tabla } from "@/components/ui/Tabla";
+import { useAreas} from "@/hooks/useAreas";
 
 const encabezado = ["Nº", "Aula Disponible", "Área", "Turno", "Acciones"];
 
@@ -9,9 +10,14 @@ export const TablaAsignar = ({
   isLoading = false,
   isError = false,
   error = {},
-  salones = [], // ✅ añadimos la prop
+  salones = [], 
 }) => {
-  if (isLoading) return <SkeletonTabla numRows={5} numColums={4} />;
+  console.log("Salones Recibidos:", salones);
+
+const { areas, isLoading: loadingAreas } = useAreas();
+console.log("Áreas:", areas);
+
+    if (isLoading) return <SkeletonTabla numRows={5} numColums={4} />;
 
   if (isError) {
     return (
@@ -23,9 +29,9 @@ export const TablaAsignar = ({
 
   const datos = salones.map((salon, index) => [
     index + 1, // Nº
-    salon.nombre || "Sin nombre", // Aula Disponible
-    salon.area || "Sin área", // Área
-    salon.turno || "Sin turno", // Turno
+    salon.name || "Sin nombre", // Aula Disponible
+    areas.find((a) => {return a.id == salon.areaId}).name || "Sin área", // Área
+    salon.shift.name || "Sin turno", // Turno
     <Button key={salon.id} onClick={() => console.log("Asignar", salon)}>
       Asignar
     </Button>, // Acciones

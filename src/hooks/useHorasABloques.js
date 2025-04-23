@@ -6,7 +6,7 @@ import HourSessionsServices from "@/services/HourSessionsServices";
  * @returns {{
  *   loading: boolean,
  *   error: Error | null,
- *   mapearABloques: (disponibilidad?: Array<{hora_ini?: string, hora_fin?: string, dia?: string}>) => Array<{id_hour_session: number, weekday: string}>,
+ *   mapearABloques: (disponibilidad?: Array<any>) => Array<{id_hour_session: number, weekday: string}>,
  *   isReady: boolean
  * }}
  */
@@ -16,52 +16,47 @@ export const useHorasABloques = () => {
   const [error, setError] = useState(null);
   const [isReady, setIsReady] = useState(false);
 
-  /**
-   * Formatea una hora al formato HH:MM:SS
-   * @param {string | undefined | null} hora - Hora en formato HH:MM o HH:MM:SS
-   * @returns {string | null} Hora formateada o null si no es válida
-   */
   const formatHora = useCallback((hora) => {
     if (!hora || typeof hora !== "string") return null;
-
-    const trimmedHora = hora.trim();
-
-    if (!/^\d{1,2}:\d{2}(:\d{2})?$/.test(trimmedHora)) return null;
-
-    return trimmedHora.length === 5 ? `${trimmedHora}:00` : trimmedHora;
+    const trimmed = hora.trim();
+    if (!/^\d{1,2}:\d{2}(:\d{2})?$/.test(trimmed)) return null;
+    return trimmed.length === 5 ? `${trimmed}:00` : trimmed;
   }, []);
 
-  /**
-   * Normaliza hora a HH:MM:SS exacto para comparación
-   * @param {string} hora 
-   * @returns {string}
-   */
-  const normalizarHora = (hora) => {
-    if (!hora) return "";
-    return hora.trim().padEnd(8, ":00").substring(0, 8);
+  const normalizarHora = (horaCompleta) => {
+    if (!horaCompleta || typeof horaCompleta !== "string") return "";
+    const match = horaCompleta.match(/T?(\d{2}:\d{2}:\d{2})/);
+    return match ? match[1] : "";
   };
 
-  /**
-   * Transforma disponibilidad horaria en bloques de sesión
-   * @param {Array<{hora_ini?: string, hora_fin?: string, dia?: string}>} [disponibilidad=[]]
-   * @returns {Array<{id_hour_session: number, weekday: string}>}
-   */
+  const capitalizar = (str) => {
+    const strSinTildes = str.normalize('NFD').replace(/[\u0300-\u036f]/g, ''); // Elimina tildes
+    return strSinTildes.charAt(0).toUpperCase() + strSinTildes.slice(1).toLowerCase();
+  };
+
   const mapearABloques = useCallback(
     (disponibilidad = []) => {
       if (!Array.isArray(disponibilidad) || !isReady) return [];
 
       return disponibilidad
         .map((item) => {
-          if (!item || typeof item !== "object") return null;
+          // Ya viene en formato correcto (por ejemplo desde localStorage)
+          if (item.id_hour_session && item.weekday && !item.hora_ini && !item.hora_fin) {
+            const valid = hourSessions.some(h => h.id === Number(item.id_hour_session));
+            if (!valid) return null;
 
-          const { hora_ini, hora_fin, dia } = item;
+            return {
+              id_hour_session: Number(item.id_hour_session),
+              weekday: capitalizar(item.weekday),
+            };
+          }
 
-          if (!hora_ini || !hora_fin || !dia) return null;
+          const { dia, hora_ini, hora_fin } = item;
+
+          if (!dia || !hora_ini || !hora_fin) return null;
 
           const formattedHoraIni = formatHora(hora_ini);
           const formattedHoraFin = formatHora(hora_fin);
-
-          if (!formattedHoraIni || !formattedHoraFin) return null;
 
           const match = hourSessions.find(
             (sesion) =>
@@ -70,14 +65,13 @@ export const useHorasABloques = () => {
           );
 
           if (!match) {
-            console.warn("No se encontró bloque para:", formattedHoraIni, formattedHoraFin, dia);
-            console.log("Sesiones disponibles:", hourSessions.map(s => `${s.startTime} - ${s.endTime}`));
+            console.warn("No se encontro bloque para:", formattedHoraIni, formattedHoraFin, dia);
             return null;
           }
 
           return {
             id_hour_session: match.id,
-            weekday: dia,
+            weekday: capitalizar(dia),
           };
         })
         .filter(Boolean);
@@ -92,7 +86,7 @@ export const useHorasABloques = () => {
       try {
         const data = await HourSessionsServices.getHourSessions();
         if (isMounted) {
-          console.log("Sesiones horarias cargadas:", data); // Log para depuración
+          console.log("Sesiones horarias cargadas:", data);
           setHourSessions(data);
           setIsReady(true);
         }
