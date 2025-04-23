@@ -64,6 +64,17 @@ export const SchedulesService = {
   },
 
   /**
+   * Asigna un horario a un profesor y una clase.
+   * @param {Object} params - Parámetros para la asignación.
+   * @param {string} params.teacherId - ID del profesor.
+   * @param {string} params.classId - ID de la clase.
+   */
+  async asignarSchedulesByTeacherClass({ teacherId, classId}) {
+    if (!teacherId || !classId) throw new Error("Faltan datos");
+    return request("patch", "/schedules/asignar/profesor", {classroomIds: [classId], teacherId});
+  },
+
+  /**
    * Carga horarios con cursos
    */
   async loadWithCourses() {
