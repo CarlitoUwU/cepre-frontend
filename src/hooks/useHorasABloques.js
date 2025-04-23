@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import HourSessionsServices from "@/services/HourSessionsServices";
+import { HourSessionsServices } from "@/services/HourSessionsServices";
 
 /**
  * Hook para transformar horas de disponibilidad en bloques horarios

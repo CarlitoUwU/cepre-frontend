@@ -1,6 +1,6 @@
 import { request } from "./api";
 
-const HourSessionsServices = {
+export const HourSessionsServices = {
   /**
    * Obtiene todas las sesiones de hora.
    * @returns {Promise<Array<{ id: number, shiftId: number, period: number, startTime: time, endTime: time }>> | null}
@@ -51,5 +51,3 @@ const HourSessionsServices = {
     request("delete", `/hour-sessions/${id}`);
   },
 };
-
-export default HourSessionsServices;
