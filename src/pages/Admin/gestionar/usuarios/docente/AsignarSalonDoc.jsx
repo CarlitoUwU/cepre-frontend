@@ -1,134 +1,120 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { Button } from "@/components/ui/Button"; // Asegúrate de tener este botón base
+import { Button } from "@/components/ui/Button";
+import { TablaAsignar } from "./TablaAsignar";
 import { TurnosSelector } from "@/components/Horarios/TurnosSelector.jsx";
 import { TeachersServices } from "@/services/TeachersServices.js";
+import { SchedulesService } from "@/services/schedulesServices.js";
+import { useHorasABloques } from "@/hooks/useHorasABloques";
 
 export const AsignarSalonDoc = ({ idDocente, regresar }) => {
-  console.log({idDocente})
   const [docente, setDocente] = useState({});
-  const nombreDocente = docente ? docente.docente : "Desconocido";
+  const [disponibilidad, setDisponibilidad] = useState([]);
+  const [salonesDisponibles, setSalonesDisponibles] = useState([]);
+  const [modoEdicion, setModoEdicion] = useState(false);
+  const [loadingSalones, setLoadingSalones] = useState(false);
+  const [errorSalones, setErrorSalones] = useState(null);
 
-  const listaSalones = [
-    /* {
-      id: "salon-102",
-      nombre: "Salón 102",
-      horas: [
-        { dia: "LUNES", hora_ini: "07:45", hora_fin: "08:25" }, // ✅ dentro del rango
-      ],
-    },
-    {
-      id: "salon-103",
-      nombre: "Salón 103",
-      horas: [
-        { dia: "LUNES", hora_ini: "08:30", hora_fin: "09:10" }, // ✅ dentro del rango
-      ],
-    } */
-  ];
+  const { mapearABloques, loading: loadingBloques, isReady } = useHorasABloques();
 
-  const [disponibilidadDocentes, setDisponibilidadDocentes] = useState({});
-  const [modoEdicionDisponibilidad, setModoEdicionDisponibilidad] = useState(false);
-
-  const objApi = {
-    id_course: docente?.courseId,
-    disponibilidad: disponibilidadDocentes[idDocente],
-  }
-
-  console.log({objApi})
-
+  // Carga inicial del docente y disponibilidad desde localStorage
   useEffect(() => {
-    const fetchData = async () => {
-      const data = localStorage.getItem(`disponibilidad-${idDocente}`);
-  
+    const cargarData = async () => {
       try {
-        const dataDocente = await TeachersServices.getTeacherById(idDocente);
-        console.log({ dataDocente });
-        setDocente(dataDocente);
-  
-        const parsed = JSON.parse(data);
-        if (parsed && typeof parsed === "object") {
-          setDisponibilidadDocentes((prev) => ({
-            ...prev,
-            [idDocente]: parsed,
-          }));
-        }
-      } catch (e) {
-        console.warn(`Error al parsear disponibilidad de ${idDocente}`, e);
+        const docenteData = await TeachersServices.getTeacherById(idDocente);
+        setDocente(docenteData);
+
+        const data = localStorage.getItem(`disponibilidad-${idDocente}`);
+        const parsed = data ? JSON.parse(data) : [];
+
+        setDisponibilidad(Array.isArray(parsed) ? parsed : []);
+      } catch (error) {
+        console.warn("Error cargando datos iniciales", error);
         localStorage.removeItem(`disponibilidad-${idDocente}`);
       }
     };
-  
-    fetchData();
+
+    if (idDocente) cargarData();
   }, [idDocente]);
 
-  const handleDisponibilidadChange = (nuevaDisponibilidad) => {
-    setDisponibilidadDocentes((prev) => {
-      const updatedDisponibilidad = {
-        ...prev,
-        [idDocente]: nuevaDisponibilidad,
+  // Carga salones cuando esté lista la disponibilidad y bloques
+  // Carga salones cuando esté lista la disponibilidad y bloques
+  useEffect(() => {
+    const cargarSalones = async () => {
+      if (!idDocente || !docente?.courseId || !isReady || disponibilidad.length === 0) return;
+  
+      const bloques = mapearABloques(disponibilidad);
+  
+      console.log("Bloques a enviar a la API:", bloques); // Verificar bloques
+  
+      if (!bloques || bloques.length === 0) {
+        console.warn("No se pudo mapear disponibilidad a bloques.");
+        return;
+      }
+  
+      const objApi = {
+        idCurso: docente.courseId,  // Asegúrate de que esto esté incluido
+        horario: bloques,  // Los bloques generados
+        page: 1,
+        pageSize: 10,
       };
+  
+      console.log("Objeto enviado a la API:", objApi); // Verificar el objeto
+  
+      setLoadingSalones(true);
+      setErrorSalones(null);
+  
+      try {
+        const response = await SchedulesService.getClasesDisponibles(objApi);
+        console.log("Respuesta de la API:", response); // Verificar respuesta
+        setSalonesDisponibles(response || []);
+        
+      } catch (error) {
+        setErrorSalones(error);
+        console.error("Error al obtener salones:", error);
+      } finally {
+        setLoadingSalones(false);
+      }
+    };
+  
+    cargarSalones();
+  }, [idDocente, docente?.courseId, disponibilidad, isReady]);
 
-      localStorage.setItem(
-        `disponibilidad-${idDocente}`,
-        JSON.stringify(nuevaDisponibilidad)
-      );
+  console.log("Salones Disponibles:", salonesDisponibles); // Verificar salones disponibles
+  
 
-      return updatedDisponibilidad;
-    });
-  };
-
-  const horaEnRango = (hora_ini_salon, hora_fin_salon, hora_ini_disp, hora_fin_disp) => {
-    return hora_ini_salon >= hora_ini_disp && hora_fin_salon <= hora_fin_disp;
-  };
-
-  const disponibilidad = disponibilidadDocentes[idDocente] || [];
-
-  const salonesDisponibles = listaSalones.filter((salon) =>
-  salon.horas.some(({ dia, hora_ini: hs_ini, hora_fin: hs_fin }) =>
-    disponibilidad.some(
-      ({ dia: dia_disp, hora_ini: hd_ini, hora_fin: hd_fin }) =>
-        dia === dia_disp && horaEnRango(hs_ini, hs_fin, hd_ini, hd_fin)
-    )
-  )
-);
-
+  // Cuando se edita disponibilidad
+  const handleDisponibilidadChange = useCallback((nuevaDisponibilidad) => {
+    setDisponibilidad(nuevaDisponibilidad);
+    localStorage.setItem(`disponibilidad-${idDocente}`, JSON.stringify(nuevaDisponibilidad));
+  }, [idDocente]);
 
   return (
     <div className="overflow-x-auto w-full text-center p-2">
       <div className="flex flex-col items-center space-y-6">
         <h2 className="text-2xl font-bold">
-          Asignación de Salones Docente - {nombreDocente}
+          Asignación de Salones Docente - {docente?.firstName} {docente?.lastName} ({docente?.phone})
         </h2>
 
-        <div className="flex w-full justify-center items-start gap-4">
-          <TurnosSelector
-            listaSalones={listaSalones}
-            disponibilidad={disponibilidadDocentes[idDocente] || []}
-            idDocente={idDocente}
-            setDisponibilidadDocentes={handleDisponibilidadChange}
-            modoEdicion={modoEdicionDisponibilidad}
-          />
+        <TurnosSelector
+          disponibilidad={disponibilidad}
+          idDocente={idDocente}
+          setDisponibilidadDocentes={handleDisponibilidadChange}
+          modoEdicion={modoEdicion}
+        />
 
-        <div className="flex flex-col items-start pt-2">
-          <label htmlFor="select-salon" className="mb-1 font-medium">Salones disponibles:</label>
-          <select id="select-salon" className="border rounded px-3 py-1 w-48">
-            <option value="">Selecciona un salón</option>
-            {salonesDisponibles.map((salon) => (
-              <option key={salon.id} value={salon.id}>
-                {salon.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
-        </div>
+        <Button onClick={() => setModoEdicion(!modoEdicion)}>
+          {modoEdicion ? "Finalizar edición" : "Modificar disponibilidad"}
+        </Button>
 
-        <div className="flex gap-4">
-          <Button onClick={() => setModoEdicionDisponibilidad(!modoEdicionDisponibilidad)}>
-            {modoEdicionDisponibilidad ? "Finalizar edición" : "Modificar disponibilidad"}
-          </Button>
+        <TablaAsignar
+          salones={salonesDisponibles}
+          isLoading={loadingSalones}
+          isError={!!errorSalones}
+          error={errorSalones}
+        />
 
-          <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
-        </div>
+        <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { HORAS_INI, HORAS_FIN } from "@/constants/horas";
-import { DIAS } from "@/constants/dias"
+import { DIAS_ADM } from "@/constants/dias";
 import { Horarios } from "./Horarios.jsx";
 
 export const TurnosSelector = ({
@@ -24,7 +24,7 @@ export const TurnosSelector = ({
   };
 
   const handleCeldaClick = (nuevaCelda) => {
-    console.log({nuevaCelda, disponibilidad})
+    console.log({nuevaCelda, disponibilidad});
     const yaMarcada = disponibilidad.some(
       (d) =>
         d.dia === nuevaCelda.dia &&
@@ -54,7 +54,7 @@ export const TurnosSelector = ({
       hora_fin: HORAS_FIN[i],
       idDocente,
     }));
-  
+
     // Verificar si todas las celdas del día ya están marcadas
     const todasMarcadas = celdasDelDia.every((celda) =>
       disponibilidad.some(
@@ -64,7 +64,7 @@ export const TurnosSelector = ({
           d.hora_fin === celda.hora_fin
       )
     );
-  
+
     // Nueva disponibilidad dependiendo de si estaban todas o no
     const nuevaDisponibilidad = todasMarcadas
       ? disponibilidad.filter(
@@ -78,20 +78,20 @@ export const TurnosSelector = ({
               d.hora_fin === celda.hora_fin
           )
         )];
-  
+
     setDisponibilidadDocentes(nuevaDisponibilidad);
     console.log("Click en día:", dia);
   };
 
   const handleClickHora = (hora_ini, hora_fin) => {
     // Generar todas las celdas de esa hora para todos los días
-    const celdasDeLaHora = DIAS.map((dia) => ({
+    const celdasDeLaHora = DIAS_ADM.map((dia) => ({
       dia,
       hora_ini,
       hora_fin,
       idDocente,
     }));
-  
+
     // Verificar si todas las celdas ya están marcadas
     const todasMarcadas = celdasDeLaHora.every((celda) =>
       disponibilidad.some(
@@ -101,7 +101,7 @@ export const TurnosSelector = ({
           d.hora_fin === celda.hora_fin
       )
     );
-  
+
     // Nueva disponibilidad dependiendo de si estaban todas o no
     const nuevaDisponibilidad = todasMarcadas
       ? disponibilidad.filter(
@@ -119,7 +119,7 @@ export const TurnosSelector = ({
               )
           ),
         ];
-  
+
     setDisponibilidadDocentes(nuevaDisponibilidad);
     console.log("Click en hora:", hora_ini, hora_fin);
   };
@@ -157,5 +157,3 @@ export const TurnosSelector = ({
     </div>
   );
 };
-
-
