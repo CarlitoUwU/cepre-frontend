@@ -87,6 +87,11 @@ export const TeachersServices = {
     return request("patch", `/teachers/${id}/deactivate`);
   },
 
+  async getHorario(id) {
+    if (!id) throw new Error("ID inválido");
+    return request("get", `/teachers/${id}/schedules`);
+  },
+
   /**
    * Crea múltiples teachers desde archivo JSON.
    * @param {File} archivo - Archivo JSON.

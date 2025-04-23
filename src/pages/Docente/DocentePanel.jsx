@@ -53,7 +53,7 @@ export const DocentePanel = () => {
   }, []);
 
   return (
-    <div className="p-5">
+    <div className="p-0 md:p-5">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
         {/* Horario General */}
         <div className="col-span-1 md:col-span-2 bg-gray-100 p-4 rounded-lg shadow-md">
