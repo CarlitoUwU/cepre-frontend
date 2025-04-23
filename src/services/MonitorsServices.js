@@ -32,7 +32,6 @@ export const MonitorsServices = {
   async updateMonitor({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
     return request("put", `/monitors/${userId}`, { firstName, lastName, personalEmail, phone });
-
   },
 
   /**
@@ -72,6 +71,17 @@ export const MonitorsServices = {
    */
   async getInformacion() {
     return request("get", "/monitors/information");
+  },
+
+  /**
+   * Obtiene un listado de monitores filtrados por asignación a un supervisor.
+   * @param {boolean} hasSupervisor - Si es true, filtra por monitores asignados a un supervisor.
+   * @param {number} page - Número de página para paginación.
+   * @param {number} limit - Número de resultados por página.
+   * @returns {Promise<Array<Object>>}
+   */
+  async getMonitoresFiltroAsignados(hasSupervisor = false, page = 1, limit = 200) {
+    return request("get", `/monitors/filtered?has_supervisor=${hasSupervisor}&page=${page}&limit=${limit}`);
   },
 
   /**
