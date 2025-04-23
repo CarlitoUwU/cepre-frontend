@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const Curso = ({ clase = null, backgroundColor, gridColumn, gridRow, gridSpan, nombre, setClaseSeleccionada = null }) => {
+export const Curso = ({ clase = null, backgroundColor, gridColumn, gridRow, gridSpan, nombre, setClaseSeleccionada = null, style = {} }) => {
   const handleClick = () => {
     setClaseSeleccionada(clase);
   };
@@ -24,7 +24,7 @@ export const Curso = ({ clase = null, backgroundColor, gridColumn, gridRow, grid
       {... (isClickable ? { onClick: handleClick } : {})}
     >
       <div className="curso-nombre">
-        <h3 style={{ color: "white", fontWeight: "bold" }}>{nombre}</h3>
+        <h3 style={{ color: "white", fontWeight: "bold" , ...style}}>{nombre}</h3>
       </div>
     </div >
 
