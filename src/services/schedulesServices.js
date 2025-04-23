@@ -1,6 +1,6 @@
 import { request } from "./api";
 
-const ScheduleService = {
+export const SchedulesService = {
 
   /**
    * Obtiene la lista de horarios.
@@ -68,8 +68,11 @@ const ScheduleService = {
    */
   async loadWithCourses() {
     return request("post", "/schedules/load-with-courses");
+  },
+
+  async getClasesDisponibles({ idCurso, horario, page = 1, pageSize = 10 }) {
+    const horarioParam = encodeURIComponent(JSON.stringify(horario));
+    return request("get", '/schedules/salones/disponibles?course_id=' + idCurso + '&horario=' + horarioParam + '&page=' + page + '&pageSize=' + pageSize)
   }
 
 };
-
-export default ScheduleService;
