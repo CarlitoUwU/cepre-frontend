@@ -13,26 +13,19 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
   const [viewMode, setViewMode] = useState('week');
   const [selectedDay, setSelectedDay] = useState(null);
   
-  // Obtener y ajustar el día actual
   const currentDayIndex = new Date().getDay();
   const adjustedDayIndex = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
   const currentDay = DIAS[adjustedDayIndex];
   
-  // Efecto para inicializar el día seleccionado
   useEffect(() => {
     setSelectedDay(currentDay);
   }, [currentDay]);
 
-  // Determinar días a mostrar
   const diasToShow = viewMode === 'day' ? [selectedDay] : DIAS;
   const diasHeader = isMobile ? diasToShow.map(dia => dia.charAt(0)) : diasToShow;
 
-  // Función para agrupar cursos
   const agruparCursosConsecutivos = (horas) => {
-    const filteredHours = viewMode === 'day' 
-      ? horas.filter(hora => hora.dia === selectedDay)
-      : horas;
-
+    const filteredHours = viewMode === 'day' ? horas.filter(hora => hora.dia === selectedDay) : horas;
     const horasOrdenadas = [...filteredHours].sort((a, b) => {
       if (a.dia !== b.dia) return DIAS.indexOf(a.dia) - DIAS.indexOf(b.dia);
       return HORAS_INI.indexOf(a.hora_ini) - HORAS_INI.indexOf(b.hora_ini);
@@ -67,11 +60,9 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
 
   const horasAgrupadas = agruparCursosConsecutivos(horas);
 
-  // Calcular rango de horas
   const horaMinima = horas.length ? Math.min(...horas.map(h => HORAS_INI.indexOf(h.hora_ini))) : 0;
   const horaMaxima = horas.length ? Math.max(...horas.map(h => HORAS_FIN.indexOf(h.hora_fin))) : HORAS_FIN.length - 1;
 
-  // Funciones auxiliares para vista semana
   const getRow = (horaIni) => HORAS_INI.indexOf(horaIni) - horaMinima + 2;
   const getRowSpan = (horaIni, horaFin) => HORAS_FIN.indexOf(horaFin) - HORAS_INI.indexOf(horaIni) + 1;
   const getColumn = (dia) => diasToShow.indexOf(dia) + 2;
@@ -86,11 +77,9 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
   };
 
   const handleDayClick = (dia) => {
+    setSelectedDay(dia);
     if (viewMode === 'week') {
       setViewMode('day');
-      setSelectedDay(dia);
-    } else {
-      setSelectedDay(dia);
     }
   };
 
@@ -98,44 +87,33 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
     setViewMode(prev => prev === 'week' ? 'day' : 'week');
   };
 
-  // Función para manejar el ancho en modo día
   const getGridTemplateColumns = () => {
-    if (viewMode === 'day') {
-      return '132px 1fr';
-    }
+    if (viewMode === 'day') return '132px 1fr';
     return `132px repeat(${diasToShow.length}, minmax(0, 1fr))`;
   };
 
   const rowHeight = isMobile ? '4rem' : '2.5rem';
 
-  // Renderizar vista de día
   const renderDayView = () => {
     const horasDelDia = horasAgrupadas.filter(h => h.dia === selectedDay);
     const horasOrdenadas = [...horasDelDia].sort((a, b) =>
       HORAS_INI.indexOf(a.hora_ini) - HORAS_INI.indexOf(b.hora_ini)
     );
-  
+
     return (
       <div className="w-full max-w-6xl mx-auto px-2 sm:px-4">
         <h2 className="text-2xl font-bold text-center mb-6 text-[#78211E]">
           Horario - {selectedDay}
         </h2>
   
-        <div className="space-y-2.5"> {/* Menos espacio entre bloques */}
+        <div className="space-y-2.5">
           {horasOrdenadas.map((hora, index) => {
             const esRecreo = hora.curso.toUpperCase().includes("RECREO");
             const color = esRecreo ? '#FACC15' : getColor(hora.curso);
   
             return (
               <div key={index} className="flex gap-3 items-stretch">
-                {/* Caja de hora (más alta) */}
-                <div
-                  className={`flex-shrink-0 flex items-center justify-center rounded-md bg-gray-100 font-semibold text-gray-700 ${
-                    isMobile
-                      ? 'min-w-[65px] h-20 sm:h-16 flex-col text-sm leading-tight'
-                      : 'min-w-[130px] h-16 text-base px-2'
-                  }`}
-                >
+                <div className={`flex-shrink-0 flex items-center justify-center rounded-md bg-gray-100 font-semibold text-gray-700 ${isMobile ? 'min-w-[65px] h-20 sm:h-16 flex-col text-sm leading-tight' : 'min-w-[130px] h-16 text-base px-2'}`}>
                   {isMobile ? (
                     <>
                       <span>{hora.hora_ini}</span>
@@ -146,21 +124,8 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
                     <span>{hora.hora_ini} - {hora.hora_fin}</span>
                   )}
                 </div>
-  
-                {/* Rectángulo del curso (más alto) */}
-                <div
-                  className="flex-1 flex rounded-lg overflow-hidden bg-white shadow border border-gray-200 h-20 sm:h-16"
-                >
-                  {/* Franja de color */}
-                  <div
-                    className="w-3 sm:w-4"
-                    style={{
-                      backgroundColor: color,
-                      flexShrink: 0
-                    }}
-                  />
-  
-                  {/* Contenido del curso */}
+                <div className="flex-1 flex rounded-lg overflow-hidden bg-white shadow border border-gray-200 h-20 sm:h-16">
+                  <div className="w-3 sm:w-4" style={{ backgroundColor: color, flexShrink: 0 }} />
                   <div className="flex-1 px-4 py-2 flex flex-col justify-center">
                     <span className="text-base sm:text-lg font-bold text-gray-800 leading-5 truncate">
                       {hora.curso}
@@ -178,44 +143,26 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
         </div>
       </div>
     );
-  };  
+  };
 
   return (
     <div className="bg-white shadow-md rounded-lg p-4 lg:p-6">
-      {/* Controles de vista */}
       <div className="flex flex-col mb-6 space-y-4">
         <div className="flex justify-center">
-          <button
-            onClick={() => setViewMode('week')}
-            className={`px-4 py-2 rounded-l-lg ${
-              viewMode === 'week' ? 'bg-[#78211E] text-white' : 'bg-gray-200 hover:bg-gray-300'
-            } transition-colors font-medium`}
-          >
+          <button onClick={() => setViewMode('week')} className={`px-4 py-2 rounded-l-lg ${viewMode === 'week' ? 'bg-[#78211E] text-white' : 'bg-gray-200 hover:bg-gray-300'} transition-colors font-medium`}>
             Vista Semanal
           </button>
-          <button
-            onClick={() => setViewMode('day')}
-            className={`px-4 py-2 rounded-r-lg ${
-              viewMode === 'day' ? 'bg-[#78211E] text-white' : 'bg-gray-200 hover:bg-gray-300'
-            } transition-colors font-medium`}
-          >
+          <button onClick={() => setViewMode('day')} className={`px-4 py-2 rounded-r-lg ${viewMode === 'day' ? 'bg-[#78211E] text-white' : 'bg-gray-200 hover:bg-gray-300'} transition-colors font-medium`}>
             Vista Diaria
           </button>
         </div>
-
         {viewMode === 'day' && (
           <div className="flex justify-center overflow-x-auto py-2 space-x-2">
             {DIAS.map((dia) => (
               <button
                 key={dia}
                 onClick={() => handleDayClick(dia)}
-                className={`px-4 py-2 rounded-lg min-w-[3rem] ${
-                  dia === selectedDay 
-                    ? 'bg-[#78211E] text-white' 
-                    : 'bg-gray-100 hover:bg-gray-200'
-                } transition-colors ${
-                  dia === currentDay ? 'font-bold ring-2 ring-[#78211E]' : ''
-                }`}
+                className={`px-4 py-2 rounded-lg min-w-[3rem] ${dia === selectedDay ? 'bg-[#78211E] text-white' : 'bg-gray-100 hover:bg-gray-200'} transition-colors ${dia === currentDay ? 'font-bold ring-2 ring-[#78211E]' : ''}`}
               >
                 {isMobile ? dia.charAt(0) : dia.substring(0, 3)}
               </button>
@@ -223,59 +170,20 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
           </div>
         )}
       </div>
-
-      {/* Contenido del horario */}
-      {viewMode === 'day' ? (
-        renderDayView()
-      ) : (
-        <div 
-          className="grid gap-1"
-          style={{
-            gridTemplateColumns: getGridTemplateColumns(),
-            gridAutoRows: rowHeight,
-          }}
-        >
-          {/* Celda vacía para esquina */}
+      {viewMode === 'day' ? renderDayView() : (
+        <div className="grid gap-1" style={{ gridTemplateColumns: getGridTemplateColumns(), gridAutoRows: rowHeight }}>
           <div className="rounded-lg bg-gray-100"></div>
-          
-          {/* Encabezados de días */}
           {diasHeader.map((dia, index) => (
-            <Dia 
-              key={index} 
-              nombre={dia} 
-              isCurrent={DIAS[index] === currentDay}
-              onClick={() => handleDayClick(DIAS[index])}
-              clickable={true}
-            />
+            <Dia key={index} nombre={dia} isCurrent={DIAS[index] === currentDay} onClick={() => handleDayClick(DIAS[index])} clickable={true} />
           ))}
-
-          {/* Horas y celdas vacías */}
           {HORAS_INI.slice(horaMinima, horaMaxima + 1).map((hora, index) => (
             <React.Fragment key={index}>
-              <Hora 
-                hora={`${hora} - ${HORAS_FIN[horaMinima + index]}`}
-                style={{ 
-                  minWidth: '132px',
-                  height: rowHeight,
-                }}
-              />
-              
+              <Hora hora={`${hora} - ${HORAS_FIN[horaMinima + index]}`} style={{ minWidth: '132px', height: rowHeight }} />
               {diasToShow.map((_, i) => (
-                <div
-                  key={`empty-${i}-${index}`}
-                  className="rounded-lg"
-                  style={{
-                    backgroundColor: "#f4f0fb",
-                    gridColumn: i + 2,
-                    gridRow: index + 2,
-                    height: rowHeight,
-                  }}
-                />
+                <div key={`empty-${i}-${index}`} className="rounded-lg" style={{ backgroundColor: "#f4f0fb", gridColumn: i + 2, gridRow: index + 2, height: rowHeight }} />
               ))}
             </React.Fragment>
           ))}
-
-          {/* Cursos */}
           {horasAgrupadas.map((hora) => (
             <Curso
               key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
@@ -284,17 +192,7 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
               gridColumn={getColumn(hora.dia)}
               gridRow={getRow(hora.hora_ini)}
               gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
-              style={{ 
-                height: `calc(${getRowSpan(hora.hora_ini, hora.hora_fin)} * ${rowHeight} - 0.25rem)`,
-                fontSize: '0.9rem',
-                padding: '0.3rem',
-                lineHeight: '1.2',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                flexDirection: 'column'
-              }}
+              style={{ height: `calc(${getRowSpan(hora.hora_ini, hora.hora_fin)} * ${rowHeight} - 0.25rem)`, fontSize: '0.9rem', padding: '0.3rem', lineHeight: '1.2', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', flexDirection: 'column' }}
             />
           ))}
         </div>
