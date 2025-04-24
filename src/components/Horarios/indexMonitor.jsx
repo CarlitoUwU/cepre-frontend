@@ -96,6 +96,14 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
     setViewMode(prev => prev === 'week' ? 'day' : 'week');
   };
 
+  // Función para manejar el ancho en modo día
+  const getGridTemplateColumns = () => {
+    if (viewMode === 'day') {
+      return 'minmax(100px, 1fr) minmax(0, 3fr)'; // Horas más anchas (100px mínimo), día ocupa 3 partes
+    }
+    return `minmax(0, 1fr) repeat(${diasToShow.length}, minmax(0, 1fr))`;
+  };
+
   return (
     <div className="bg-white shadow-md rounded-lg p-4">
       {/* Controles de vista */}
@@ -144,33 +152,65 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
       <div 
         className="grid gap-1"
         style={{
-          gridTemplateColumns: `repeat(${diasToShow.length + 1}, minmax(0, 1fr))`,
+          gridTemplateColumns: getGridTemplateColumns(),
         }}
       >
-        {/* Celda vacía para esquina superior izquierda */}
-        <div></div>
-
-        {/* Encabezados de días */}
-        {diasHeader.map((dia, index) => (
-          <Dia 
-            key={index} 
-            nombre={dia} 
-            isCurrent={DIAS[index] === currentDay && viewMode === 'week'}
-            onClick={() => handleDayClick(DIAS[index])}
-            clickable={true}
-          />
-        ))}
+        {/* En modo día: Horas primero */}
+        {viewMode === 'day' ? (
+          <>
+            {/* Encabezado de horas (celda vacía) */}
+            <div className="rounded-lg bg-gray-100"></div>
+            
+            {/* Encabezado del día */}
+            <Dia 
+              nombre={selectedDay} 
+              isCurrent={selectedDay === currentDay}
+              className="text-center font-medium"
+            />
+          </>
+        ) : (
+          <>
+            {/* En modo semana: Celda vacía para esquina */}
+            <div className="rounded-lg bg-gray-100"></div>
+            
+            {/* Encabezados de días */}
+            {diasHeader.map((dia, index) => (
+              <Dia 
+                key={index} 
+                nombre={dia} 
+                isCurrent={DIAS[index] === currentDay}
+                onClick={() => handleDayClick(DIAS[index])}
+                clickable={true}
+              />
+            ))}
+          </>
+        )}
 
         {/* Horas */}
         {HORAS_INI.slice(horaMinima, horaMaxima + 1).map((hora, index) => (
-          <Hora 
-            key={index} 
-            hora={`${hora} - ${HORAS_FIN[horaMinima + index]}`} 
-          />
+          <React.Fragment key={index}>
+            <Hora 
+              hora={`${hora} - ${HORAS_FIN[horaMinima + index]}`}
+              className={viewMode === 'day' ? 'font-medium' : ''}
+            />
+            
+            {/* Celdas vacías para el día */}
+            {viewMode === 'day' && (
+              <div
+                className="rounded-lg"
+                style={{
+                  backgroundColor: "#f4f0fb",
+                  gridColumn: 2,
+                  gridRow: index + 2,
+                  minHeight: "3rem",
+                }}
+              />
+            )}
+          </React.Fragment>
         ))}
 
-        {/* Celdas vacías */}
-        {diasToShow.flatMap((_, i) =>
+        {/* En modo semana: celdas vacías */}
+        {viewMode === 'week' && diasToShow.flatMap((_, i) =>
           HORAS_INI.slice(horaMinima, horaMaxima + 1).map((_, k) => (
             <div
               key={`${i}-${k}`}
@@ -189,12 +229,18 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
         {horasAgrupadas.map((hora) => (
           <Curso
             key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
-            nombre={acortarNombreCurso(hora.curso)}
+            nombre={viewMode === 'day' ? hora.curso : acortarNombreCurso(hora.curso)}
             backgroundColor={getColor(hora.curso)}
-            gridColumn={getColumn(hora.dia)}
+            gridColumn={viewMode === 'day' ? 2 : getColumn(hora.dia)}
             gridRow={getRow(hora.hora_ini)}
             gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
-            style={{ minHeight: "6rem" }}
+            style={{ 
+              minHeight: "6rem",
+              ...(viewMode === 'day' && { 
+                fontSize: '0.95rem',
+                padding: '0.5rem'
+              })
+            }}
           />
         ))}
       </div>
