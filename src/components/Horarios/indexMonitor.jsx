@@ -13,7 +13,7 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
   const isMobile = useIsMobile(1024);
   const [viewMode, setViewMode] = useState('week');
   const [selectedDay, setSelectedDay] = useState(null);
-  const [docentesPorCurso, setDocentesPorCurso] = useState({}); // Estado nuevo para docentes
+  const [docentesPorCurso, setDocentesPorCurso] = useState({}); 
 
   const currentDayIndex = new Date().getDay();
   const adjustedDayIndex = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
