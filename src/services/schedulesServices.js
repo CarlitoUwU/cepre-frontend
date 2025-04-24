@@ -69,9 +69,10 @@ export const SchedulesService = {
    * @param {string} params.teacherId - ID del profesor.
    * @param {string} params.classId - ID de la clase.
    */
-  async asignarSchedulesByTeacherClass({ teacherId, classId}) {
+
+  async asignarSchedulesByTeacherClass({ teacherId, classId }) {
     if (!teacherId || !classId) throw new Error("Faltan datos");
-    return request("patch", "/schedules/asignar/profesor", {classroomIds: [classId], teacherId});
+    return request("patch", "/schedules/asignar/profesor", { classroomIds: [classId], teacherId: teacherId });
   },
 
   /**

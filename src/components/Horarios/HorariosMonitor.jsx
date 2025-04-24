@@ -107,7 +107,7 @@ export const HorariosMonitor = ({ aula, cursosConDocente, horas = [], turno = ""
               gridColumn={getColumn(hora.dia)}
               gridRow={getRow(hora.hora_ini)}
               gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
-              style={{ "font-size": "0.8rem" }}
+              style={{ "fontSize": "0.8rem" }}
             />
           );
         })}

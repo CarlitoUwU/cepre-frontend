@@ -1,49 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/Button";
+import { useProfesoresDisponibles } from "@/hooks/useListaProfesDisponibles";
+import { useHorasABloques } from "@/hooks/useHorasABloques";
+import { SchedulesService } from "@/services/SchedulesServices";
+import { toast } from "react-toastify";
+import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 
-const encabezado = ["N°", "Docente", "Correo", "Telefono", "Acciones"];
-export const BuscarProfesor = ({ curso, profesor, horario, idSalon }) => {
-  console.log({ profesor, curso })
-  const a = [
-    {
-      id: 1,
-      docente: "Juan Perez",
-      correo: "juan@gmail.com",
-      numero: 923423242
-    },
-    {
-      id: 2,
-      docente: "Maria Lopez",
-      correo: "maria@gmail.com",
-      numero: 936234242
-    },
-    {
-      id: 3,
-      docente: "Pedro Gonzalez",
-      correo: "pedro@gmail.com",
-      numero: 946282342
-    },
-  ]
-  console.log({ curso, horario, idSalon })
-  const [profesoresDisponibles, setProfesoresDisponibles] = useState(a);
+const encabezado = ["N°", "Docente", "Correo", "Teléfono", "Acciones"];
 
-  const handleAsignar = (idProfesor, idSalon) => {
-    console.log("Asignar profesor", idProfesor, "al salón", idSalon);
+export const BuscarProfesor = ({ curso: { id: courseId, name }, profesor, horario, idSalon, setAsignar }) => {
+  const [profesorAsignado, setProfesorAsignado] = useState(profesor);
+  const [wasAssigned, setWasAssigned] = useState(false);
+  const { mapearABloques } = useHorasABloques();
+  const horarioApi = useMemo(() => mapearABloques(horario).map((bloque) => ({
+    hourSessionId: bloque.id_hour_session, weekday: bloque.weekday
+  })), [horario, mapearABloques]);
+  const {
+    data,
+    profesores,
+    isLoading,
+    isError,
+    error,
+    asignarClaseMutation
+  } = useProfesoresDisponibles({
+    courseId,
+    hourSessions: horarioApi
+  });
 
-    // Aqui se agrega el servicio para asignar el profesor al salón
+  useEffect(() => {
+    if (isError) {
+      toast.error("Error al cargar los profesores disponibles");
+      console.error("Error al cargar profesores:", error);
+      return;
+    }
 
-    setProfesoresDisponibles((prev) => prev?.filter((profesor) => profesor.id !== idProfesor));
+    if (!isLoading && data !== undefined && profesores.length === 0 && !wasAssigned) {
+      toast.error("No hay profesores disponibles para este horario");
+    }
+  }, [isLoading, profesores, isError, error, data, wasAssigned]);
+
+
+  const handleAsignar = async (idProfesor, idSalon) => {
+    try {
+      const profesor = profesores.find((prof) => prof.id === idProfesor);
+      const response = await asignarClaseMutation.mutateAsync({
+        teacherId: idProfesor,
+        classId: idSalon
+      });
+      if (response) {
+        setProfesorAsignado(profesor);
+        toast.success("Profesor asignado correctamente");
+        setWasAssigned(true);
+        setAsignar(name);
+      }
+
+    } catch (error) {
+      toast.error("Error al asignar el profesor");
+      console.error("Asignación fallida:", error);
+    }
   }
 
-  const getDatos = () => {
-    return profesoresDisponibles.map((profesor, i) =>
+  const getNombreCompleto = (p) => `${p?.firstName || ''} ${p?.lastName || ''}`.trim();
+
+  const mapProfesoresToTabla = () => {
+    return profesores.map((profesor, i) =>
       [
         i + 1,
-        profesor.docente,
-        profesor.correo,
-        profesor.numero,
-        <Button key={profesor.id} onClick={() => { handleAsignar(profesor.id, idSalon) }}>
+        getNombreCompleto(profesor),
+        profesor?.email || "No disponible",
+        profesor?.phone || "No disponible",
+        <Button onClick={() => { handleAsignar(profesor.id, idSalon) }}>
           Asignar
         </Button>,
       ]
@@ -52,16 +79,18 @@ export const BuscarProfesor = ({ curso, profesor, horario, idSalon }) => {
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-center text-lg font-bold mb-4">Seleccionar Profesor - {curso?.name}</h2>
-        {profesor && (
+        <h2 className="text-center text-lg font-bold mb-4">Seleccionar Profesor - {name}</h2>
+        {profesorAsignado && (
           <div className="text-center mb-4">
             <h3 className="text-lg font-semibold">Profesor Asignado:</h3>
-            <p>{profesor.firstName} {profesor.lastName}</p>
-            <p>{profesor.email}</p>
+            <p>{getNombreCompleto(profesorAsignado)}</p>
+            <p>{profesorAsignado?.email}</p>
           </div>
         )}
       </div>
-      <Tabla encabezado={encabezado} datos={getDatos()} />
+      {isLoading || data === undefined ? (<SkeletonTabla />) :
+        (< Tabla encabezado={encabezado} datos={mapProfesoresToTabla()} />)
+      }
     </div>
   )
 }

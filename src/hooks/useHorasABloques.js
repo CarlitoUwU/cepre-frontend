@@ -86,7 +86,6 @@ export const useHorasABloques = () => {
       try {
         const data = await HourSessionsServices.getHourSessions();
         if (isMounted) {
-          console.log("Sesiones horarias cargadas:", data);
           setHourSessions(data);
           setIsReady(true);
         }

@@ -42,7 +42,7 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
   useEffect(() => {
     const cargarSalones = async () => {
       if (!idDocente || !docente?.courseId || !isReady || disponibilidad.length === 0) return;
-  
+      
       const bloques = mapearABloques(disponibilidad);
   
       console.log("Bloques a enviar a la API:", bloques); // Verificar bloques
