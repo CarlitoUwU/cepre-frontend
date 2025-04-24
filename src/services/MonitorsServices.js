@@ -80,8 +80,8 @@ export const MonitorsServices = {
    * @param {number} limit - Número de resultados por página.
    * @returns {Promise<Array<Object>>}
    */
-  async getMonitoresFiltroAsignados(hasSupervisor = false, page = 1, limit = 200) {
-    return request("get", `/monitors/filtered?has_supervisor=${hasSupervisor}&page=${page}&limit=${limit}`);
+  async getMonitoresFiltroAsignados(shiftId, hasSupervisor = false, page = 1, limit = 200) {
+    return request("get", `/monitors/filtered?shiftId=${shiftId}&has_supervisor=${hasSupervisor}&page=${page}&limit=${limit}`);
   },
 
   /**
