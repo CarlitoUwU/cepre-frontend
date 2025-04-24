@@ -167,7 +167,7 @@ export const SupervisorUsuarios = () => {
     return (
       <AsignarSalonSup
         regresar={handleRegresar}
-        idSupervisor={editingId}
+        supervisor={supervisores.find((supervisor) => supervisor.id === editingId)}
       />
     )
   }
