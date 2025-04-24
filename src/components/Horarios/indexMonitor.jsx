@@ -6,20 +6,39 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import { HORAS_INI, HORAS_FIN } from '@/constants/horas';
 import { DIAS } from "@/constants/dias";
 import { useCursos } from "@/hooks/useCursos";
+import { MonitorsServices } from "@/services/MonitorsServices"; 
 
 export const TablaHorarioMonitor = ({ horas = [] }) => {
   const { cursos } = useCursos();
   const isMobile = useIsMobile(1024);
   const [viewMode, setViewMode] = useState('week');
   const [selectedDay, setSelectedDay] = useState(null);
-  
+  const [docentesPorCurso, setDocentesPorCurso] = useState({}); // Estado nuevo para docentes
+
   const currentDayIndex = new Date().getDay();
   const adjustedDayIndex = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
   const currentDay = DIAS[adjustedDayIndex];
-  
+
   useEffect(() => {
     setSelectedDay(currentDay);
   }, [currentDay]);
+
+  useEffect(() => {
+    fetchProfesoresData();
+  }, []);
+
+  const fetchProfesoresData = async () => {
+    try {
+      const profesores = await MonitorsServices.cargarDocentes();
+      const docentesMap = {};
+      profesores.forEach(profesor => {
+        docentesMap[profesor.courseName.toUpperCase()] = `${profesor.firstName} ${profesor.lastName}`;
+      });
+      setDocentesPorCurso(docentesMap);
+    } catch (error) {
+      console.error("Error fetching profesores data", error);
+    }
+  };
 
   const diasToShow = viewMode === 'day' ? [selectedDay] : DIAS;
   const diasHeader = isMobile ? diasToShow.map(dia => dia.charAt(0)) : diasToShow;
@@ -105,12 +124,12 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
         <h2 className="text-2xl font-bold text-center mb-6 text-[#78211E]">
           Horario - {selectedDay}
         </h2>
-  
+
         <div className="space-y-2.5">
           {horasOrdenadas.map((hora, index) => {
             const esRecreo = hora.curso.toUpperCase().includes("RECREO");
             const color = esRecreo ? '#FACC15' : getColor(hora.curso);
-  
+
             return (
               <div key={index} className="flex gap-3 items-stretch">
                 <div className={`flex-shrink-0 flex items-center justify-center rounded-md bg-gray-100 font-semibold text-gray-700 ${isMobile ? 'min-w-[65px] h-20 sm:h-16 flex-col text-sm leading-tight' : 'min-w-[130px] h-16 text-base px-2'}`}>
@@ -132,7 +151,7 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
                     </span>
                     {!esRecreo && (
                       <span className="text-sm text-gray-500 mt-0.5 border-t border-gray-200 pt-0.5">
-                        Docente: {hora.profesor || 'Por asignar'}
+                        Docente: {docentesPorCurso[hora.curso.toUpperCase()] || 'Por asignar'}
                       </span>
                     )}
                   </div>
@@ -192,7 +211,17 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
               gridColumn={getColumn(hora.dia)}
               gridRow={getRow(hora.hora_ini)}
               gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
-              style={{ height: `calc(${getRowSpan(hora.hora_ini, hora.hora_fin)} * ${rowHeight} - 0.25rem)`, fontSize: '0.9rem', padding: '0.3rem', lineHeight: '1.2', display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', flexDirection: 'column' }}
+              style={{
+                height: `calc(${getRowSpan(hora.hora_ini, hora.hora_fin)} * ${rowHeight} - 0.25rem)`,
+                fontSize: '0.9rem',
+                padding: '0.3rem',
+                lineHeight: '1.2',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                flexDirection: 'column'
+              }}
             />
           ))}
         </div>
