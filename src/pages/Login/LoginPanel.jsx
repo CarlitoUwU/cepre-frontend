@@ -24,7 +24,7 @@ export const LoginPanel = () => {
         }`}
         style={{ 
           backgroundImage: `url(${background})`,
-          backgroundColor: dominantColor,
+          backgroundColor: `linear-gradient(135deg, #3e8e41, #8b5e3c)`,
           filter: 'blur(3px)', // Blur ligero - ajusta este valor según prefieras
           transform: 'scale(1.05)' // Ligero escalado para evitar bordes transparentes
         }}
