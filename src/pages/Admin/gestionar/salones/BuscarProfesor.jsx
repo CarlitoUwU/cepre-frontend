@@ -3,7 +3,6 @@ import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/Button";
 import { useProfesoresDisponibles } from "@/hooks/useListaProfesDisponibles";
 import { useHorasABloques } from "@/hooks/useHorasABloques";
-import { SchedulesService } from "@/services/SchedulesServices";
 import { toast } from "react-toastify";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 
