@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { HORAS_INI, HORAS_FIN } from "@/constants/horas";
-import { DIAS_ADM } from "@/constants/dias";
+import { DIAS } from "@/constants/dias";
 import { Horarios } from "./Horarios.jsx";
 
 export const TurnosSelector = ({
@@ -85,7 +85,7 @@ export const TurnosSelector = ({
 
   const handleClickHora = (hora_ini, hora_fin) => {
     // Generar todas las celdas de esa hora para todos los días
-    const celdasDeLaHora = DIAS_ADM.map((dia) => ({
+    const celdasDeLaHora = DIAS.map((dia) => ({
       dia,
       hora_ini,
       hora_fin,
