@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import ClassesServices from '../services/ClassesServices';  // Asegúrate de que la ruta esté correcta
+import { useEffect, useState, useCallback } from 'react';
+import { ClassesServices } from '@/services/ClassesServices';  
 
 export function useInfoClases(classId) {
   const [schedules, setSchedules] = useState([]);
@@ -7,40 +7,45 @@ export function useInfoClases(classId) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  const fetchInfo = useCallback(async () => {
     if (!classId) return;
 
-    const fetchInfo = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        // Usando los servicios importados para obtener los datos
-        const [scheduleRes, teachersRes] = await Promise.all([
-          ClassesServices.getSchedulesByClassId(classId),
-          ClassesServices.getTeachersByClassId(classId)
-        ]);
+    setLoading(true);
+    setError(null);
+    try {
+      const [scheduleRes, teachersRes] = await Promise.all([
+        ClassesServices.getSchedulesByClassId(classId),
+        ClassesServices.getTeachersByClassId(classId)
+      ]);
 
-        // Ajustar la respuesta de los horarios si es necesario
-        setSchedules(scheduleRes);
-        
-        // Ajustar la respuesta de los docentes si es necesario
-        setTeachers(teachersRes);
+      setSchedules(scheduleRes);
+      setTeachers(teachersRes.filter(docente => docente.firstName !== "no asignado"));
 
-      } catch (err) {
-        console.error('Error al obtener información de la clase:', err);
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
+    } catch (err) {
+      console.error('Error al obtener información de la clase:', err);
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [classId]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchInfo();
     };
 
+    fetchData();
+  }, [fetchInfo]);
+
+  const refetch = useCallback(() => {
     fetchInfo();
-  }, [classId]);
+  }, [fetchInfo]);
 
   return {
     schedules,
     teachers,
     loading,
+    refetch,
     error,
   };
 }

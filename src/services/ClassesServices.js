@@ -1,6 +1,6 @@
 import { request } from "./api";
 
-const ClassesServices = {
+export const ClassesServices = {
   /**
    * Obtiene la lista de clases.
    * @returns {Promise<Array<Object>>}
@@ -57,7 +57,7 @@ const ClassesServices = {
    * @returns {Promise<Array<Object>>}
    */
   async getClassesOfTeacher() {
-    return request("get", "/classes/teacher");
+    return request("get", "/classes/getClassOfTeacher");
   },
 
   /**
@@ -80,5 +80,3 @@ const ClassesServices = {
     return request("get", `/classes/${classId}/teachers`);
   },
 };
-
-export default ClassesServices;

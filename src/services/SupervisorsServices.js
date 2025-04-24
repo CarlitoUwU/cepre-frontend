@@ -67,7 +67,7 @@ export const SupervisorsServices = {
    * @returns {Promise<Array>}
    */
   async getMonitors(userId = null) {
-    const url = userId ? `/supervisors/${userId}` : "/supervisors/getMonitors";
+    const url = userId ? `/supervisors/${userId}/monitors` : "/supervisors/getMonitors";
     return request("get", url);
   },
 

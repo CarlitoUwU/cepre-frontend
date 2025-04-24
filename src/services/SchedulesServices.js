@@ -1,6 +1,6 @@
 import { request } from "./api";
 
-const ScheduleService = {
+export const SchedulesService = {
 
   /**
    * Obtiene la lista de horarios.
@@ -64,12 +64,27 @@ const ScheduleService = {
   },
 
   /**
+   * Asigna un horario a un profesor y una clase.
+   * @param {Object} params - Parámetros para la asignación.
+   * @param {string} params.teacherId - ID del profesor.
+   * @param {string} params.classId - ID de la clase.
+   */
+
+  async asignarSchedulesByTeacherClass({ teacherId, classId }) {
+    if (!teacherId || !classId) throw new Error("Faltan datos");
+    return request("patch", "/schedules/asignar/profesor", { classroomIds: [classId], teacherId: teacherId });
+  },
+
+  /**
    * Carga horarios con cursos
    */
   async loadWithCourses() {
     return request("post", "/schedules/load-with-courses");
+  },
+
+  async getClasesDisponibles({ idCurso, horario, page = 1, pageSize = 10 }) {
+    const horarioParam = encodeURIComponent(JSON.stringify(horario));
+    return request("get", '/schedules/salones/disponibles?course_id=' + idCurso + '&horario=' + horarioParam + '&page=' + page + '&pageSize=' + pageSize)
   }
 
 };
-
-export default ScheduleService;

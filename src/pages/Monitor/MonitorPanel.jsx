@@ -41,7 +41,7 @@ const fetchProfesoresData = async () => {
   }
   catch (error) {
     console.error("Error fetching profesores data", error);
-    throw new Error(TYPE_ERROR.SIN_PROFESORES);
+    //throw new Error(TYPE_ERROR.SIN_PROFESORES);
   }
 }
 
@@ -87,7 +87,7 @@ export const MonitorPanel = () => {
           const horario = await fetchHorarioData();
           const monitor = await fetchDatosMonitor();
 
-          if (!horario.length || !profesores.length || !monitor) {
+          if (!horario.length || !monitor) {
             setHorario([]);
             setListaProfesores([]);
             setMonitorInfo({});

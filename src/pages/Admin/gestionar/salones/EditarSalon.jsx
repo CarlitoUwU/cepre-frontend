@@ -3,34 +3,39 @@ import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { useClases } from "@/hooks/useClases";
 import { useInfoClases } from "@/hooks/useInfoClases";
 import { HorariosMonitor } from "@/components/Horarios/HorariosMonitor";
-import { TablaCursos } from "./TablaCursos"; 
+import { TablaCursos } from "./TablaCursos";
 import { formatTimeToHHMM } from "@/utils/formatTime";
 import { DIAS_DIC } from "@/constants/dias";
+import { BuscarProfesor } from "./BuscarProfesor";
+import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
+
+const TURNOS = {
+  "Turno 01": { inicio: "07:00", fin: "12:10" },
+  "Turno 02": { inicio: "11:30", fin: "16:40" },
+  "Turno 03": { inicio: "16:00", fin: "21:10" },
+};
+
+const VISTAS = {
+  EDITAR: "editar",
+  BUSCAR: "buscar",
+}
 
 export const EditarSalon = ({ idSalon, regresar }) => {
   const { clases } = useClases();
-  const { schedules: infoClases, teachers, loading } = useInfoClases(idSalon);
+  const { schedules: infoClases, teachers, loading, refetch } = useInfoClases(idSalon);
 
   const salon = clases ? clases.find((a) => a.id === idSalon) : null;
-  const nombreAula = salon ? salon.name : "Aula no encontrada";
   const turno = salon?.shift;
-  const turnoOriginal = turno?.name ? turno.name : "Turno no disponible";
-  const turnoNormalizado = turnoOriginal.replace(/0?([1-3])$/, "$1");
 
-  const turnos = {
-    "Turno 1": { inicio: "07:00", fin: "12:10" },
-    "Turno 2": { inicio: "11:30", fin: "16:40" },
-    "Turno 3": { inicio: "16:00", fin: "21:10" },
-  };
-
-  const rango = turnos[turnoNormalizado];
+  const rango = TURNOS[turno?.name] || null;
   const [horariosSalon, setHorariosSalon] = useState([]);
+  const [vistaActual, setVistaActual] = useState(VISTAS.EDITAR);
+  const [cursosConDocente, setCursosConDocente] = useState([]);
+  const [curso, setCurso] = useState(null);
+  const [profesor, setProfesor] = useState(null);
 
   useEffect(() => {
     if (!loading) {
-      console.log("📅 Horarios del salón:", infoClases);
-      console.log("👨‍🏫 Docentes asignados:", teachers);
-      // Actualizamos los horarios del salón si hay información disponible
       if (infoClases) {
         const data = infoClases.map((clase) => {
           return {
@@ -41,43 +46,47 @@ export const EditarSalon = ({ idSalon, regresar }) => {
           }
         })
         setHorariosSalon(data);
+        setCursosConDocente(teachers.map((docente) => { return docente.courseName }));
       }
     }
   }, [infoClases, teachers, loading]);
 
-  if (loading) {
-    return <div className="text-center">Cargando...</div>;
+  const handleBuscarProfesor = (curso, profesor) => {
+    setVistaActual(VISTAS.BUSCAR);
+    setCurso(curso);
+    setProfesor(profesor);
+  }
+
+  const handleRegresar = () => {
+    setVistaActual(VISTAS.EDITAR);
+    setCurso(null);
+    refetch();
+  }
+
+  const handleAsignar = (name) => {
+    setCursosConDocente((prev) => {
+      if (prev.includes(name)) {
+        return prev;
+      } else {
+        return [...prev, name];
+      }
+    });
   }
 
   return (
     <div className="p-4 space-y-2 flex flex-col items-center justify-center max-w-4xl mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-bold">Modificación de Aula: {nombreAula}</h2>
-        <h3 className="text-xl font-semibold">Turno del Aula: {turnoOriginal}</h3>
+        <h2 className="text-2xl font-bold">Modificación de Aula: {salon?.name}</h2>
+        <h3 className="text-xl font-semibold">Turno del Aula: {turno?.name}</h3>
         {rango && <p>Horario: {rango.inicio} - {rango.fin}</p>}
       </div>
 
       {rango ? (
         <HorariosMonitor
-          listaSalones={[
-            {
-              aula: nombreAula,
-              horas: horariosSalon,
-              monitor: null,
-              numHoras: horariosSalon.length,
-              enlace: "",
-              cursosDoc: teachers
-              .map((docente) => {
-                if (docente.firstName !== "no asignado") {
-                  return { curso: docente.courseName };
-                }
-                return undefined;
-              })
-              .filter(Boolean),
-            },
-          ]}
-          setClaseSeleccionada={() => { }}
-          turno={turnoNormalizado}
+          aula={salon?.name}
+          horas={horariosSalon}
+          cursosConDocente={cursosConDocente}
+          turno={turno?.name}
         />
       ) : (
         <p className="text-center text-red-500">Turno inválido o no definido.</p>
@@ -85,11 +94,20 @@ export const EditarSalon = ({ idSalon, regresar }) => {
 
       {/* Tabla de cursos*/}
       <div className="mt-1 overflow-x-auto w-full">
-        <TablaCursos docentes={teachers}/>         
+        {vistaActual == VISTAS.EDITAR ? (
+          loading ? <SkeletonTabla numRows={15} numColums={4} /> : (
+            <TablaCursos docentes={teachers} buscarProfesor={handleBuscarProfesor} />
+          )
+        ) : (
+          <BuscarProfesor idSalon={idSalon} curso={curso} profesor={profesor} setAsignar={handleAsignar} horario={horariosSalon.filter((hora) => {
+            return hora.curso == curso.name
+          })} />
+        )
+        }
       </div>
 
       <div className="mt-4 flex justify-center">
-        <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
+        <ButtonNegative onClick={vistaActual == VISTAS.BUSCAR ? handleRegresar : regresar}>Atrás</ButtonNegative>
       </div>
     </div>
   );

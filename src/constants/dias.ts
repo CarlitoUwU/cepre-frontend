@@ -15,3 +15,12 @@ export const DIAS: Array<string> = [
   "VIERNES",
   "SÁBADO"
 ];
+
+export const DIAS_ADM: Array<string> = [
+  "LUNES",
+  "MARTES",
+  "MIERCOLES",
+  "JUEVES",
+  "VIERNES",
+  "SABADO"
+];

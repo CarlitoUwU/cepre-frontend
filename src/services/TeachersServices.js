@@ -87,6 +87,49 @@ export const TeachersServices = {
     return request("patch", `/teachers/${id}/deactivate`);
   },
 
+  async getHorario(id) {
+    if (!id) throw new Error("ID inválido");
+    return request("get", `/teachers/${id}/schedules`);
+  },
+
+  /**
+   * Obtiene los teachers por curso.
+   * @param {string} id - ID del curso.
+   * @param {number} page - Página de resultados.
+   * @param {number} limit - Límite de resultados por página.
+   * @returns {Promise<Object>}
+   */
+  async getTeacherByIdCourse(id, page = 1, limit = 10) {
+    if (!id) throw new Error("ID inválido");
+    return request("get", `/teachers/by-course/${id}?page=${page}&limit=${limit}`);
+  },
+
+  /**
+   * Obtiene los teachers por query.
+   * @param {string} query - Query de búsqueda.
+   * @param {number} page - Página de resultados.
+   * @param {number} limit - Límite de resultados por página.
+   * @returns {Promise<Object>}
+   */
+  async getTeacherByQuery(query, page = 1, limit = 10) {
+    if (!query) throw new Error("Query inválido");
+    return request("get", `/teachers/search?query=${query}&page=${page}&limit=${limit}`);
+  },
+
+  /**
+   * Obtiene los teachers disponibles para un curso y sesiones horarias específicas.
+   * @param {Object} params - Parámetros de búsqueda.
+   * @param {string} params.courseId - ID del curso.
+   * @param {Array} params.hourSessions - Array de sesiones horarias.
+   * @param {number} page - Página de resultados.
+   * @param {number} limit - Límite de resultados por página.
+   * @returns {Promise<Object>}
+   */
+  async getTeacherAvailable({ courseId, hourSessions }, page = 1, limit = 10) {
+    if (!courseId || !hourSessions) throw new Error("Faltan datos obligatorios");
+    return request("post", `/teachers/available?page=${page}&limit=${limit}`, { courseId, hourSessions });
+  },
+
   /**
    * Crea múltiples teachers desde archivo JSON.
    * @param {File} archivo - Archivo JSON.
