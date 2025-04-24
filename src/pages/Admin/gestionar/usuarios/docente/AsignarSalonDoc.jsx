@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Button } from "@/components/ui/Button";
 import { TablaAsignar } from "./TablaAsignar";
-import { TurnosSelector } from "@/components/Horarios/TurnosSelector.jsx";
-import { TeachersServices } from "@/services/TeachersServices.js";
-import { SchedulesService } from "@/services/schedulesServices.js";
+import { TurnosSelector } from "@/components/Horarios/TurnosSelector";
+import { TeachersServices } from "@/services/TeachersServices";
+import { SchedulesService } from "@/services/SchedulesServices";
 import { useHorasABloques } from "@/hooks/useHorasABloques";
 
 export const AsignarSalonDoc = ({ idDocente, regresar }) => {
