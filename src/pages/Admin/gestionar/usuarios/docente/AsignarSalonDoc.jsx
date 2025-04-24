@@ -107,6 +107,10 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
           {modoEdicion ? "Finalizar edición" : "Modificar disponibilidad"}
         </Button>
 
+        <h2 className="text-2xl font-bold">
+          Salones Disponibles en el curso de {docente?.courseName}:
+        </h2>
+
         <TablaAsignar
           salones={salonesDisponibles}
           isLoading={loadingSalones}

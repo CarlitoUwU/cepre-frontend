@@ -6,6 +6,15 @@ import { HORAS_INI, HORAS_FIN } from "@/constants/horas";
 import { AREA_COLORS } from "@/constants/areaColors";
 import { DIAS } from "@/constants/dias";
 
+// Función para verificar cruce de horas entre clase y turno
+const hayCruceDeHoras = (horaIniClase, horaFinClase, horaIniTurno, horaFinTurno) => {
+  const iniClase = HORAS_INI.indexOf(horaIniClase);
+  const finClase = HORAS_FIN.indexOf(horaFinClase);
+  const iniTurno = HORAS_INI.indexOf(horaIniTurno);
+  const finTurno = HORAS_FIN.indexOf(horaFinTurno);
+  return finClase >= iniTurno && iniClase <= finTurno;
+};
+
 const TablaTurno = ({
   nombreTurno,
   listaSalones,
@@ -56,13 +65,17 @@ const TablaTurno = ({
               <div
                 key={`bg-${dia}-${hora}`}
                 className="rounded-lg cursor-pointer"
-                onClick={() =>
-                  handleCeldaClick({
-                    dia,
-                    hora_ini: hora,
-                    hora_fin: horaFin,
-                  })
-                }
+                onClick={() => {
+                  if (hayCruceDeHoras(hora, horaFin, horaInicio, horaFin)) {
+                    handleCeldaClick({
+                      dia,
+                      hora_ini: hora,
+                      hora_fin: horaFin,
+                    });
+                  } else {
+                    alert("Este horario no pertenece al turno actual.");
+                  }
+                }}
                 style={{
                   backgroundColor: estaDisponible ? "#b5e6b5" : "#f4f4f4",
                   gridColumn: i + 2,
@@ -75,10 +88,8 @@ const TablaTurno = ({
 
         {listaSalones.flatMap((salon) =>
           salon.horas
-            .filter(
-              (h) =>
-                HORAS_INI.indexOf(h.hora_ini) >= minIndex &&
-                HORAS_FIN.indexOf(h.hora_fin) <= maxIndex
+            .filter((h) =>
+              hayCruceDeHoras(h.hora_ini, h.hora_fin, horaInicio, horaFin)
             )
             .map((hora) => (
               <Curso
