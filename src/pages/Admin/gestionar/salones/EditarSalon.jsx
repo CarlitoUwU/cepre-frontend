@@ -30,10 +30,9 @@ export const EditarSalon = ({ idSalon, regresar }) => {
   const rango = TURNOS[turno?.name] || null;
   const [horariosSalon, setHorariosSalon] = useState([]);
   const [vistaActual, setVistaActual] = useState(VISTAS.EDITAR);
+  const [cursosConDocente, setCursosConDocente] = useState([]);
   const [curso, setCurso] = useState(null);
   const [profesor, setProfesor] = useState(null);
-
-  console.log({ horariosSalon })
 
   useEffect(() => {
     if (!loading) {
@@ -47,6 +46,7 @@ export const EditarSalon = ({ idSalon, regresar }) => {
           }
         })
         setHorariosSalon(data);
+        setCursosConDocente(teachers.map((docente) => { return docente.courseName }));
       }
     }
   }, [infoClases, teachers, loading]);
@@ -63,6 +63,16 @@ export const EditarSalon = ({ idSalon, regresar }) => {
     refetch();
   }
 
+  const handleAsignar = (name) => {
+    setCursosConDocente((prev) => {
+      if (prev.includes(name)) {
+        return prev;
+      } else {
+        return [...prev, name];
+      }
+    });
+  }
+
   return (
     <div className="p-4 space-y-2 flex flex-col items-center justify-center max-w-4xl mx-auto">
       <div className="text-center">
@@ -75,9 +85,7 @@ export const EditarSalon = ({ idSalon, regresar }) => {
         <HorariosMonitor
           aula={salon?.name}
           horas={horariosSalon}
-          cursosConDocente={teachers
-            .map((docente) => { return docente.courseName })
-          }
+          cursosConDocente={cursosConDocente}
           turno={turno?.name}
         />
       ) : (
@@ -91,7 +99,7 @@ export const EditarSalon = ({ idSalon, regresar }) => {
             <TablaCursos docentes={teachers} buscarProfesor={handleBuscarProfesor} />
           )
         ) : (
-          <BuscarProfesor idSalon={idSalon} curso={curso} profesor={profesor} horario={horariosSalon.filter((hora) => {
+          <BuscarProfesor idSalon={idSalon} curso={curso} profesor={profesor} setAsignar={handleAsignar} horario={horariosSalon.filter((hora) => {
             return hora.curso == curso.name
           })} />
         )
