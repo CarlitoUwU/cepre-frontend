@@ -27,14 +27,22 @@ export const FuncionesMonitor = ({ monitorInfo }) => {
         <Input type="text" value={newMeetLink} onChange={(e) => setNewMeetLink(e.target.value)} />
       ) : (
         <a href={newMeetLink} target="_blank" rel="noopener noreferrer">
-          <img src={meetIcon} alt="Meet" className="mx-auto" style={{ maxWidth: "100px", maxHeight: "50px" }} />
+          <img
+            src={meetIcon}
+            alt="Meet"
+            className="mx-auto max-w-[60px] max-h-[30px] md:max-w-[100px] md:max-h-[50px] w-auto h-auto"
+          />
         </a>
       ),
       editClassroom ? (
         <Input type="text" value={newClassroomLink} onChange={(e) => setNewClassroomLink(e.target.value)} />
       ) : (
         <a href={newClassroomLink} target="_blank" rel="noopener noreferrer">
-          <img src={classroomIcon} alt="Classroom" className="mx-auto" style={{ maxWidth: "50px", maxHeight: "50px" }} />
+          <img
+            src={classroomIcon}
+            alt="Classroom"
+            className="mx-auto max-w-[30px] max-h-[30px] md:max-w-[50px] md:max-h-[50px] w-auto h-auto"
+          />
         </a>
       ),
     ],
