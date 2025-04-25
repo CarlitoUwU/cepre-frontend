@@ -77,8 +77,8 @@ export const SupervisorsServices = {
    * @param {string} idMonitor
    * @returns {Promise<JSON{mensaje: El monitor fue asignado correctamente}>}
    */
-  async asignarMonitor(idSupervisor, idMonitor) {
-    return request("patch", 'supervisors/assignMonitor', { idSupervisor, idMonitor });
+  async asignarMonitor(id_supervisor, id_monitor) {
+    return request("patch", 'supervisors/assignMonitor', { id_supervisor, id_monitor });
   },
 
   /**
@@ -86,8 +86,8 @@ export const SupervisorsServices = {
    * @param {string} idMonitor
    * @returns {Promise<JSON{mensaje: El monitor fue desasignado correctamente}>}
    */
-  async quitarMonitor(idMonitor) {
-    return request("patch", 'supervisors/assignMonitor', { idMonitor });
+  async quitarMonitor(id_monitor) {
+    return request("patch", 'supervisors/assignMonitor', { id_monitor });
   },
 
   async supervisorJson(archivo) {
