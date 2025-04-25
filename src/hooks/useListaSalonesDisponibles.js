@@ -1,0 +1,59 @@
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { SchedulesService } from "@/services/SchedulesServices";
+
+export const useListaSalonesDisponibles = ({ objApi }) => {
+  const enabled = Boolean(objApi);
+  const queryClient = useQueryClient();
+
+  const {
+    data: salones,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isFetching,
+  } = useQuery({
+    queryKey: ["salonesDisponibles", objApi],
+    queryFn: () =>
+      SchedulesService.getClasesDisponibles(objApi),
+    staleTime: 1000 * 60 * 5, // 5 minutos sin volver a pedir los mismos datos
+    cacheTime: 1000 * 60 * 10, // 10 minutos de retención en caché
+    retry: 1,
+    refetchOnWindowFocus: false,
+    enabled, // evita ejecutar la query si no se tiene los datos necesarios
+  });
+
+  const asignarSalonMutation = useMutation({
+    mutationFn: ({ teacherId, classId }) =>
+      SchedulesService.asignarSchedulesByTeacherClass({
+        teacherId,
+        classId,
+      }),
+    onSuccess: (_, { classId }) => {
+      // Actualizar cache y eliminar el salón asignado
+      queryClient.setQueryData(
+        ["salonesDisponibles", objApi],
+        (oldData) => {
+          if (!oldData) return oldData;
+          return {
+            ...oldData,
+            data: oldData.data?.filter((salon) => salon.id !== classId),
+          };
+        }
+      );
+    },
+    onError: (error) => {
+      console.error("Error al asignar salón:", error);
+    },
+  });
+  
+  return {
+    salones,
+    isLoading,
+    isError,
+    error,
+    asignarSalonMutation,
+    refetch,
+    isFetching,
+  };
+};

@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/Button";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { Tabla } from "@/components/ui/Tabla";
 import { useAreas } from "@/hooks/useAreas";
+import { useListaSalonesDisponibles } from "@/hooks/useListaSalonesDisponibles";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 const encabezado = ["Nº", "Aula Disponible", "Área", "Turno", "Acciones"];
 
@@ -10,10 +13,25 @@ export const TablaAsignar = ({
   isLoading = false,
   isError = false,
   error = {},
-  salones = [],
-  teacherId
-}) => {
+  teacherId,
+  objApi = {},
+  }) => {
   const { areas, isLoading: loadingAreas } = useAreas();
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(10);
+
+  const {salones,
+    total,
+    totalPages,
+    isLoading: loadingSalones,
+    asignarSalonMutation
+  } = useListaSalonesDisponibles({
+    objApi
+  })
+
+  const handleNext = () => setPage((prev) => prev + 1);
+  const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
+  const handleLimitChange = (e) => setLimit(e.target.value);
 
   if (isLoading) return <SkeletonTabla numRows={5} numColums={4} />;
 
@@ -27,16 +45,12 @@ export const TablaAsignar = ({
 
   const handleAsignar = async (idProfesor, idSalon) => {
       try {
-        const profesor = profesores.find((prof) => prof.id === idProfesor);
-        const response = await asignarClaseMutation.mutateAsync({
+        const response = await asignarSalonMutation.mutateAsync({
           teacherId: idProfesor,
           classId: idSalon
         });
         if (response) {
-          setProfesorAsignado(profesor);
           toast.success("Profesor asignado correctamente");
-          setWasAssigned(true);
-          setAsignar(name);
         }
   
       } catch (error) {
@@ -45,7 +59,7 @@ export const TablaAsignar = ({
       }
     }
 
-  const datos = salones.map((salon, index) => [
+  const datos = ()=>{return salones?.map((salon, index) => [
     index + 1,
     salon.name || "Sin nombre",
     areas.find((a) => a.id == salon.areaId)?.name || "Sin área",
@@ -53,17 +67,17 @@ export const TablaAsignar = ({
     <Button
       key={salon.id}
       onClick={() =>
-        onAsignar?.({ teacherId, classId: salon.id })
+        handleAsignar?.( teacherId, salon.id )
       }
     >
       Asignar
     </Button>,
-  ]);
+  ])};
 
   return (
     <div className="overflow-x-auto w-full mt-6">
       <div className="w-full text-center">
-        <Tabla encabezado={encabezado} datos={datos} />
+        <Tabla encabezado={encabezado} datos={datos()} />
       </div>
     </div>
   );

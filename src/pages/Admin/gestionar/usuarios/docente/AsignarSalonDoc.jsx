@@ -27,6 +27,8 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
     cargarHorarioAsignado,
   } = useHorarioAsignadoDocente();
 
+  const [objApi, setObjApi] = useState({})
+
   // Carga inicial del docente, disponibilidad y horario asignado
   useEffect(() => {
     const cargarDataInicial = async () => {
@@ -68,6 +70,8 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
         page: 1,
         pageSize: 10,
       };
+
+      setObjApi(objApi); // Guardar el objeto API para usarlo en la tabla
 
       setLoadingSalones(true);
       setErrorSalones(null);
@@ -128,7 +132,8 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
             isLoading={loadingSalones}
             isError={!!errorSalones}
             error={errorSalones}
-            teacherId={idDocente}                  
+            teacherId={idDocente}
+            objApi ={objApi}                  
           />
 
           <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
