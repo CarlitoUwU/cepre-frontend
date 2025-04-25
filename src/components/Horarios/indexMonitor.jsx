@@ -165,23 +165,23 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 lg:p-6">
-      <div className="flex flex-col mb-6 space-y-4">
-        <div className="flex justify-center">
-          <button onClick={() => setViewMode('week')} className={`px-4 py-2 rounded-l-lg ${viewMode === 'week' ? 'bg-[#78211E] text-white' : 'bg-gray-200 hover:bg-gray-300'} transition-colors font-medium`}>
-            Vista Semanal
+    <div className="bg-white shadow-md rounded-lg p-4 lg:p-6 ">
+      <div className="flex flex-col mb-6 space-y-4 select-none ">
+        <div className="flex justify-center ">
+          <button onClick={() => setViewMode('week')} className={`px-4 py-2 rounded-l-lg ${viewMode === 'week' ? 'bg-[#78211E] text-white' : 'bg-gray-200 hover:bg-gray-300'} transition-colors font-medium cursor-pointer`}>
+            Vista Semanal 
           </button>
-          <button onClick={() => setViewMode('day')} className={`px-4 py-2 rounded-r-lg ${viewMode === 'day' ? 'bg-[#78211E] text-white' : 'bg-gray-200 hover:bg-gray-300'} transition-colors font-medium`}>
+          <button onClick={() => setViewMode('day')} className={`px-4 py-2 rounded-r-lg ${viewMode === 'day' ? 'bg-[#78211E] text-white' : 'bg-gray-200 hover:bg-gray-300'} transition-colors font-medium cursor-pointer`}>
             Vista Diaria
           </button>
         </div>
         {viewMode === 'day' && (
-          <div className="flex justify-center overflow-x-auto py-2 space-x-2">
+          <div className="flex justify-center overflow-x-auto py-2 space-x-2 ">
             {DIAS.map((dia) => (
               <button
                 key={dia}
                 onClick={() => handleDayClick(dia)}
-                className={`px-4 py-2 rounded-lg min-w-[3rem] ${dia === selectedDay ? 'bg-[#78211E] text-white' : 'bg-gray-100 hover:bg-gray-200'} transition-colors ${dia === currentDay ? 'font-bold ring-2 ring-[#78211E]' : ''}`}
+                className={`px-4 py-2 cursor-pointer rounded-lg min-w-[3rem] ${dia === selectedDay ? 'bg-[#78211E] text-white' : 'bg-gray-100 hover:bg-gray-200'} transition-colors ${dia === currentDay ? 'font-bold ring-2 ring-[#78211E]' : ''}`}
               >
                 {isMobile ? dia.charAt(0) : dia.substring(0, 3)}
               </button>
