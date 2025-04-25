@@ -4,12 +4,11 @@ import { DIAS } from "@/constants/dias";
 import { Horarios } from "./Horarios.jsx";
 
 export const TurnosSelector = ({
-  listaSalones,
-  setClaseSeleccionada,
   disponibilidad,
   idDocente,
   setDisponibilidadDocentes,
-  modoEdicion = false, // recibimos el flag
+  modoEdicion = false, 
+  horarioAsignado = [],
 }) => {
   const [turnoSeleccionado, setTurnoSeleccionado] = useState("Turno 1");
 
@@ -144,15 +143,13 @@ export const TurnosSelector = ({
       </div>
 
       <Horarios
-        listaSalones={listaSalones}
-        setClaseSeleccionada={setClaseSeleccionada}
         turno={turnoSeleccionado}
         disponibilidad={disponibilidad}
         idDocente={idDocente}
-        setDisponibilidadDocentes={setDisponibilidadDocentes}
         handleCeldaClick={modoEdicion ? handleCeldaClick : undefined}
         handleClickDia={modoEdicion ? handleClickDia : undefined}
         handleClickHora={modoEdicion ? handleClickHora : undefined}
+        horarioAsignado={horarioAsignado} 
       />
     </div>
   );

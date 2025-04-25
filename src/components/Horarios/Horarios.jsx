@@ -15,9 +15,26 @@ const hayCruceDeHoras = (horaIniClase, horaFinClase, horaIniTurno, horaFinTurno)
   return finClase >= iniTurno && iniClase <= finTurno;
 };
 
+function esHora2AntesQueHora1(hora1, hora2) {
+  const [h1, m1] = hora1.split(":").map(Number);
+  const [h2, m2] = hora2.split(":").map(Number);
+
+  const minutos1 = h1 * 60 + m1;
+  const minutos2 = h2 * 60 + m2;
+
+  return minutos2 < minutos1;
+}
+
+function compararTurnoYSalon(turno, salon) {
+  const turnoDigito = turno.substring(turno.length - 1); // último carácter
+  const salonDigito = salon.substring(2, 3); // primer dígito después de "I-"
+
+  return turnoDigito === salonDigito;
+}
+
 const TablaTurno = ({
   nombreTurno,
-  listaSalones,
+  horarioAsignado = [],
   horaInicio,
   horaFin,
   disponibilidad = [],
@@ -86,74 +103,78 @@ const TablaTurno = ({
           })
         )}
 
-        {listaSalones.flatMap((salon) =>
-          salon.horas
-            .filter((h) =>
-              hayCruceDeHoras(h.hora_ini, h.hora_fin, horaInicio, horaFin)
-            )
-            .map((hora) => (
+        {
+          horarioAsignado?.map((hora) =>{
+            console.log("horarioAsignado", hora);
+            const pertenece = esHora2AntesQueHora1(horaFin, hora.hora_ini) && 
+            esHora2AntesQueHora1(hora.hora_fin, horaInicio) && compararTurnoYSalon(nombreTurno, hora.clase);  
+            if (!pertenece) return null;
+            return (
               <Curso
-                key={`${salon.aula}-${hora.dia}-${hora.hora_ini}`}
-                clase={{ aula: salon.aula }}
-                nombre={salon.aula}
-                backgroundColor={AREA_COLORS[salon.area] || "#f4351c"}
+                key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
+                nombre={hora.clase}
+                backgroundColor={AREA_COLORS[hora.area] || "#f4351c"} // Asegúrate de que `area` es el correcto
                 gridColumn={getColumn(hora.dia)}
                 gridRow={getRow(hora.hora_ini)}
                 gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
               />
-            ))
-        )}
-      </div>
-    </div>
-  );
-};
+            );
 
-export const Horarios = ({
-  listaSalones = [],
-  turno = "",
-  disponibilidad = [],
-  handleCeldaClick,
-  handleClickDia,
-  handleClickHora,
-}) => {
-  return (
-    <div className="p-4 space-y-10">
-      {turno === "Turno 1" && (
-        <TablaTurno
-          nombreTurno="Turno 1"
-          listaSalones={listaSalones}
-          horaInicio="07:00"
-          horaFin="12:10"
-          disponibilidad={disponibilidad}
-          handleCeldaClick={handleCeldaClick}
-          handleClickDia={handleClickDia}
-          handleClickHora={handleClickHora}
-        />
-      )}
-      {turno === "Turno 2" && (
-        <TablaTurno
-          nombreTurno="Turno 2"
-          listaSalones={listaSalones}
-          horaInicio="11:30"
-          horaFin="16:40"
-          disponibilidad={disponibilidad}
-          handleCeldaClick={handleCeldaClick}
-          handleClickDia={handleClickDia}
-          handleClickHora={handleClickHora}
-        />
-      )}
-      {turno === "Turno 3" && (
-        <TablaTurno
-          nombreTurno="Turno 3"
-          listaSalones={listaSalones}
-          horaInicio="16:00"
-          horaFin="21:10"
-          disponibilidad={disponibilidad}
-          handleCeldaClick={handleCeldaClick}
-          handleClickDia={handleClickDia}
-          handleClickHora={handleClickHora}
-        />
-      )}
-    </div>
+          })
+        }
+        
+              </div>
+            </div>
+          );
+        };
+
+      export const Horarios = ({
+        turno = "",
+        disponibilidad = [],
+        horarioAsignado = [],
+        docente = "",
+        handleCeldaClick,
+        handleClickDia,
+        handleClickHora,
+      }) => {
+        return (
+          <div className="p-4 space-y-10">
+            {turno === "Turno 1" && (
+              <TablaTurno
+                nombreTurno="Turno 01"
+                horarioAsignado={horarioAsignado}
+                horaInicio="07:00"
+                horaFin="12:10"
+                disponibilidad={disponibilidad}
+                handleCeldaClick={handleCeldaClick}
+                handleClickDia={handleClickDia}
+                handleClickHora={handleClickHora}
+              />
+            )}
+            {turno === "Turno 2" && (
+              <TablaTurno
+                nombreTurno="Turno 02"
+                horarioAsignado={horarioAsignado}
+                horaInicio="11:30"
+                horaFin="16:40"
+                disponibilidad={disponibilidad}
+                handleCeldaClick={handleCeldaClick}
+                handleClickDia={handleClickDia}
+                handleClickHora={handleClickHora}
+              />
+            )}
+            {turno === "Turno 3" && (
+              <TablaTurno
+                nombreTurno="Turno 03"
+                horarioAsignado={horarioAsignado}
+                horaInicio="16:00"
+                horaFin="21:10"
+                disponibilidad={disponibilidad}
+                handleCeldaClick={handleCeldaClick}
+                handleClickDia={handleClickDia}
+                handleClickHora={handleClickHora}
+              />
+            )}
+          </div>
   );
 };

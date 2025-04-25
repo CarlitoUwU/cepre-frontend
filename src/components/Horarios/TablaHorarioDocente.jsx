@@ -1,0 +1,114 @@
+  import { Dia } from './Dia';
+  import { Hora } from './Hora';
+  import { Curso } from './Curso';
+  import React from 'react';
+  import { useIsMobile } from '@/hooks/useIsMobile';
+  import { AREA_COLORS } from '@/constants/areaColors';
+  import { HORAS_INI, HORAS_FIN } from '@/constants/horas';
+  import { DIAS } from "@/constants/dias";
+
+  export const TablaHorarioDocente = ({ 
+    horarios = [], 
+    setClaseSeleccionada = () => {} 
+  }) => {
+    const isMobile = useIsMobile(1024);
+
+    // Procesar los datos del horario
+    const clasesProcesadas = horarios.map((item, index) => ({
+      aula: item.clase || 'Sin aula',
+      area: item.area || 'Sin área',
+      dia: item.dia,
+      hora_ini: item.hora_ini,
+      hora_fin: item.hora_fin,
+    }));
+
+    console.log('Clases procesadas:', clasesProcesadas);
+
+    const duplicateClasses = clasesProcesadas.filter((class1, index) => 
+      clasesProcesadas.some((class2, otherIndex) => 
+        index !== otherIndex && class1.classId === class2.classId
+      )
+    );
+    
+    if (duplicateClasses.length > 0) {
+      console.warn('Duplicate classes found:', duplicateClasses);
+    }
+
+    // Obtener rango de horas
+    const horasDisponibles = clasesProcesadas.flatMap(c => [c.hora_ini, c.hora_fin]);
+    const horaMinima = horasDisponibles.length ? horasDisponibles.sort()[0] : "07:00";
+    const horaMaxima = horasDisponibles.length ? horasDisponibles.sort().at(-1) : "12:10";
+
+    const minIndex = Math.max(HORAS_INI.indexOf(horaMinima), 0);
+    const maxIndex = Math.min(HORAS_FIN.indexOf(horaMaxima), HORAS_FIN.length - 1);
+
+    // Funciones de ayuda para el grid
+    const getRow = horaIni => HORAS_INI.indexOf(horaIni) - minIndex + 2;
+    const getRowSpan = (horaIni, horaFin) => HORAS_FIN.indexOf(horaFin) - HORAS_INI.indexOf(horaIni) + 1;
+    const getColumn = dia => DIAS.indexOf(dia) + 2;
+
+    const dias = DIAS;
+    const diasHeader = isMobile ? DIAS.map(dia => dia.charAt(0)) : dias;
+
+    if (!clasesProcesadas.length) {
+      return (
+        <div className="p-4 text-center text-gray-500">
+          No hay horarios disponibles para mostrar
+        </div>
+      );
+    }
+
+    return (
+      <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4">
+        {/* Espacio vacío en la esquina superior izquierda */}
+        <div></div>
+
+        {/* Encabezado de dias */}
+        {diasHeader.map((dia, index) => (
+          <Dia key={`dia-${index}`} nombre={dia} />
+        ))}
+
+        {/* Horas en la primera columna */}
+        {HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, index) => (
+          <Hora key={`hora-${index}`} hora={`${hora} - ${HORAS_FIN[minIndex + index]}`} />
+        ))}
+
+        {/* Celdas vacías del grid */}
+        {dias.flatMap((dia, i) =>
+          HORAS_INI.slice(minIndex, maxIndex + 1).map((_, k) => (
+            <div
+              key={`celda-${dia}-${k}`}
+              className='rounded-lg'
+              style={{
+                backgroundColor: "#f4f4f4",
+                borderRadius: ".2vw",
+                gridColumn: i + 2,
+                gridRow: k + 2,
+                color: "#000",
+              }}
+            ></div>
+          ))
+        )}
+
+        {/* Clases asignadas */}
+        {clasesProcesadas.map(clase => (
+          <Curso
+            key={clase.classId}
+            clase={{
+              aula: clase.aula,
+              monitor: clase.monitor,
+              area: clase.area,
+              numHoras: clase.numHoras,
+              enlace: clase.enlace,
+            }}
+            nombre={clase.aula}
+            backgroundColor={AREA_COLORS[clase.area] || "#f4351c"}
+            gridColumn={getColumn(clase.dia)}
+            gridRow={getRow(clase.hora_ini)}
+            gridSpan={getRowSpan(clase.hora_ini, clase.hora_fin)}
+            setClaseSeleccionada={setClaseSeleccionada}
+          />
+        ))}
+      </div>
+    );
+  };
