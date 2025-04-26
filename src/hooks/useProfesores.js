@@ -27,9 +27,19 @@ export const useProfesores = ({ page = 1, limit = 20 } = {}) => {
     onSuccess: (nuevoProfesor) => {
       queryClient.setQueryData(["profesores", page, limit], (prev) => {
         if (!prev) return;
+        const newProfesor = {
+          courseName: nuevoProfesor?.teacher?.courses?.name,
+          email: nuevoProfesor?.email,
+          firstName: nuevoProfesor?.userProfile?.firstName,
+          lastName: nuevoProfesor?.userProfile?.lastName,
+          id: nuevoProfesor?.teacher?.id,
+          isCoordinator: nuevoProfesor?.teacher?.isCoordinator,
+          jobStatus: nuevoProfesor?.teacher?.jobStatus,
+          phone: nuevoProfesor?.userProfile?.phone,
+        }
         return {
           ...prev,
-          data: [nuevoProfesor, ...prev.data],
+          data: [newProfesor, ...prev.data],
           total: prev.total + 1,
         };
       });
@@ -49,7 +59,7 @@ export const useProfesores = ({ page = 1, limit = 20 } = {}) => {
               ...p,
               firstName: profesorActualizado.firstName || "-",
               lastName: profesorActualizado.lastName || "-",
-              personalEmail: profesorActualizado.personalEmail || "-",
+              email: profesorActualizado.email || "-",
               phone: profesorActualizado.phone || "-",
             } : p
           ),

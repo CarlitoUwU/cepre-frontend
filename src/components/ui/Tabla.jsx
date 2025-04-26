@@ -35,7 +35,7 @@ export const Tabla = ({ encabezado = [], datos = [], index_key = null, filtroDic
   );
 
   return (
-    <div className="overflow-x-auto relative">
+    <div className="overflow-x-auto relative rounded-xl">
       <table className="w-full border-collapse border border-gray-300 shadow-md rounded-lg">
         <thead>
           <tr className="bg-[#78211E] text-white font-extrabold">
