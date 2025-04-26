@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider } from "./contexts/AuthProvider";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
 import { ToastContainer } from 'react-toastify';

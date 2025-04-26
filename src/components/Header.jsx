@@ -1,21 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { FaSignOutAlt } from "react-icons/fa";
 import unsaLogo from "@/assets/Unsa_logo.png";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/useAuth";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
-  const { user, logout, login } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user) {
-      const token = localStorage.getItem("token");
-      if (token) {
-        login(token, navigate, false);
-      }
-    }
-  }, [user, login, navigate]);
 
   const handleLogout = () => {
     logout(navigate);
@@ -25,13 +17,13 @@ export const Header = () => {
     <header className="fixed top-0 left-0 w-full bg-[#78211E] h-20 shadow-md flex items-center z-50">
       {/* Sección izquierda: Logo + Texto alineados */}
       <div className="flex items-center h-full pl-0">
-        <img 
-          src={unsaLogo} 
-          alt="UNSA" 
-          className="h-full md:h-full object-cover w-auto md:w-auto max-h-[50px] md:max-h-none" 
+        <img
+          src={unsaLogo}
+          alt="UNSA"
+          className="h-full md:h-full object-cover w-auto md:w-auto max-h-[50px] md:max-h-none"
         />
         <p className="ml-2 md:ml-4 text-white text-sm md:text-lg font-semibold">
-          {user ? `Bienvenido ${user.role}, ${user.email}` : "Bienvenido"}
+          {user ? `Bienvenido ${user.role}, ${user?.firstName?.split(' ')[0] || 'Sin Nombres'} ${user?.lastName || ''}` : "Bienvenido"}
         </p>
       </div>
 
