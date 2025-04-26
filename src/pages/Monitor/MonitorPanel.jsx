@@ -131,7 +131,7 @@ export const MonitorPanel = () => {
 
         {/* Horario del Monitor */}
         <div className="col-span-1 md:col-span-3 overflow-x-auto">
-          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">
+          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4 ">
             HORARIO {monitorInfo?.salon || ""}
           </h2>
           <TablaHorarioMonitor horas={horario} />
