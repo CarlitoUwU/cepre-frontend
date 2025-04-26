@@ -53,7 +53,7 @@ export const MonitorUsuarios = () => {
       setEditFormData({
         nombres: monitor.firstName || "-",
         apellidos: monitor.lastName || "-",
-        correo: monitor.personalEmail || "-",
+        correo: monitor.email || "-",
         numero: monitor.phone || "-",
       });
     }
@@ -69,7 +69,7 @@ export const MonitorUsuarios = () => {
         userId: editingId,
         firstName: editFormData.nombres,
         lastName: editFormData.apellidos,
-        personalEmail: editFormData.correo,
+        email: editFormData.correo,
         phone: editFormData.numero,
       };
 
@@ -93,7 +93,6 @@ export const MonitorUsuarios = () => {
   const handleBorrar = async (id) => {
     try {
       const monitorEliminado = await eliminarMonitorMutation.mutateAsync(id);
-      console.log({ monitorEliminado })
       if (monitorEliminado || monitorEliminado === '') {
         toast.success("Monitor eliminado correctamente");
       }
@@ -128,7 +127,7 @@ export const MonitorUsuarios = () => {
         <EditableCell
           editable={esEdicion}
           name="correo"
-          value={esEdicion ? editFormData.correo : monitor.personalEmail}
+          value={esEdicion ? editFormData.correo : monitor.email}
           onChange={handleEditChange}
           type="email"
         />,

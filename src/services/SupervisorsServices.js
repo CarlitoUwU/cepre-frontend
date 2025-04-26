@@ -36,9 +36,9 @@ export const SupervisorsServices = {
    * @param {Object} data - Datos a actualizar.
    * @returns {Promise<Object>}
    */
-  async updateSupervisor({ id, firstName, lastName, personalEmail, phone, shiftId }) {
+  async updateSupervisor({ id, firstName, lastName, email, phone, shiftId }) {
     if (!id) throw new Error("ID inválido");
-    return request("put", `/supervisors/${id}`, { firstName, lastName, personalEmail, phone, shiftId });
+    return request("put", `/supervisors/${id}`, { firstName, lastName, email, phone, shiftId });
   },
 
   /**

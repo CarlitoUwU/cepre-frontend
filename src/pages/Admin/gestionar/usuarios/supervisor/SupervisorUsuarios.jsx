@@ -53,7 +53,7 @@ export const SupervisorUsuarios = () => {
       setEditFormData({
         nombres: supervisor.firstName || "-",
         apellidos: supervisor.lastName || "-",
-        correo: supervisor.personalEmail || "-",
+        correo: supervisor.email || "-",
         numero: supervisor.phone || "-",
       });
     }
@@ -69,7 +69,7 @@ export const SupervisorUsuarios = () => {
         userId: editingId,
         firstName: editFormData.nombres,
         lastName: editFormData.apellidos,
-        personalEmail: editFormData.correo,
+        email: editFormData.correo,
         phone: editFormData.numero,
       };
 
@@ -93,7 +93,6 @@ export const SupervisorUsuarios = () => {
   const handleBorrar = async (id) => {
     try {
       const supervisorEliminado = await eliminarSupervisorMutation.mutateAsync(id);
-      console.log({ supervisorEliminado });
       if (supervisorEliminado || supervisorEliminado === '') {
         toast.success("Supervisor eliminado correctamente");
       }
@@ -137,7 +136,7 @@ export const SupervisorUsuarios = () => {
         <EditableCell
           editable={esEdicion}
           name="correo"
-          value={esEdicion ? editFormData.correo : supervisor.personalEmail}
+          value={esEdicion ? editFormData.correo : supervisor.email}
           onChange={handleEditChange}
           type="email"
         />,

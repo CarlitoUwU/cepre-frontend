@@ -62,9 +62,9 @@ export const TeachersServices = {
    * @param {Object} teacherData - Datos del teacher a actualizar.
    * @returns {Promise<Object>}
    */
-  async updateTeacher({ userId, firstName, lastName, personalEmail, phone }) {
+  async updateTeacher({ userId, firstName, lastName, email, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/teachers/${userId}`, { firstName, lastName, personalEmail, phone });
+    return request("put", `/teachers/${userId}`, { firstName, lastName, email, phone });
   },
 
   /**
