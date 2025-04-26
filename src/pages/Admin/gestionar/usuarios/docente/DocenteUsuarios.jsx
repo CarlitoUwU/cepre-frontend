@@ -213,7 +213,7 @@ export const DocenteUsuarios = () => {
   if (vista === VISTA.ASIGNAR_SALON) {
     return (
       <AsignarSalonDoc
-        idDocente={editingId}
+        docente={profesores.find((profesor) => profesor.id === editingId)}
         regresar={handleRegresar}
       />
     )
@@ -238,7 +238,7 @@ export const DocenteUsuarios = () => {
           <FaSyncAlt />
         </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE DOCENTES</h2>
-          <Button onClick={handleAgregar}>Agregar Docente</Button>
+        <Button onClick={handleAgregar}>Agregar Docente</Button>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :
         <Tabla encabezado={encabezado} datos={getDatosProfesor()} />

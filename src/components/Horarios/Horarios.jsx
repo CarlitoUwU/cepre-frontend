@@ -104,10 +104,9 @@ const TablaTurno = ({
         )}
 
         {
-          horarioAsignado?.map((hora) =>{
-            console.log("horarioAsignado", hora);
-            const pertenece = esHora2AntesQueHora1(horaFin, hora.hora_ini) && 
-            esHora2AntesQueHora1(hora.hora_fin, horaInicio) && compararTurnoYSalon(nombreTurno, hora.clase);  
+          horarioAsignado?.map((hora) => {
+            const pertenece = esHora2AntesQueHora1(horaFin, hora.hora_ini) &&
+              esHora2AntesQueHora1(hora.hora_fin, horaInicio) && compararTurnoYSalon(nombreTurno, hora.clase);
             if (!pertenece) return null;
             return (
               <Curso
@@ -122,59 +121,58 @@ const TablaTurno = ({
 
           })
         }
-        
-              </div>
-            </div>
-          );
-        };
 
-      export const Horarios = ({
-        turno = "",
-        disponibilidad = [],
-        horarioAsignado = [],
-        docente = "",
-        handleCeldaClick,
-        handleClickDia,
-        handleClickHora,
-      }) => {
-        return (
-          <div className="p-4 space-y-10">
-            {turno === "Turno 1" && (
-              <TablaTurno
-                nombreTurno="Turno 01"
-                horarioAsignado={horarioAsignado}
-                horaInicio="07:00"
-                horaFin="12:10"
-                disponibilidad={disponibilidad}
-                handleCeldaClick={handleCeldaClick}
-                handleClickDia={handleClickDia}
-                handleClickHora={handleClickHora}
-              />
-            )}
-            {turno === "Turno 2" && (
-              <TablaTurno
-                nombreTurno="Turno 02"
-                horarioAsignado={horarioAsignado}
-                horaInicio="11:30"
-                horaFin="16:40"
-                disponibilidad={disponibilidad}
-                handleCeldaClick={handleCeldaClick}
-                handleClickDia={handleClickDia}
-                handleClickHora={handleClickHora}
-              />
-            )}
-            {turno === "Turno 3" && (
-              <TablaTurno
-                nombreTurno="Turno 03"
-                horarioAsignado={horarioAsignado}
-                horaInicio="16:00"
-                horaFin="21:10"
-                disponibilidad={disponibilidad}
-                handleCeldaClick={handleCeldaClick}
-                handleClickDia={handleClickDia}
-                handleClickHora={handleClickHora}
-              />
-            )}
-          </div>
+      </div>
+    </div>
+  );
+};
+
+export const Horarios = ({
+  turno = "",
+  disponibilidad = [],
+  horarioAsignado = [],
+  handleCeldaClick,
+  handleClickDia,
+  handleClickHora,
+}) => {
+  return (
+    <div className="p-4 space-y-10">
+      {turno === "Turno 1" && (
+        <TablaTurno
+          nombreTurno="Turno 01"
+          horaInicio="07:00"
+          horaFin="12:10"
+          horarioAsignado={horarioAsignado}
+          disponibilidad={disponibilidad}
+          handleCeldaClick={handleCeldaClick}
+          handleClickDia={handleClickDia}
+          handleClickHora={handleClickHora}
+        />
+      )}
+      {turno === "Turno 2" && (
+        <TablaTurno
+          nombreTurno="Turno 02"
+          horaInicio="11:30"
+          horaFin="16:40"
+          horarioAsignado={horarioAsignado}
+          disponibilidad={disponibilidad}
+          handleCeldaClick={handleCeldaClick}
+          handleClickDia={handleClickDia}
+          handleClickHora={handleClickHora}
+        />
+      )}
+      {turno === "Turno 3" && (
+        <TablaTurno
+          nombreTurno="Turno 03"
+          horaInicio="16:00"
+          horaFin="21:10"
+          horarioAsignado={horarioAsignado}
+          disponibilidad={disponibilidad}
+          handleCeldaClick={handleCeldaClick}
+          handleClickDia={handleClickDia}
+          handleClickHora={handleClickHora}
+        />
+      )}
+    </div>
   );
 };

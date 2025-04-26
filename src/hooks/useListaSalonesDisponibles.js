@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { SchedulesService } from "@/services/SchedulesServices";
 
 export const useListaSalonesDisponibles = ({ objApi }) => {
-  const enabled = Boolean(objApi);
+  const enabled = Boolean(objApi?.idDocente && objApi?.idCurso && objApi?.horario);
   const queryClient = useQueryClient();
 
   const {
@@ -35,10 +35,7 @@ export const useListaSalonesDisponibles = ({ objApi }) => {
         ["salonesDisponibles", objApi],
         (oldData) => {
           if (!oldData) return oldData;
-          return {
-            ...oldData,
-            data: oldData.data?.filter((salon) => salon.id !== classId),
-          };
+          return oldData?.filter((salon) => salon.id !== classId);
         }
       );
     },
@@ -46,10 +43,11 @@ export const useListaSalonesDisponibles = ({ objApi }) => {
       console.error("Error al asignar salón:", error);
     },
   });
-  
+
   return {
     salones,
     isLoading,
+    enabled,
     isError,
     error,
     asignarSalonMutation,

@@ -5,9 +5,9 @@ import { Horarios } from "./Horarios.jsx";
 
 export const TurnosSelector = ({
   disponibilidad,
-  idDocente,
+  docente,
   setDisponibilidadDocentes,
-  modoEdicion = false, 
+  modoEdicion = false,
   horarioAsignado = [],
 }) => {
   const [turnoSeleccionado, setTurnoSeleccionado] = useState("Turno 1");
@@ -23,7 +23,7 @@ export const TurnosSelector = ({
   };
 
   const handleCeldaClick = (nuevaCelda) => {
-    console.log({nuevaCelda, disponibilidad});
+    console.log({ nuevaCelda, disponibilidad });
     const yaMarcada = disponibilidad.some(
       (d) =>
         d.dia === nuevaCelda.dia &&
@@ -33,13 +33,13 @@ export const TurnosSelector = ({
 
     const nuevaDisponibilidad = yaMarcada
       ? disponibilidad.filter(
-          (d) =>
-            !(
-              d.dia === nuevaCelda.dia &&
-              d.hora_ini === nuevaCelda.hora_ini &&
-              d.hora_fin === nuevaCelda.hora_fin
-            )
-        )
+        (d) =>
+          !(
+            d.dia === nuevaCelda.dia &&
+            d.hora_ini === nuevaCelda.hora_ini &&
+            d.hora_fin === nuevaCelda.hora_fin
+          )
+      )
       : [...disponibilidad, nuevaCelda];
 
     setDisponibilidadDocentes(nuevaDisponibilidad);
@@ -51,7 +51,7 @@ export const TurnosSelector = ({
       dia,
       hora_ini,
       hora_fin: HORAS_FIN[i],
-      idDocente,
+      idDocente: docente?.id,
     }));
 
     // Verificar si todas las celdas del día ya están marcadas
@@ -67,16 +67,16 @@ export const TurnosSelector = ({
     // Nueva disponibilidad dependiendo de si estaban todas o no
     const nuevaDisponibilidad = todasMarcadas
       ? disponibilidad.filter(
-          (d) => d.dia !== dia
-        )
+        (d) => d.dia !== dia
+      )
       : [...disponibilidad, ...celdasDelDia.filter(celda =>
-          !disponibilidad.some(
-            (d) =>
-              d.dia === celda.dia &&
-              d.hora_ini === celda.hora_ini &&
-              d.hora_fin === celda.hora_fin
-          )
-        )];
+        !disponibilidad.some(
+          (d) =>
+            d.dia === celda.dia &&
+            d.hora_ini === celda.hora_ini &&
+            d.hora_fin === celda.hora_fin
+        )
+      )];
 
     setDisponibilidadDocentes(nuevaDisponibilidad);
     console.log("Click en día:", dia);
@@ -88,7 +88,7 @@ export const TurnosSelector = ({
       dia,
       hora_ini,
       hora_fin,
-      idDocente,
+      idDocente: docente?.id,
     }));
 
     // Verificar si todas las celdas ya están marcadas
@@ -104,20 +104,20 @@ export const TurnosSelector = ({
     // Nueva disponibilidad dependiendo de si estaban todas o no
     const nuevaDisponibilidad = todasMarcadas
       ? disponibilidad.filter(
-          (d) => !(d.hora_ini === hora_ini && d.hora_fin === hora_fin)
-        )
+        (d) => !(d.hora_ini === hora_ini && d.hora_fin === hora_fin)
+      )
       : [
-          ...disponibilidad,
-          ...celdasDeLaHora.filter(
-            (celda) =>
-              !disponibilidad.some(
-                (d) =>
-                  d.dia === celda.dia &&
-                  d.hora_ini === celda.hora_ini &&
-                  d.hora_fin === celda.hora_fin
-              )
-          ),
-        ];
+        ...disponibilidad,
+        ...celdasDeLaHora.filter(
+          (celda) =>
+            !disponibilidad.some(
+              (d) =>
+                d.dia === celda.dia &&
+                d.hora_ini === celda.hora_ini &&
+                d.hora_fin === celda.hora_fin
+            )
+        ),
+      ];
 
     setDisponibilidadDocentes(nuevaDisponibilidad);
     console.log("Click en hora:", hora_ini, hora_fin);
@@ -131,10 +131,9 @@ export const TurnosSelector = ({
             key={turno}
             onClick={() => handleTurnoChange(turno)}
             className={`px-4 py-2 rounded-md cursor-pointer select-none transition-all duration-200 shadow 
-              ${
-                turnoSeleccionado === turno
-                  ? "bg-gray-300 text-black font-bold shadow-md"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              ${turnoSeleccionado === turno
+                ? "bg-gray-300 text-black font-bold shadow-md"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200"
               }`}
           >
             {turno}: {horario}
@@ -145,11 +144,10 @@ export const TurnosSelector = ({
       <Horarios
         turno={turnoSeleccionado}
         disponibilidad={disponibilidad}
-        idDocente={idDocente}
+        horarioAsignado={horarioAsignado}
         handleCeldaClick={modoEdicion ? handleCeldaClick : undefined}
         handleClickDia={modoEdicion ? handleClickDia : undefined}
         handleClickHora={modoEdicion ? handleClickHora : undefined}
-        horarioAsignado={horarioAsignado} 
       />
     </div>
   );
