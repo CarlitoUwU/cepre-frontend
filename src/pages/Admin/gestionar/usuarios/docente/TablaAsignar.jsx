@@ -30,8 +30,11 @@ export const TablaAsignar = ({
     isLoading: loadingSalones,
     isError: errorSalones,
     error: errorSalonesObj,
-    asignarSalonMutation
+    asignarSalonMutation,
+    refetch,
   } = useListaSalonesDisponibles({ objApi });
+
+  const salonesList = Array.isArray(salones) ? salones : [];
 
   const handleNext = () => setPage((prev) => prev + 1);
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
@@ -55,6 +58,7 @@ export const TablaAsignar = ({
       });
       if (response) {
         toast.success("Profesor asignado correctamente");
+        await refetch(); // <-- recargar salones disponibles cuando asignación sea exitosa
       }
     } catch (error) {
       toast.error("Error al asignar el profesor");
@@ -62,7 +66,7 @@ export const TablaAsignar = ({
     }
   };
 
-  const datos = () => salones?.map((salon, index) => [
+  const datos = () => salonesList.map((salon, index) => [
     index + 1,
     salon.name || "Sin nombre",
     areas.find((a) => a.id == salon.areaId)?.name || "Sin área",
@@ -73,7 +77,7 @@ export const TablaAsignar = ({
     >
       Asignar
     </Button>,
-  ]);
+  ]);  
 
   return (
     <div className="overflow-x-auto w-full mt-6">
