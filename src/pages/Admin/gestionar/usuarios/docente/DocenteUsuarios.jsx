@@ -57,7 +57,7 @@ export const DocenteUsuarios = () => {
       setEditFormData({
         nombres: profesor.firstName || "-",
         apellidos: profesor.lastName || "-",
-        correo: profesor.personalEmail || "-",
+        correo: profesor.email || "-",
         numero: profesor.phone || "-",
         extra: profesor.courseName || "-",
       });
@@ -75,7 +75,7 @@ export const DocenteUsuarios = () => {
         userId: editingId,
         firstName: editFormData.nombres,
         lastName: editFormData.apellidos,
-        personalEmail: editFormData.correo,
+        email: editFormData.correo,
         phone: editFormData.numero
       }
 
@@ -101,7 +101,6 @@ export const DocenteUsuarios = () => {
   const handleBorrar = async (id) => {
     try {
       const profesorEliminado = await eliminarProfesorMutation.mutateAsync(id);
-      console.log({ profesorEliminado });
       if (profesorEliminado || profesorEliminado === '') {
         toast.success(`Profesor eliminado correctamente`);
       }
@@ -150,7 +149,6 @@ export const DocenteUsuarios = () => {
   }
 
   const handleAsignarSalon = (id) => {
-    console.log("Asignar salón al docente con ID:", id);
     setEditingId(id);
     setVista(VISTA.ASIGNAR_SALON);
   };
@@ -184,7 +182,7 @@ export const DocenteUsuarios = () => {
         <EditableCell
           editable={esEdicion}
           name="correo"
-          value={esEdicion ? editFormData.correo : profesor.personalEmail}
+          value={esEdicion ? editFormData.correo : profesor.email}
           onChange={handleEditChange}
           type="email"
         />,
@@ -213,7 +211,7 @@ export const DocenteUsuarios = () => {
   if (vista === VISTA.ASIGNAR_SALON) {
     return (
       <AsignarSalonDoc
-        idDocente={editingId}
+        docente={profesores.find((profesor) => profesor.id === editingId)}
         regresar={handleRegresar}
       />
     )
@@ -238,7 +236,7 @@ export const DocenteUsuarios = () => {
           <FaSyncAlt />
         </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE DOCENTES</h2>
-          <Button onClick={handleAgregar}>Agregar Docente</Button>
+        <Button onClick={handleAgregar}>Agregar Docente</Button>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :
         <Tabla encabezado={encabezado} datos={getDatosProfesor()} />

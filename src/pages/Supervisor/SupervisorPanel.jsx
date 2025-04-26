@@ -77,19 +77,20 @@ export const SupervisorPanel = () => {
   if (error) return <p className="text-center text-red-600">{error}</p>;
 
   return (
-    <div className="p-5">
-      <div className="bg-gray-100 p-5 rounded-md shadow-md overflow-x-auto text-center">
+    <div className="p-0 sm:p-5">
+      <div className="bg-gray-100 p-3 sm:p-5 rounded-none sm:rounded-md shadow-md overflow-x-auto text-center">
         <h1 className="text-2xl font-bold text-center mb-6">Panel de Supervisor</h1>
-
+  
         {estado === ESTADO.INDEX &&
           <Tabla encabezado={["N°", "Aula", "Monitor", "Enlace", "Acciones"]} datos={datosAulas} index_key={0} />}
-
+  
         {estado === ESTADO.HORARIO &&
           <HorarioMonitorPanel aula={selectedSalon} cambiarVista={cambiarVistaDirectorio} volver={volverAlIndex} />}
-
+  
         {estado === ESTADO.DIRECTORIO &&
           <DirectorioMonitorPanel aula={selectedSalon} cambiarVista={cambiarVistaHorario} volver={volverAlIndex} />}
       </div>
     </div>
   );
+  
 };

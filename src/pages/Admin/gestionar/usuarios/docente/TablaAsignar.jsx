@@ -10,45 +10,25 @@ import { toast } from "react-toastify";
 const encabezado = ["Nº", "Aula Disponible", "Área", "Turno", "Acciones"];
 
 export const TablaAsignar = ({
-  teacherId,
+  teacher,
   objApi = {},
 }) => {
-  const { 
-    areas, 
-    isLoading: loadingAreas, 
-    isError: errorAreas, 
-    error: errorAreasObj 
-  } = useAreas();
-  
+  const { areas, isLoading: loadingAreas } = useAreas();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
 
-  const {
-    salones = [],
-    total,
+  const { salones,
     totalPages,
     isLoading: loadingSalones,
-    isError: errorSalones,
-    error: errorSalonesObj,
-    asignarSalonMutation,
-    refetch,
-  } = useListaSalonesDisponibles({ objApi });
-
-  const salonesList = Array.isArray(salones) ? salones : [];
+    enabled: enabledSalones,
+    asignarSalonMutation
+  } = useListaSalonesDisponibles({
+    objApi
+  })
 
   const handleNext = () => setPage((prev) => prev + 1);
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
   const handleLimitChange = (e) => setLimit(e.target.value);
-
-  if (loadingAreas || loadingSalones) return <SkeletonTabla numRows={5} numColums={4} />;
-
-  if (errorAreas || errorSalones) {
-    return (
-      <div className="text-center text-red-500">
-        Error al cargar los datos: {errorAreasObj?.message || errorSalonesObj?.message}
-      </div>
-    );
-  }
 
   const handleAsignar = async (idProfesor, idSalon) => {
     try {
@@ -58,31 +38,53 @@ export const TablaAsignar = ({
       });
       if (response) {
         toast.success("Profesor asignado correctamente");
-        await refetch(); // <-- recargar salones disponibles cuando asignación sea exitosa
       }
+
     } catch (error) {
       toast.error("Error al asignar el profesor");
       console.error("Asignación fallida:", error);
     }
-  };
+  }
 
-  const datos = () => salonesList.map((salon, index) => [
-    index + 1,
-    salon.name || "Sin nombre",
-    areas.find((a) => a.id == salon.areaId)?.name || "Sin área",
-    salon.shift?.name || "Sin turno",
-    <Button
-      key={salon.id}
-      onClick={() => handleAsignar?.(teacherId, salon.id)}
-    >
-      Asignar
-    </Button>,
-  ]);  
+  const datos = () => {
+    if (!salones || salones.length == 0) return []
+    return salones?.map((salon, index) => [
+      index + 1,
+      salon.name || "Sin nombre",
+      areas.find((a) => a.id == salon.areaId)?.name || "Sin área",
+      salon.shift?.name || "Sin turno",
+      <Button
+        key={salon.id}
+        onClick={() =>
+          handleAsignar?.(teacher?.id, salon.id)
+        }
+      >
+        Asignar
+      </Button>,
+    ])
+  };
 
   return (
     <div className="overflow-x-auto w-full mt-6">
+      <h2 className="text-2xl font-bold">
+        Salones Disponibles en el curso de {teacher?.courseName}:
+      </h2>
       <div className="w-full text-center">
-        <Tabla encabezado={encabezado} datos={datos()} />
+        {loadingAreas || loadingSalones || !enabledSalones ? (<SkeletonTabla />)
+          : (<Tabla encabezado={encabezado} datos={datos()} />)}
+      </div>
+      <div className="flex justify-between mt-4">
+        <Button onClick={handlePrev} disabled={page === 1} >  {/* disabled cambiar estilos */}
+          Anterior
+        </Button>
+        <Button onClick={handleNext} disabled={page >= totalPages} >  {/* disabled cambiar estilos */}
+          Siguiente
+        </Button>
+        <select value={limit} onChange={handleLimitChange} className="border border-gray-300 rounded p-2">
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+        </select>
       </div>
     </div>
   );

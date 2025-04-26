@@ -1,20 +1,19 @@
 import React from "react";
 import { Navigate, Outlet, useLocation, useSearchParams } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import { LoginPanel } from "../pages/Login/LoginPanel";
+import { LoginPanel } from "@/pages/Login/LoginPanel";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export const ProtectedRoute = () => {
   const location = useLocation();
   const [searchParams] = useSearchParams();
+  const { data: user } = useCurrentUser();
 
-  // Buscar el token en la URL (para GoogleAuthHandler)
-  const urlToken = searchParams.get("token") || null;
+  const urlToken = searchParams.get("token");
   const storedToken = localStorage.getItem("token");
   const token = urlToken || storedToken;
 
-  // Permitir acceso a GoogleAuthHandler si el token está en la URL
   if (location.pathname === "/login" && urlToken) {
-    return <Outlet />;
+    return <Outlet />; // Permitir acceso al login con token
   }
 
   if (!token) {
@@ -22,15 +21,12 @@ export const ProtectedRoute = () => {
   }
 
   try {
-    const decoded = jwtDecode(token);
-    const userRole = decoded.role;
+    const userRole = user?.role;
 
-    // Si el token en la URL es diferente al de localStorage, actualizarlo
     if (urlToken && urlToken !== storedToken) {
       localStorage.setItem("token", urlToken);
     }
 
-    // Definir las rutas permitidas por rol
     const rolePaths = {
       administrador: "/admin",
       profesor: "/docente",
@@ -40,12 +36,11 @@ export const ProtectedRoute = () => {
 
     const expectedPath = rolePaths[userRole] || "/";
 
-    // ✅ Redirigir si la ruta actual no coincide con la del rol
     if (!location.pathname.startsWith(expectedPath)) {
       return <Navigate to={expectedPath} replace />;
     }
 
-    return <Outlet />; // Permite acceso si la ruta es correcta
+    return <Outlet />; // Ruta correcta para el rol
   } catch (error) {
     console.error("Token inválido:", error);
     localStorage.removeItem("token");

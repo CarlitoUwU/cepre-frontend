@@ -4,58 +4,43 @@ import { Button } from "@/components/ui/Button";
 import { TablaAsignar } from "./TablaAsignar";
 import { useHorarioAsignadoDocente } from "@/hooks/useHorarioAsignadoDocente";
 import { TurnosSelector } from "@/components/Horarios/TurnosSelector";
-import { TeachersServices } from "@/services/TeachersServices";
-import { SchedulesService } from "@/services/SchedulesServices";
 import { useHorasABloques } from "@/hooks/useHorasABloques";
-import { HorarioCompleto } from "./HorarioCompleto"; // Asegúrate de importar correctamente HorarioCompleto
+import { HorarioCompleto } from "./HorarioCompleto";
+import { useCursos } from "@/hooks/useCursos";
 
-export const AsignarSalonDoc = ({ idDocente, regresar }) => {
-  const [docente, setDocente] = useState({});
+export const AsignarSalonDoc = ({ docente, regresar }) => {
+  const { cursos } = useCursos()
   const [disponibilidad, setDisponibilidad] = useState([]);
-  const [salonesDisponibles, setSalonesDisponibles] = useState([]);
   const [modoEdicion, setModoEdicion] = useState(false);
-  const [loadingSalones, setLoadingSalones] = useState(false);
-  const [errorSalones, setErrorSalones] = useState(null);
   const [mostrarHorarioCompleto, setMostrarHorarioCompleto] = useState(false);
-
-  const { mapearABloques, loading: loadingBloques, isReady } = useHorasABloques();
-
+  const [objApi, setObjApi] = useState({})
+  const { mapearABloques, isReady } = useHorasABloques();
   const {
     horario: horarioAsignado,
-    loading: loadingHorario,
-    error: errorHorario,
-    cargarHorarioAsignado,
-  } = useHorarioAsignadoDocente();
-
-  const [objApi, setObjApi] = useState({})
+  } = useHorarioAsignadoDocente({ idDocente: docente?.id });
 
   // Carga inicial del docente, disponibilidad y horario asignado
   useEffect(() => {
     const cargarDataInicial = async () => {
       try {
-        const docenteData = await TeachersServices.getTeacherById(idDocente);
-        setDocente(docenteData);
-
-        const data = localStorage.getItem(`disponibilidad-${idDocente}`);
+        const data = localStorage.getItem(`disponibilidad-${docente?.id}`);
         const parsed = data ? JSON.parse(data) : [];
         setDisponibilidad(Array.isArray(parsed) ? parsed : []);
-
-        await cargarHorarioAsignado(idDocente);  // Aquí carga el horario asignado
       } catch (error) {
         console.warn("Error cargando datos iniciales", error);
-        localStorage.removeItem(`disponibilidad-${idDocente}`);
+        localStorage.removeItem(`disponibilidad-${docente?.id}`);
       }
     };
 
-    if (idDocente) {
+    if (docente?.id) {
       cargarDataInicial();
     }
-  }, [idDocente]);
+  }, [docente]);
 
   // Carga salones disponibles
   useEffect(() => {
     const cargarSalones = async () => {
-      if (!idDocente || !docente?.courseId || !isReady || disponibilidad.length === 0) return;
+      if (!docente || !isReady || disponibilidad.length === 0) return;
 
       const bloques = mapearABloques(disponibilidad);
 
@@ -64,43 +49,31 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
         return;
       }
 
+      const curso = cursos.find((curso) => { return curso?.name?.toLowerCase() === docente?.courseName?.toLowerCase() })
+
       const objApi = {
-        idCurso: docente.courseId,
+        idDocente: docente?.id,
+        idCurso: curso?.id,
         horario: bloques,
         page: 1,
         pageSize: 10,
       };
 
-      setObjApi(objApi); // Guardar el objeto API para usarlo en la tabla
-      
-    console.log("Cargando salones con el objeto API:", objApi); // Verifica el objeto API
-
-      setLoadingSalones(true);
-      setErrorSalones(null);
-
-      try {
-        const response = await SchedulesService.getClasesDisponibles(objApi);
-        setSalonesDisponibles(response || []);
-      } catch (error) {
-        setErrorSalones(error);
-        console.error("Error al obtener salones:", error);
-      } finally {
-        setLoadingSalones(false);
-      }
+      setObjApi(objApi);
     };
 
     cargarSalones();
-  }, [idDocente, docente?.courseId, disponibilidad, isReady]);
+  }, [cursos, disponibilidad, docente, isReady, mapearABloques]);
 
   const handleDisponibilidadChange = useCallback((nuevaDisponibilidad) => {
     setDisponibilidad(nuevaDisponibilidad);
-    localStorage.setItem(`disponibilidad-${idDocente}`, JSON.stringify(nuevaDisponibilidad));
-  }, [idDocente]);
+    localStorage.setItem(`disponibilidad-${docente?.id}`, JSON.stringify(nuevaDisponibilidad));
+  }, [docente]);
 
   return (
     <div className="overflow-x-auto w-full text-center p-2">
       {mostrarHorarioCompleto ? (
-        <HorarioCompleto idDocente={idDocente} setMostrarHorarioCompleto={setMostrarHorarioCompleto} docente = {docente} />
+        <HorarioCompleto idDocente={docente?.id} setMostrarHorarioCompleto={setMostrarHorarioCompleto} docente={docente} />
       ) : (
         <div className="flex flex-col items-center space-y-6">
           <h2 className="text-2xl font-bold">
@@ -125,17 +98,9 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
             </Button>
           </div>
 
-          <h2 className="text-2xl font-bold">
-            Salones Disponibles en el curso de {docente?.courseName}:
-          </h2>
-
           <TablaAsignar
-            salones={salonesDisponibles}
-            isLoading={loadingSalones}
-            isError={!!errorSalones}
-            error={errorSalones}
-            teacherId={idDocente}
-            objApi ={objApi}                  
+            teacher={docente}
+            objApi={objApi}
           />
 
           <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>

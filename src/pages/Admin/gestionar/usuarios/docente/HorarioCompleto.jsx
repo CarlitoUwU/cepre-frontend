@@ -1,16 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { TablaHorarioDocente } from "@/components/Horarios/TablaHorarioDocente";
 import { useHorarioAsignadoDocente } from "@/hooks/useHorarioAsignadoDocente";
 
-export const HorarioCompleto = ({ idDocente, setMostrarHorarioCompleto, docente }) => {
-  const { horario, loading, cargarHorarioAsignado } = useHorarioAsignadoDocente();
-
-  useEffect(() => {
-    if (idDocente) {
-      cargarHorarioAsignado(idDocente);
-    }
-  }, [idDocente]);
+export const HorarioCompleto = ({ setMostrarHorarioCompleto, docente }) => {
+  const { horario, loading } = useHorarioAsignadoDocente({ idDocente: docente?.id });
 
   return (
     <div className="flex flex-col items-center justify-center p-10 space-y-6">
@@ -19,9 +13,9 @@ export const HorarioCompleto = ({ idDocente, setMostrarHorarioCompleto, docente 
       {loading ? (
         <p>Cargando horario...</p>
       ) : (
-        <TablaHorarioDocente 
+        <TablaHorarioDocente
           horarios={horario || []}
-          setClaseSeleccionada={() => {}}
+          setClaseSeleccionada={() => { }}
         />
       )}
 
