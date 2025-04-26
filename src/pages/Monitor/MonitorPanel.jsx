@@ -120,7 +120,7 @@ export const MonitorPanel = () => {
     <div className="bg-gray-200 p-2 md:p-4 mx-0 md:m-5 text-center">
       <div className="grid grid-cols-1 md:grid-cols-5 gap-2 md:gap-4">
         {/* Lista de Cursos */}
-        <div className="col-span-1 md:col-span-2 overflow-x-auto">
+        <div className="col-span-1 md:col-span-2 overflow-x-auto text-xs md:text-sm">
           <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">CURSOS</h2>
           {isLoading ? (
             <SkeletonTabla numRows={15} nuColumns={3} />
@@ -131,13 +131,13 @@ export const MonitorPanel = () => {
 
         {/* Horario del Monitor */}
         <div className="col-span-1 md:col-span-3 overflow-x-auto">
-          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4">
+          <h2 className="text-xl md:text-2xl font-bold mb-2 md:mb-4 ">
             HORARIO {monitorInfo?.salon || ""}
           </h2>
           <TablaHorarioMonitor horas={horario} />
 
           {/* Funciones del Monitor */}
-          <div className="col-span-1 md:col-span-5 mt-4 md:mt-8">
+          <div className="col-span-1 md:col-span-5 mt-4 md:mt-8 text-xs md:text-sm">
             <FuncionesMonitor monitorInfo={monitorInfo} />
           </div>
         </div>
