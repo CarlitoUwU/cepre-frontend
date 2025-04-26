@@ -12,6 +12,7 @@ const encabezado = ["Nº", "Aula Disponible", "Área", "Turno", "Acciones"];
 export const TablaAsignar = ({
   teacher,
   objApi = {},
+  onSalonAsignado,   // 👈 importante: recibir la función de recarga
 }) => {
   const { areas, isLoading: loadingAreas } = useAreas();
   const [page, setPage] = useState(1);
@@ -38,6 +39,11 @@ export const TablaAsignar = ({
       });
       if (response) {
         toast.success("Profesor asignado correctamente");
+
+        // 🔥 Una vez asignado, llamamos a la función que recarga el horario
+        if (onSalonAsignado) {
+          await onSalonAsignado();
+        }
       }
 
     } catch (error) {
@@ -74,10 +80,10 @@ export const TablaAsignar = ({
           : (<Tabla encabezado={encabezado} datos={datos()} />)}
       </div>
       <div className="flex justify-between mt-4">
-        <Button onClick={handlePrev} disabled={page === 1} >  {/* disabled cambiar estilos */}
+        <Button onClick={handlePrev} disabled={page === 1}>
           Anterior
         </Button>
-        <Button onClick={handleNext} disabled={page >= totalPages} >  {/* disabled cambiar estilos */}
+        <Button onClick={handleNext} disabled={page >= totalPages}>
           Siguiente
         </Button>
         <select value={limit} onChange={handleLimitChange} className="border border-gray-300 rounded p-2">
@@ -89,4 +95,3 @@ export const TablaAsignar = ({
     </div>
   );
 };
-
