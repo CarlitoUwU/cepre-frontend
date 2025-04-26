@@ -72,6 +72,8 @@ export const AsignarSalonDoc = ({ idDocente, regresar }) => {
       };
 
       setObjApi(objApi); // Guardar el objeto API para usarlo en la tabla
+      
+    console.log("Cargando salones con el objeto API:", objApi); // Verifica el objeto API
 
       setLoadingSalones(true);
       setErrorSalones(null);

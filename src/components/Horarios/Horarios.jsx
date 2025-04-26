@@ -105,7 +105,6 @@ const TablaTurno = ({
 
         {
           horarioAsignado?.map((hora) =>{
-            console.log("horarioAsignado", hora);
             const pertenece = esHora2AntesQueHora1(horaFin, hora.hora_ini) && 
             esHora2AntesQueHora1(hora.hora_fin, horaInicio) && compararTurnoYSalon(nombreTurno, hora.clase);  
             if (!pertenece) return null;
