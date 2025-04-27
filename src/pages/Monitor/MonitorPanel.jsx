@@ -25,8 +25,11 @@ const fetchHorarioData = async () => {
       curso: hora.courseName,
     }));
   } catch (error) {
+    if (error?.response?.status === 404) {
+      toast.error("No se encontró horario para el monitor.");
+      return [];
+    }
     console.error("Error fetching horario data", error);
-    throw new Error(TYPE_ERROR.SIN_HORARIO);
   }
 };
 
@@ -40,8 +43,11 @@ const fetchProfesoresData = async () => {
     }))
   }
   catch (error) {
+    if (error?.response?.status === 404) {
+      toast.error("No se encontró profesores asignados.");
+      return [];
+    }
     console.error("Error fetching profesores data", error);
-    //throw new Error(TYPE_ERROR.SIN_PROFESORES);
   }
 }
 
@@ -58,8 +64,11 @@ const fetchDatosMonitor = async () => {
     };
   }
   catch (error) {
+    if (error?.response?.status === 404) {
+      toast.error("No se encontró información del monitor.");
+      return null;
+    }
     console.error("Error fetching monitor data", error);
-    throw new Error(TYPE_ERROR.SIN_DATOS);
   }
 }
 
