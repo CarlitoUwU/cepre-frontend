@@ -66,7 +66,7 @@ export const SupervisorUsuarios = () => {
   const handleGuardar = async () => {
     try {
       const supervisor = {
-        userId: editingId,
+        id: editingId,
         firstName: editFormData.nombres,
         lastName: editFormData.apellidos,
         email: editFormData.correo,
@@ -85,7 +85,17 @@ export const SupervisorUsuarios = () => {
         });
       }
     } catch (error) {
-      toast.error("Error al actualizar supervisor");
+      if (error.response?.status === 409) {
+        toast.error("El correo ya está en uso por otro usuario");
+      } else if (error.response?.status === 400) {
+        toast.error("Error en los datos proporcionados");
+      } else if (error.response?.status === 404) {
+        toast.error("Supervisor no encontrado");
+      } else if (error.response?.status === 500) {
+        toast.error("Error interno del servidor");
+      } else {
+        toast.error("Error al actualizar supervisor");
+      }
       console.error("Error al actualizar supervisor:", error);
     }
   };
