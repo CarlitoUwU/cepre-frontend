@@ -6,6 +6,11 @@ import { HORAS_INI, HORAS_FIN } from "@/constants/horas";
 import { AREA_COLORS } from "@/constants/areaColors";
 import { DIAS } from "@/constants/dias";
 
+const COLORS_CELDAS = {
+  "PERTENECE": "#b5e6b5",
+  "NO_PERTENECE": "#f4f4f4",
+}
+
 // Función para verificar cruce de horas entre clase y turno
 const hayCruceDeHoras = (horaIniClase, horaFinClase, horaIniTurno, horaFinTurno) => {
   const iniClase = HORAS_INI.indexOf(horaIniClase);
@@ -32,6 +37,35 @@ function compararTurnoYSalon(turno, salon) {
   return turnoDigito === salonDigito;
 }
 
+const agruparHoras = (horas) => {
+  const horasOrdenadas = [...horas].sort((a, b) => {
+    if (a.dia !== b.dia) return DIAS.indexOf(a.dia) - DIAS.indexOf(b.dia);
+    return HORAS_INI.indexOf(a.hora_ini) - HORAS_INI.indexOf(b.hora_ini);
+  });
+
+  const grupos = [];
+  let grupoActual = null;
+
+  horasOrdenadas.forEach((hora) => {
+    if (
+      grupoActual &&
+      grupoActual.dia === hora.dia &&
+      grupoActual.clase === hora.clase &&
+      HORAS_FIN.indexOf(grupoActual.hora_fin) + 1 === HORAS_INI.indexOf(hora.hora_ini)
+    ) {
+      // Agrupar si es misma asignatura y hora consecutiva
+      grupoActual.hora_fin = hora.hora_fin;
+    } else {
+      if (grupoActual) grupos.push(grupoActual);
+      grupoActual = { ...hora };
+    }
+  });
+
+  if (grupoActual) grupos.push(grupoActual);
+  return grupos;
+};
+
+
 const TablaTurno = ({
   nombreTurno,
   horarioAsignado = [],
@@ -45,6 +79,12 @@ const TablaTurno = ({
   const minIndex = HORAS_INI.indexOf(horaInicio);
   const maxIndex = HORAS_FIN.indexOf(horaFin);
 
+  const horasTurno = horarioAsignado.filter(
+    (hora) => esHora2AntesQueHora1(horaFin, hora.hora_ini) &&
+      esHora2AntesQueHora1(hora.hora_fin, horaInicio) && compararTurnoYSalon(nombreTurno, hora.clase));
+
+  const horasAgrupadas = agruparHoras(horasTurno);
+
   const getRow = (horaIni) => HORAS_INI.indexOf(horaIni) - minIndex + 2;
   const getRowSpan = (horaIni, horaFin) =>
     HORAS_FIN.indexOf(horaFin) - HORAS_INI.indexOf(horaIni) + 1;
@@ -56,7 +96,7 @@ const TablaTurno = ({
       <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4 relative">
         <div></div>
         {DIAS.map((dia, index) => (
-          <Dia key={index} nombre={dia} onClick={() => handleClickDia(dia)} />
+          <Dia key={index} nombre={dia} onClick={() => handleClickDia?.(dia)} />
         ))}
 
         {HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, index) => (
@@ -64,7 +104,7 @@ const TablaTurno = ({
             key={index}
             hora={`${hora} - ${HORAS_FIN[minIndex + index]}`}
             onClick={() =>
-              handleClickHora(hora, HORAS_FIN[minIndex + index])
+              handleClickHora?.(hora, HORAS_FIN[minIndex + index])
             }
           />
         ))}
@@ -81,10 +121,10 @@ const TablaTurno = ({
             return (
               <div
                 key={`bg-${dia}-${hora}`}
-                className="rounded-lg cursor-pointer"
+                className={`rounded-lg ${handleCeldaClick ? 'cursor-pointer' : ''}`}
                 onClick={() => {
                   if (hayCruceDeHoras(hora, horaFin, horaInicio, horaFin)) {
-                    handleCeldaClick({
+                    handleCeldaClick?.({
                       dia,
                       hora_ini: hora,
                       hora_fin: horaFin,
@@ -94,7 +134,7 @@ const TablaTurno = ({
                   }
                 }}
                 style={{
-                  backgroundColor: estaDisponible ? "#b5e6b5" : "#f4f4f4",
+                  backgroundColor: estaDisponible ? COLORS_CELDAS.PERTENECE : COLORS_CELDAS.NO_PERTENECE,
                   gridColumn: i + 2,
                   gridRow: k + 2,
                 }}
@@ -103,25 +143,18 @@ const TablaTurno = ({
           })
         )}
 
-        {
-          horarioAsignado?.map((hora) => {
-            const pertenece = esHora2AntesQueHora1(horaFin, hora.hora_ini) &&
-              esHora2AntesQueHora1(hora.hora_fin, horaInicio) && compararTurnoYSalon(nombreTurno, hora.clase);
-            if (!pertenece) return null;
-            return (
-              <Curso
-                key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
-                nombre={hora.clase}
-                backgroundColor={AREA_COLORS[hora.area] || "#f4351c"} // Asegúrate de que `area` es el correcto
-                gridColumn={getColumn(hora.dia)}
-                gridRow={getRow(hora.hora_ini)}
-                gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
-              />
-            );
-
-          })
-        }
-
+        {horasAgrupadas?.map((hora) => {
+          return (
+            <Curso
+              key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
+              nombre={hora.clase}
+              backgroundColor={AREA_COLORS[hora.area] || "#f4351c"} // Asegúrate de que `area` es el correcto
+              gridColumn={getColumn(hora.dia)}
+              gridRow={getRow(hora.hora_ini)}
+              gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
+            />
+          );
+        })}
       </div>
     </div>
   );

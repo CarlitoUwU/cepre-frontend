@@ -93,7 +93,17 @@ export const DocenteUsuarios = () => {
         });
       }
     } catch (error) {
-      toast.error("Error al actualizar el docente");
+      if (error.response?.status === 409) {
+        toast.error("El correo ya está en uso por otro usuario");
+      } else if (error.response?.status === 400) {
+        toast.error("Error en los datos proporcionados");
+      } else if (error.response?.status === 404) {
+        toast.error("Docente no encontrado");
+      } else if (error.response?.status === 500) {
+        toast.error("Error interno del servidor");
+      } else {
+        toast.error("Error al actualizar el docente");
+      }
       console.error("Error al actualizar el docente:", error);
     }
   };
