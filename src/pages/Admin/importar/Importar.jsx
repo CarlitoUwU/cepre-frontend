@@ -119,7 +119,7 @@ export const Importar = () => {
 
       {/* FORMULARIO */}
       <form onSubmit={handleSubmit} className="bg-gray-200 p-6 rounded-lg w-full mx-auto flex flex-col min-h-[60vh] max-w-screen-lg">
-        <label htmlFor="file-upload" className={`${app_estado === app_estados.SinArchivo ? 'cursor-pointer' : ''} flex flex-col items-center justify-center flex-grow w-full rounded-lg border-4 border-black border-dashed bg-gray-100`}>
+        <label htmlFor="file-upload" className={`${app_estado === app_estados.SinArchivo ? 'cursor-pointer select-none' : ''} flex flex-col items-center justify-center flex-grow w-full rounded-lg border-4 border-black border-dashed bg-gray-100`}>
           {app_estado === app_estados.SinArchivo ? (
             <>
               <img src="../subir.png" alt="Upload icon" className="w-25 h-25 sm:w-45 sm:h-45" />
