@@ -8,13 +8,6 @@ import { formatTimeToHHMM } from "@/utils/formatTime";
 import { toast } from "react-toastify";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 
-const TYPE_ERROR = {
-  SIN_HORARIO: "No se encontró horario",
-  SIN_PROFESORES: "No se encontró profesores",
-  SIN_DATOS: "No se encontraron datos",
-  default: "Error desconocido, contacte al administrador",
-};
-
 const fetchHorarioData = async () => {
   try {
     const horario = await MonitorsServices.cargarHorario();
@@ -25,8 +18,11 @@ const fetchHorarioData = async () => {
       curso: hora.courseName,
     }));
   } catch (error) {
+    if (error?.response?.status === 404) {
+      toast.error("No se encontró horario para el monitor.");
+      return [];
+    }
     console.error("Error fetching horario data", error);
-    throw new Error(TYPE_ERROR.SIN_HORARIO);
   }
 };
 
@@ -40,8 +36,11 @@ const fetchProfesoresData = async () => {
     }))
   }
   catch (error) {
+    if (error?.response?.status === 404) {
+      toast.error("No se encontró profesores asignados.");
+      return [];
+    }
     console.error("Error fetching profesores data", error);
-    //throw new Error(TYPE_ERROR.SIN_PROFESORES);
   }
 }
 
@@ -58,8 +57,11 @@ const fetchDatosMonitor = async () => {
     };
   }
   catch (error) {
+    if (error?.response?.status === 404) {
+      toast.error("No se encontró información del monitor.");
+      return null;
+    }
     console.error("Error fetching monitor data", error);
-    throw new Error(TYPE_ERROR.SIN_DATOS);
   }
 }
 
@@ -91,14 +93,23 @@ export const MonitorPanel = () => {
             setHorario([]);
             setListaProfesores([]);
             setMonitorInfo({});
-            toast.error("No se encontraron datos para mostrar.");
             return;
           }
 
           setIsLoading(false);
 
           // Guardar en el estado
-          setHorario(horario);
+          setHorario(horario?.map(hora => {
+            const profesor = profesores.find(prof => prof.curso === hora.curso);
+
+            if (profesor) {
+              return {
+                ...hora,
+                docente: profesor.docente,
+              };
+            }
+            return hora;
+          }));
           setListaProfesores(profesores);
           setMonitorInfo(monitor);
 
@@ -107,8 +118,7 @@ export const MonitorPanel = () => {
           sessionStorage.setItem("profesores", JSON.stringify(profesores));
         } catch (error) {
           console.error("Error en loadHorario", error);
-          const tipo = error?.message || TYPE_ERROR.default;
-          toast.error(tipo);
+          toast.error("Error al cargar los datos del horario.");
         }
       }
     };
