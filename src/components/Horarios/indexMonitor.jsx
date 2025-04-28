@@ -6,42 +6,23 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import { HORAS_INI, HORAS_FIN } from '@/constants/horas';
 import { DIAS } from "@/constants/dias";
 import { useCursos } from "@/hooks/useCursos";
-import { MonitorsServices } from "@/services/MonitorsServices"; 
 
 export const TablaHorarioMonitor = ({ horas = [] }) => {
   const { cursos } = useCursos();
   const isMobile = useIsMobile(1024);
   const [viewMode, setViewMode] = useState('week');
   const [selectedDay, setSelectedDay] = useState(null);
-  const [docentesPorCurso, setDocentesPorCurso] = useState({}); 
 
   const currentDayIndex = new Date().getDay();
-  const adjustedDayIndex = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
+  const adjustedDayIndex = currentDayIndex === 0 ? 0 : currentDayIndex - 1;
   const currentDay = DIAS[adjustedDayIndex];
 
   useEffect(() => {
     setSelectedDay(currentDay);
   }, [currentDay]);
 
-  useEffect(() => {
-    fetchProfesoresData();
-  }, []);
-
-  const fetchProfesoresData = async () => {
-    try {
-      const profesores = await MonitorsServices.cargarDocentes();
-      const docentesMap = {};
-      profesores.forEach(profesor => {
-        docentesMap[profesor.courseName.toUpperCase()] = `${profesor.firstName} ${profesor.lastName}`;
-      });
-      setDocentesPorCurso(docentesMap);
-    } catch (error) {
-      console.error("Error fetching profesores data", error);
-    }
-  };
-
   const diasToShow = viewMode === 'day' ? [selectedDay] : DIAS;
-  const diasHeader = isMobile ? diasToShow.map(dia => dia.charAt(0)) : diasToShow;
+  const diasHeader = isMobile ? diasToShow.map(dia => dia?.charAt(0)) : diasToShow;
 
   const agruparCursosConsecutivos = (horas) => {
     const filteredHours = viewMode === 'day' ? horas.filter(hora => hora.dia === selectedDay) : horas;
@@ -90,7 +71,7 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
   const acortarNombreCurso = (nombre) => {
     if (!isMobile) return nombre;
     const palabras = nombre.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().split(" ");
-    return palabras.length === 1 
+    return palabras.length === 1
       ? palabras[0].slice(0, 3).toUpperCase().split("").join("\n")
       : palabras.map(p => p[0]?.toUpperCase()).join("\n");
   };
@@ -100,10 +81,6 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
     if (viewMode === 'week') {
       setViewMode('day');
     }
-  };
-
-  const toggleViewMode = () => {
-    setViewMode(prev => prev === 'week' ? 'day' : 'week');
   };
 
   const getGridTemplateColumns = () => {
@@ -127,8 +104,7 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
 
         <div className="space-y-2.5">
           {horasOrdenadas.map((hora, index) => {
-            const esRecreo = hora.curso.toUpperCase().includes("RECREO");
-            const color = esRecreo ? '#FACC15' : getColor(hora.curso);
+            const color = getColor(hora.curso);
 
             return (
               <div key={index} className="flex gap-3 items-stretch">
@@ -149,11 +125,9 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
                     <span className="text-base sm:text-lg font-bold text-gray-800 leading-5 truncate">
                       {hora.curso}
                     </span>
-                    {!esRecreo && (
-                      <span className="text-sm text-gray-500 mt-0.5 border-t border-gray-200 pt-0.5">
-                        Docente: {docentesPorCurso[hora.curso.toUpperCase()] || 'Por asignar'}
-                      </span>
-                    )}
+                    <span className="text-sm text-gray-500 mt-0.5 border-t border-gray-200 pt-0.5">
+                      Docente: {hora?.docente || 'Por asignar'}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -169,31 +143,33 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
       <div className="flex flex-col mb-6 space-y-4 select-none ">
         <div className="flex justify-center ">
           <button onClick={() => setViewMode('week')} className={`px-4 py-2 rounded-l-lg ${viewMode === 'week' ? 'bg-[#78211E] text-white' : 'bg-gray-200 hover:bg-gray-300'} transition-colors font-medium cursor-pointer`}>
-            Vista Semanal 
+            Vista Semanal
           </button>
           <button onClick={() => setViewMode('day')} className={`px-4 py-2 rounded-r-lg ${viewMode === 'day' ? 'bg-[#78211E] text-white' : 'bg-gray-200 hover:bg-gray-300'} transition-colors font-medium cursor-pointer`}>
             Vista Diaria
           </button>
         </div>
+        {/* Cabecera */}
         {viewMode === 'day' && (
           <div className="flex justify-center overflow-x-auto py-2 space-x-2 ">
-            {DIAS.map((dia) => (
+            {DIAS.map((dia, i) => (
               <button
-                key={dia}
+                key={`${dia}-${i}`}
                 onClick={() => handleDayClick(dia)}
                 className={`px-4 py-2 cursor-pointer rounded-lg min-w-[3rem] ${dia === selectedDay ? 'bg-[#78211E] text-white' : 'bg-gray-100 hover:bg-gray-200'} transition-colors ${dia === currentDay ? 'font-bold ring-2 ring-[#78211E]' : ''}`}
               >
-                {isMobile ? dia.charAt(0) : dia.substring(0, 3)}
+                {isMobile ? dia?.charAt(0) : dia.substring(0, 3)}
               </button>
             ))}
           </div>
         )}
       </div>
       {viewMode === 'day' ? renderDayView() : (
+        // Vista semanal
         <div className="grid gap-1" style={{ gridTemplateColumns: getGridTemplateColumns(), gridAutoRows: rowHeight }}>
           <div className="rounded-lg bg-gray-100"></div>
           {diasHeader.map((dia, index) => (
-            <Dia key={index} nombre={dia} isCurrent={DIAS[index] === currentDay} onClick={() => handleDayClick(DIAS[index])} clickable={true} />
+            <Dia key={`${dia}-${index}-day`} nombre={dia} isCurrent={DIAS[index] === currentDay} onClick={() => handleDayClick(DIAS[index])} clickable={true} />
           ))}
           {HORAS_INI.slice(horaMinima, horaMaxima + 1).map((hora, index) => (
             <React.Fragment key={index}>
@@ -203,9 +179,9 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
               ))}
             </React.Fragment>
           ))}
-          {horasAgrupadas.map((hora) => (
+          {horasAgrupadas.map((hora, i) => (
             <Curso
-              key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
+              key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}-${i}`}
               nombre={acortarNombreCurso(hora.curso)}
               backgroundColor={getColor(hora.curso)}
               gridColumn={getColumn(hora.dia)}

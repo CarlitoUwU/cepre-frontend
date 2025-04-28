@@ -145,9 +145,9 @@ export const TurnosSelector = ({
         turno={turnoSeleccionado}
         disponibilidad={disponibilidad}
         horarioAsignado={horarioAsignado}
-        handleCeldaClick={modoEdicion ? handleCeldaClick : undefined}
-        handleClickDia={modoEdicion ? handleClickDia : undefined}
-        handleClickHora={modoEdicion ? handleClickHora : undefined}
+        handleCeldaClick={modoEdicion ? handleCeldaClick : null}
+        handleClickDia={modoEdicion ? handleClickDia : null}
+        handleClickHora={modoEdicion ? handleClickHora : null}
       />
     </div>
   );
