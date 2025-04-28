@@ -8,13 +8,6 @@ import { formatTimeToHHMM } from "@/utils/formatTime";
 import { toast } from "react-toastify";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 
-const TYPE_ERROR = {
-  SIN_HORARIO: "No se encontró horario",
-  SIN_PROFESORES: "No se encontró profesores",
-  SIN_DATOS: "No se encontraron datos",
-  default: "Error desconocido, contacte al administrador",
-};
-
 const fetchHorarioData = async () => {
   try {
     const horario = await MonitorsServices.cargarHorario();
@@ -100,14 +93,23 @@ export const MonitorPanel = () => {
             setHorario([]);
             setListaProfesores([]);
             setMonitorInfo({});
-            toast.error("No se encontraron datos para mostrar.");
             return;
           }
 
           setIsLoading(false);
 
           // Guardar en el estado
-          setHorario(horario);
+          setHorario(horario?.map(hora => {
+            const profesor = profesores.find(prof => prof.curso === hora.curso);
+
+            if (profesor) {
+              return {
+                ...hora,
+                docente: profesor.docente,
+              };
+            }
+            return hora;
+          }));
           setListaProfesores(profesores);
           setMonitorInfo(monitor);
 
@@ -116,8 +118,7 @@ export const MonitorPanel = () => {
           sessionStorage.setItem("profesores", JSON.stringify(profesores));
         } catch (error) {
           console.error("Error en loadHorario", error);
-          const tipo = error?.message || TYPE_ERROR.default;
-          toast.error(tipo);
+          toast.error("Error al cargar los datos del horario.");
         }
       }
     };

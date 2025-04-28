@@ -6,39 +6,20 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 import { HORAS_INI, HORAS_FIN } from '@/constants/horas';
 import { DIAS } from "@/constants/dias";
 import { useCursos } from "@/hooks/useCursos";
-import { MonitorsServices } from "@/services/MonitorsServices";
 
 export const TablaHorarioMonitor = ({ horas = [] }) => {
   const { cursos } = useCursos();
   const isMobile = useIsMobile(1024);
   const [viewMode, setViewMode] = useState('week');
   const [selectedDay, setSelectedDay] = useState(null);
-  const [docentesPorCurso, setDocentesPorCurso] = useState({});
 
   const currentDayIndex = new Date().getDay();
-  const adjustedDayIndex = currentDayIndex === 0 ? 6 : currentDayIndex - 1;
+  const adjustedDayIndex = currentDayIndex === 0 ? 0 : currentDayIndex - 1;
   const currentDay = DIAS[adjustedDayIndex];
 
   useEffect(() => {
     setSelectedDay(currentDay);
   }, [currentDay]);
-
-  useEffect(() => {
-    fetchProfesoresData();
-  }, []);
-
-  const fetchProfesoresData = async () => {
-    try {
-      const profesores = await MonitorsServices.cargarDocentes();
-      const docentesMap = {};
-      profesores.forEach(profesor => {
-        docentesMap[profesor.courseName.toUpperCase()] = `${profesor.firstName} ${profesor.lastName}`;
-      });
-      setDocentesPorCurso(docentesMap);
-    } catch (error) {
-      console.error("Error fetching profesores data", error);
-    }
-  };
 
   const diasToShow = viewMode === 'day' ? [selectedDay] : DIAS;
   const diasHeader = isMobile ? diasToShow.map(dia => dia?.charAt(0)) : diasToShow;
@@ -123,8 +104,7 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
 
         <div className="space-y-2.5">
           {horasOrdenadas.map((hora, index) => {
-            const esRecreo = hora.curso.toUpperCase().includes("RECREO");
-            const color = esRecreo ? '#FACC15' : getColor(hora.curso);
+            const color = getColor(hora.curso);
 
             return (
               <div key={index} className="flex gap-3 items-stretch">
@@ -145,11 +125,9 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
                     <span className="text-base sm:text-lg font-bold text-gray-800 leading-5 truncate">
                       {hora.curso}
                     </span>
-                    {!esRecreo && (
-                      <span className="text-sm text-gray-500 mt-0.5 border-t border-gray-200 pt-0.5">
-                        Docente: {docentesPorCurso[hora.curso.toUpperCase()] || 'Por asignar'}
-                      </span>
-                    )}
+                    <span className="text-sm text-gray-500 mt-0.5 border-t border-gray-200 pt-0.5">
+                      Docente: {hora?.docente || 'Por asignar'}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -171,6 +149,7 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
             Vista Diaria
           </button>
         </div>
+        {/* Cabecera */}
         {viewMode === 'day' && (
           <div className="flex justify-center overflow-x-auto py-2 space-x-2 ">
             {DIAS.map((dia, i) => (
@@ -186,6 +165,7 @@ export const TablaHorarioMonitor = ({ horas = [] }) => {
         )}
       </div>
       {viewMode === 'day' ? renderDayView() : (
+        // Vista semanal
         <div className="grid gap-1" style={{ gridTemplateColumns: getGridTemplateColumns(), gridAutoRows: rowHeight }}>
           <div className="rounded-lg bg-gray-100"></div>
           {diasHeader.map((dia, index) => (
