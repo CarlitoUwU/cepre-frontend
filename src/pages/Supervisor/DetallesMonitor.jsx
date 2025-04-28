@@ -61,26 +61,33 @@ export const DetallesMonitor = ({ aula = {}, volver = () => {} }) => {
   const horariosRender = useMemo(() => horario, [horario]);
 
   return (
-    <div>
-      {/* Sección Horario */}
-      <h2 className="text-xl font-semibold text-center mb-4">
-        {`Horario del Aula ${aula.aula || "Desconocida"}`}
-      </h2>
-      <TablaHorarioMonitor horas={horariosRender} />
+    <div className="grid grid-cols-1 md:grid-cols-5 text-sm">
 
-      {/* Separador */}
-      <hr className="my-8 border-t-2 border-gray-300" />
-
-      {/* Sección Directorio */}
-      <h2 className="text-xl font-semibold text-center mb-4">
-        {`Directorio del Aula ${aula.aula || "Desconocida"}`}
-      </h2>
-      <Tabla encabezado={["N°", "Curso", "Nombre", "Correo", "Número"]} datos={docentes} />
-
-      {/* Botón Volver */}
-      <div className="text-center mt-6">
-        <ButtonNegative onClick={volver}>Volver</ButtonNegative>
+      {/* Directorio del Aula (Izquierda - menos ancho) */}
+      <div className="md:col-span-2 flex flex-col items-center">
+        <h2 className="text-base font-semibold text-center mb-1">
+          {`Directorio del Aula ${aula.aula || "Desconocida"}`}
+        </h2>
+        <div className="w-full max-w-[100%]">
+          <Tabla encabezado={["N°", "Curso", "Nombre", "Correo", "Número"]} datos={docentes} />
+        </div>
       </div>
+
+      {/* Horario del Aula (Derecha - más ancho) */}
+      <div className="md:col-span-3 flex flex-col items-center">
+        <h2 className="text-base font-semibold text-center mb-1">
+          {`Horario del Aula ${aula.aula || "Desconocida"}`}
+        </h2>
+        <div className="w-full max-w-[95%]">
+          <TablaHorarioMonitor horas={horariosRender} />
+        </div>
+
+        {/* Botón Volver */}
+        <div className="mt-6 text-center">
+          <ButtonNegative onClick={volver}>Volver</ButtonNegative>
+        </div>
+      </div>
+
     </div>
   );
 };
