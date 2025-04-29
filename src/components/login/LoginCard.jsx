@@ -6,9 +6,12 @@ import logo from "@/assets/logo-light.png";
 export const LoginCard = ({ onGoogleLogin, isLoading }) => {
   return (
     <div className="w-full max-w-md bg-white/85 backdrop-blur-sm rounded-2xl shadow-2xl p-8 transition-all duration-300 animate-fadeIn">
-      <div className="flex flex-row items-center justify-center gap-12 mb-6">
-        <Escudo />
-        <Logo />
+      <div className="flex flex-col items-center gap-4 mb-6">
+        <div className="flex flex-row items-center justify-center gap-12">
+          <Escudo />
+          <Logo />
+        </div>
+        <div className="w-full border-t-2 border-gray-300" />
       </div>
       <h1 className="text-xl text-gray-800 font-semibold text-center mb-6">
         Universidad Nacional de San Agustín
@@ -30,6 +33,7 @@ export const LoginCard = ({ onGoogleLogin, isLoading }) => {
     </div>
   );
 };
+
 
 export const Escudo = () => (
   <div className="h-12 w-auto">
