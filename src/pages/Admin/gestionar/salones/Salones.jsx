@@ -104,7 +104,7 @@ export const Salones = () => {
   }
 
   return (
-    <div className="overflow-x-auto w-full text-center">
+    <div className="overflow-x-auto w-full text-center text-xs sm:text-sm">
       <div className="flex justify-between items-center mt-1 mb-6 px-4">
         <Button onClick={refetch}>
           <FaSyncAlt />
