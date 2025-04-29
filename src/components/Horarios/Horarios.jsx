@@ -91,71 +91,68 @@ const TablaTurno = ({
   const getColumn = (dia) => DIAS.indexOf(dia) + 2;
 
   return (
-    <div className="">
-      <h2 className="text-xl font-semibold mb-4 text-gray-800">{nombreTurno}</h2>
-      <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4 relative">
-        <div></div>
-        {DIAS.map((dia, index) => (
-          <Dia key={index} nombre={dia} onClick={() => handleClickDia?.(dia)} />
-        ))}
+    <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4 relative w-full">
+      <div></div>
+      {DIAS.map((dia, index) => (
+        <Dia key={index} nombre={dia} onClick={() => handleClickDia?.(dia)} />
+      ))}
 
-        {HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, index) => (
-          <Hora
-            key={index}
-            hora={`${hora} - ${HORAS_FIN[minIndex + index]}`}
-            onClick={() =>
-              handleClickHora?.(hora, HORAS_FIN[minIndex + index])
-            }
-          />
-        ))}
+      {HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, index) => (
+        <Hora
+          key={index}
+          hora={`${hora} - ${HORAS_FIN[minIndex + index]}`}
+          onClick={() =>
+            handleClickHora?.(hora, HORAS_FIN[minIndex + index])
+          }
+        />
+      ))}
 
-        {DIAS.flatMap((dia, i) =>
-          HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, k) => {
-            const horaIndex = HORAS_INI.indexOf(hora);
-            const horaFin = HORAS_FIN[horaIndex];
+      {DIAS.flatMap((dia, i) =>
+        HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, k) => {
+          const horaIndex = HORAS_INI.indexOf(hora);
+          const horaFin = HORAS_FIN[horaIndex];
 
-            const estaDisponible = disponibilidad.some(
-              (d) => d.dia === dia && d.hora_ini === hora && d.hora_fin === horaFin
-            );
+          const estaDisponible = disponibilidad.some(
+            (d) => d.dia === dia && d.hora_ini === hora && d.hora_fin === horaFin
+          );
 
-            return (
-              <div
-                key={`bg-${dia}-${hora}`}
-                className={`rounded-lg ${handleCeldaClick ? 'cursor-pointer' : ''}`}
-                onClick={() => {
-                  if (hayCruceDeHoras(hora, horaFin, horaInicio, horaFin)) {
-                    handleCeldaClick?.({
-                      dia,
-                      hora_ini: hora,
-                      hora_fin: horaFin,
-                    });
-                  } else {
-                    alert("Este horario no pertenece al turno actual.");
-                  }
-                }}
-                style={{
-                  backgroundColor: estaDisponible ? COLORS_CELDAS.PERTENECE : COLORS_CELDAS.NO_PERTENECE,
-                  gridColumn: i + 2,
-                  gridRow: k + 2,
-                }}
-              />
-            );
-          })
-        )}
-
-        {horasAgrupadas?.map((hora) => {
           return (
-            <Curso
-              key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
-              nombre={hora.clase}
-              backgroundColor={AREA_COLORS[hora.area] || "#f4351c"} // Asegúrate de que `area` es el correcto
-              gridColumn={getColumn(hora.dia)}
-              gridRow={getRow(hora.hora_ini)}
-              gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
+            <div
+              key={`bg-${dia}-${hora}`}
+              className={`rounded-lg ${handleCeldaClick ? 'cursor-pointer' : ''}`}
+              onClick={() => {
+                if (hayCruceDeHoras(hora, horaFin, horaInicio, horaFin)) {
+                  handleCeldaClick?.({
+                    dia,
+                    hora_ini: hora,
+                    hora_fin: horaFin,
+                  });
+                } else {
+                  alert("Este horario no pertenece al turno actual.");
+                }
+              }}
+              style={{
+                backgroundColor: estaDisponible ? COLORS_CELDAS.PERTENECE : COLORS_CELDAS.NO_PERTENECE,
+                gridColumn: i + 2,
+                gridRow: k + 2,
+              }}
             />
           );
-        })}
-      </div>
+        })
+      )}
+
+      {horasAgrupadas?.map((hora) => {
+        return (
+          <Curso
+            key={`${hora.dia}-${hora.hora_ini}-${hora.hora_fin}`}
+            nombre={hora.clase}
+            backgroundColor={AREA_COLORS[hora.area] || "#f4351c"} // Asegúrate de que `area` es el correcto
+            gridColumn={getColumn(hora.dia)}
+            gridRow={getRow(hora.hora_ini)}
+            gridSpan={getRowSpan(hora.hora_ini, hora.hora_fin)}
+          />
+        );
+      })}
     </div>
   );
 };

@@ -71,7 +71,7 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
   }, [docente]);
 
   return (
-    <div className="overflow-x-auto w-full text-center p-2">
+    <div className="overflow-x-auto w-full text-center p-2 max-w-4xl mx-auto">
       {mostrarHorarioCompleto ? (
         <HorarioCompleto idDocente={docente?.id} setMostrarHorarioCompleto={setMostrarHorarioCompleto} docente={docente} />
       ) : (

@@ -60,8 +60,18 @@ export const MonitorUsuarios = () => {
   };
 
   const handleEditChange = (e) => {
-    setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+  
+    if (name === "numero") {
+      if (value && !/^9\d{0,8}$/.test(value)) {
+        toast.error("El número debe empezar con 9 y ser de 9 dígitos.");
+        return; 
+      }
+    }
+  
+    setEditFormData({ ...editFormData, [name]: value });
   };
+  
 
   const handleGuardar = async () => {
     try {
@@ -115,34 +125,32 @@ export const MonitorUsuarios = () => {
 
   const getDatosMonitores = () => {
     if (!monitores || monitores.length === 0) return [];
-
+  
     return monitores.map((monitor, index) => {
       const esEdicion = editingId === monitor.id;
-
+  
       return [
         index + (page - 1) * limit + 1,
         monitor.className || "-",
         <EditableCell
-          editable={esEdicion}
+          editable={esEdicion && "nombres" !== "correo"}  
           name="nombres"
           value={esEdicion ? editFormData.nombres : monitor.firstName}
           onChange={handleEditChange}
         />,
         <EditableCell
-          editable={esEdicion}
+          editable={esEdicion && "apellidos" !== "correo"} 
           name="apellidos"
           value={esEdicion ? editFormData.apellidos : monitor.lastName}
           onChange={handleEditChange}
         />,
         <EditableCell
-          editable={esEdicion}
+          editable={false}  
           name="correo"
-          value={esEdicion ? editFormData.correo : monitor.email}
-          onChange={handleEditChange}
-          type="email"
+          value={monitor.email}
         />,
         <EditableCell
-          editable={esEdicion}
+          editable={esEdicion && "numero" !== "correo"} 
           name="numero"
           value={esEdicion ? editFormData.numero : monitor.phone}
           onChange={handleEditChange}
@@ -160,7 +168,7 @@ export const MonitorUsuarios = () => {
         )
       ];
     });
-  }
+  };  
 
   if (vista === VISTA.FORMULARIO) {
     return (
