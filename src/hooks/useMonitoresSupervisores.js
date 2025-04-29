@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { SupervisorsServices } from "@/services/SupervisorsServices";
 import { MonitorsServices } from "@/services/MonitorsServices";
 
-export const useMonitoresSupervisores = ({ supervisorId, shiftId, page = 1, limit = 10 }) => {
+export const useMonitoresSupervisores = ({ supervisorId, shiftId, page = 1, limit = 10 , area_id = null}) => {
   const queryClient = useQueryClient();
 
   // Obtener monitores asignados al supervisor
@@ -31,8 +31,8 @@ export const useMonitoresSupervisores = ({ supervisorId, shiftId, page = 1, limi
     refetch: refetchDisponibles,
     isFetching: isFetchingDisponibles,
   } = useQuery({
-    queryKey: ["monitoresDisponibles", shiftId, page, limit],
-    queryFn: () => MonitorsServices.getMonitoresFiltroAsignados(shiftId, false, page, limit),
+    queryKey: ["monitoresDisponibles", shiftId, page, limit, area_id],
+    queryFn: () => MonitorsServices.getMonitoresFiltroAsignados(shiftId, false, page, limit, area_id),
     enabled: !!shiftId,
     staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 10,

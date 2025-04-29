@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/Button";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { Tabla } from "@/components/ui/Tabla";
 import { useAreas } from "@/hooks/useAreas";
+import { useTurnos } from "@/hooks/useTurnos";
 import { useListaSalonesDisponibles } from "@/hooks/useListaSalonesDisponibles";
-import { useState } from "react";
 import { toast } from "react-toastify";
 
 const encabezado = ["Nº", "Aula Disponible", "Área", "Turno", "Acciones"];
@@ -12,24 +12,54 @@ const encabezado = ["Nº", "Aula Disponible", "Área", "Turno", "Acciones"];
 export const TablaAsignar = ({
   teacher,
   objApi = {},
-  onSalonAsignado,   // 👈 importante: recibir la función de recarga
+  onSalonAsignado,
 }) => {
   const { areas, isLoading: loadingAreas } = useAreas();
+  const { turnos, isLoading: loadingTurnos } = useTurnos();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-
+  const [area_id, setAreaId] = useState(null);
+  const [shift_id, setShiftId] = useState(null);
   const { salones,
     totalPages,
     isLoading: loadingSalones,
     enabled: enabledSalones,
     asignarSalonMutation
   } = useListaSalonesDisponibles({
-    objApi
+    objApi, page, limit, area_id, shift_id
   })
 
   const handleNext = () => setPage((prev) => prev + 1);
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
   const handleLimitChange = (e) => setLimit(e.target.value);
+
+  const filtro = useMemo(() => {
+    if (!areas?.length) return {};
+    if (!turnos?.length) return {};
+
+    return {
+      2: {
+        options: areas.map((a) => a.name),
+        onChange: (area_name) => {
+          setTimeout(() => {
+            const area = areas.find((a) => a.name === area_name[0]);
+            setAreaId(area?.id || null);
+          }, 0);
+        }
+      },
+      3: {
+        options: turnos.map((a) => a.name),
+        onChange: (turno_name) => {
+          setTimeout(() => {
+            const turno = turnos.find((a) => a.name === turno_name[0]);
+            setShiftId(turno?.id || null);
+          }, 0);
+        }
+      },
+    };
+  }, [areas, turnos]);
+
+
 
   const handleAsignar = async (idProfesor, idSalon) => {
     try {
@@ -76,8 +106,8 @@ export const TablaAsignar = ({
         Salones Disponibles en el curso de {teacher?.courseName}:
       </h2>
       <div className="mt-6 w-full text-center">
-        {loadingAreas || loadingSalones || !enabledSalones ? (<SkeletonTabla />)
-          : (<Tabla encabezado={encabezado} datos={datos()} />)}
+        {loadingAreas || loadingTurnos || loadingSalones || !enabledSalones ? (<SkeletonTabla />)
+          : (<Tabla encabezado={encabezado} datos={datos()} filtroDic={filtro} />)}
       </div>
       <div className="flex justify-between mt-4">
         <Button onClick={handlePrev} disabled={page === 1}>

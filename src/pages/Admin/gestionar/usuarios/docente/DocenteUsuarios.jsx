@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { EditableCell } from "@/components/ui/EditableCell";
+import { Input } from "@/components/ui/Input";
 import { AgregarUsuarios } from "../AgregarUsuarios";
 import { useProfesores } from "@/hooks/useProfesores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { AsignarSalonDoc } from "./AsignarSalonDoc";
 import { toast } from "react-toastify";
 import { FaSyncAlt } from "react-icons/fa";
+import { useCursos } from "@/hooks/useCursos";
 
 const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
 const VISTA = {
@@ -17,10 +18,11 @@ const VISTA = {
   ASIGNAR_SALON: "asignarSalonDoc"
 };
 
-  export const DocenteUsuarios = ({ setMostrarCabecera }) => {
+export const DocenteUsuarios = ({ setMostrarCabecera }) => {
   const [vista, setVista] = useState(VISTA.TABLA);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [curso_id, setCursoId] = useState(null);
   const {
     profesores,
     totalPages,
@@ -30,7 +32,11 @@ const VISTA = {
     actualizarProfesorMutation,
     eliminarProfesorMutation,
     refetch,
-  } = useProfesores({ page, limit });
+  } = useProfesores({ page, limit, curso_id });
+  const {
+    cursos
+  } = useCursos();
+
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
     nombres: "",
@@ -54,7 +60,22 @@ const VISTA = {
     const regex = /^9\d{8}$/;  // Empieza en 9 y luego 8 dígitos (total 9 dígitos)
     return regex.test(numero);
   };
-  
+
+  const filtro = useMemo(() => {
+    if (!cursos?.length) return {};
+
+    return {
+      1: {
+        options: cursos.map((a) => a.name),
+        onChange: (curso_name) => {
+          setTimeout(() => {
+            const curso = cursos.find((c) => c.name === curso_name[0]);
+            setCursoId(curso?.id || null);
+          }, 0);
+        }
+      },
+    };
+  }, [cursos]);
 
   const handleModificar = (id) => {
     const profesor = profesores.find((profesor) => profesor.id === id);
@@ -72,22 +93,20 @@ const VISTA = {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-  
     if (name === "numero") {
       if (!/^\d*$/.test(value)) {
-        return; 
+        return;
       }
       if (value.length > 9) {
         return;
       }
       if (value.length === 1 && value !== "9") {
-        return; 
+        return;
       }
     }
-
     setEditFormData({ ...editFormData, [name]: value });
   };
-  
+
 
 
   const handleGuardar = async () => {
@@ -96,7 +115,7 @@ const VISTA = {
         toast.error("El número debe comenzar con 9 y tener exactamente 9 dígitos.");
         return;
       }
-  
+
       const profesor = {
         userId: editingId,
         firstName: editFormData.nombres,
@@ -104,9 +123,9 @@ const VISTA = {
         email: editFormData.correo,
         phone: editFormData.numero,
       };
-  
+
       const profeActualizado = await actualizarProfesorMutation.mutateAsync(profesor);
-  
+
       if (profeActualizado) {
         toast.success(`Profesor "${profeActualizado.firstName}" actualizado correctamente`);
         setEditingId(null);
@@ -118,7 +137,7 @@ const VISTA = {
           extra: "",
         });
       }
-    }  catch (error) {
+    } catch (error) {
       if (error.response?.status === 409) {
         toast.error("El correo ya está en uso por otro usuario");
       } else if (error.response?.status === 400) {
@@ -195,7 +214,7 @@ const VISTA = {
     setEditingId(null);
     setVista(VISTA.TABLA);
     setMostrarCabecera(true); // MOSTRAR
-  };  
+  };
 
   const getDatosProfesor = () => {
     if (!profesores || profesores.length === 0) return [];
@@ -206,31 +225,26 @@ const VISTA = {
       return [
         index + (page - 1) * limit + 1,
         profesor.courseName || "-",
-        <EditableCell
-          editable={esEdicion}
-          name="nombres"
-          value={esEdicion ? editFormData.nombres : profesor.firstName}
-          onChange={handleEditChange}
-        />,
-        <EditableCell
-          editable={esEdicion}
-          name="apellidos"
-          value={esEdicion ? editFormData.apellidos : profesor.lastName}
-          onChange={handleEditChange}
-        />,
-        <EditableCell
-          editable={esEdicion}
-          name="correo"
-          value={esEdicion ? editFormData.correo : profesor.email}
-          onChange={handleEditChange}
-          type="email"
-        />,
-        <EditableCell
-          editable={esEdicion}
-          name="numero"
-          value={esEdicion ? editFormData.numero : profesor.phone}
-          onChange={handleEditChange}
-        />,
+        esEdicion ? (
+          <Input type="text" name="nombres" value={editFormData.nombres} onChange={handleEditChange} />
+        ) : (
+          profesor.firstName || "-"
+        ),
+        esEdicion ? (
+          <Input type="text" name="apellidos" value={editFormData.apellidos} onChange={handleEditChange} />
+        ) : (
+          profesor.lastName || "-"
+        ),
+        esEdicion ? (
+          <Input type="email" name="correo" value={editFormData.correo} onChange={handleEditChange} />
+        ) : (
+          profesor.email || "-"
+        ),
+        esEdicion ? (
+          <Input type="text" name="numero" value={editFormData.numero} onChange={handleEditChange} />
+        ) : (
+          profesor.phone || "-"
+        ),
         esEdicion ? (
           <div className="flex gap-2 justify-center min-w-[300px]">
             <Button onClick={() => handleGuardar(profesor.id)}>Guardar</Button>
@@ -278,7 +292,7 @@ const VISTA = {
         <Button onClick={handleAgregar}>Agregar Docente</Button>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :
-        <Tabla encabezado={encabezado} datos={getDatosProfesor()} />
+        <Tabla encabezado={encabezado} datos={getDatosProfesor()} filtroDic={filtro} />
       }
       <div className="flex justify-between mt-4">
         <Button onClick={handlePrev} disabled={page === 1} >  {/* disabled cambiar estilos */}

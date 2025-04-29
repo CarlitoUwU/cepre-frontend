@@ -5,8 +5,9 @@ export const MonitorsServices = {
    * Obtiene un listado paginado de monitores activos con información resumida.
    * @returns {Promise<Array<Object>>}
    */
-  async getMonitors(page = 1, limit = 20) {
-    return request("get", `/monitors?page=${page}&limit=${limit}`, null, true);
+  async getMonitors(page = 1, limit = 20, shift_id = null) {
+    const url = `/monitors?page=${page}&limit=${limit}${shift_id ? `&shift_id=${shift_id}` : ""}`;
+    return request("get", url, null, true);
   },
 
   /**
@@ -80,8 +81,9 @@ export const MonitorsServices = {
    * @param {number} limit - Número de resultados por página.
    * @returns {Promise<Array<Object>>}
    */
-  async getMonitoresFiltroAsignados(shiftId, hasSupervisor = false, page = 1, limit = 200) {
-    return request("get", `/monitors/filtered?shiftId=${shiftId}&has_supervisor=${hasSupervisor}&page=${page}&limit=${limit}`);
+  async getMonitoresFiltroAsignados(shiftId, hasSupervisor = false, page = 1, limit = 200, area_id = null) {
+    const url = `/monitors/filtered?shiftId=${shiftId}&has_supervisor=${hasSupervisor}&page=${page}&limit=${limit}${area_id ? `&area_id=${area_id}` : ""}`;
+    return request("get", url);
   },
 
   /**

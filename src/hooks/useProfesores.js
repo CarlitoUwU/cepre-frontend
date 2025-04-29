@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { TeachersServices } from "@/services/TeachersServices.js";
 
-export const useProfesores = ({ page = 1, limit = 20 } = {}) => {
+export const useProfesores = ({ page = 1, limit = 20, curso_id = null} = {}) => {
   const queryClient = useQueryClient();
 
   // Obtener los profesores con useQuery
@@ -13,8 +13,8 @@ export const useProfesores = ({ page = 1, limit = 20 } = {}) => {
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["profesores", page, limit], // clave única para cachear y reutilizar esta consulta
-    queryFn: () => TeachersServices.getTeachers(page, limit),
+    queryKey: ["profesores", page, limit, curso_id], // clave única para cachear y reutilizar esta consulta
+    queryFn: () => TeachersServices.getTeachers(page, limit, curso_id),
     staleTime: 1000 * 60 * 5, // 5 minutos: evita refetch si no ha pasado ese tiempo
     cacheTime: 1000 * 60 * 10, // 10 minutos en memoria si no se está usando
     retry: 1, // solo 1 intento si falla

@@ -1,9 +1,17 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { SchedulesService } from "@/services/SchedulesServices";
 
-export const useListaSalonesDisponibles = ({ objApi }) => {
+export const useListaSalonesDisponibles = ({ objApi, page = 1, limit = 10, area_id = null, shift_id = null }) => {
   const enabled = Boolean(objApi?.idDocente && objApi?.idCurso && objApi?.horario);
   const queryClient = useQueryClient();
+
+  objApi = {
+    ...objApi,
+    page,
+    pageSize: limit,
+    area_id,
+    shift_id,
+  };
 
   const {
     data: salones,
@@ -13,7 +21,7 @@ export const useListaSalonesDisponibles = ({ objApi }) => {
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["salonesDisponibles", objApi],
+    queryKey: ["salonesDisponibles", objApi, page, limit, area_id, shift_id],
     queryFn: () =>
       SchedulesService.getClasesDisponibles(objApi),
     staleTime: 1000 * 60 * 5, // 5 minutos sin volver a pedir los mismos datos

@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { MonitorsServices } from "@/services/MonitorsServices.js";
 
-export const useMonitores = ({ page = 1, limit = 20 } = {}) => {
+export const useMonitores = ({ page = 1, limit = 20, shift_id = null} = {}) => {
   const queryClient = useQueryClient();
 
   // Obtener los monitores
@@ -13,8 +13,8 @@ export const useMonitores = ({ page = 1, limit = 20 } = {}) => {
     refetch,
     isFetching,
   } = useQuery({
-    queryKey: ["monitores", page, limit],
-    queryFn: () => MonitorsServices.getMonitors(page, limit),
+    queryKey: ["monitores", page, limit, shift_id],
+    queryFn: () => MonitorsServices.getMonitors(page, limit, shift_id),
     staleTime: 1000 * 60 * 5,
     cacheTime: 1000 * 60 * 10,
     retry: 1,

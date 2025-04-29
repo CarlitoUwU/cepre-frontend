@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { EditableCell } from "@/components/ui/EditableCell";
+import { Input } from "@/components/ui/Input";
 import { AgregarUsuarios } from "../AgregarUsuarios";
 import { useMonitores } from "@/hooks/useMonitores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { toast } from "react-toastify";
 import { FaSyncAlt } from "react-icons/fa";
+import { useTurnos } from "@/hooks/useTurnos";
 
-const encabezado = ["N°", "Salón", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
+const encabezado = ["N°", "Salón", "Nombres", "Apellidos", "Correo", "Número", "Turno", "Acciones"];
 const VISTA = {
   TABLA: "tabla",
   FORMULARIO: "formulario",
@@ -19,6 +20,7 @@ export const MonitorUsuarios = () => {
   const [vista, setVista] = useState(VISTA.TABLA);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [shift_id, setShiftId] = useState(null); // Estado para el ID del turno seleccionado
   const {
     monitores,
     totalPages,
@@ -27,7 +29,8 @@ export const MonitorUsuarios = () => {
     actualizarMonitorMutation,
     eliminarMonitorMutation,
     refetch,
-  } = useMonitores({ page, limit });
+  } = useMonitores({ page, limit, shift_id });
+  const { turnos } = useTurnos();
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
     nombres: "",
@@ -46,6 +49,22 @@ export const MonitorUsuarios = () => {
     }
   }, [isError, monitores]);
 
+  const filtro = useMemo(() => {
+    if (!turnos?.length) return {};
+
+    return {
+      6: {
+        options: turnos.map((a) => a.name),
+        onChange: (turno_name) => {
+          setTimeout(() => {
+            const turno = turnos.find((c) => c.name === turno_name[0]);
+            setShiftId(turno?.id || null);
+          }, 0);
+        }
+      },
+    };
+  }, [turnos]);
+
   const handleModificar = (id) => {
     const monitor = monitores.find((monitor) => monitor.id === id);
     if (monitor) {
@@ -61,17 +80,17 @@ export const MonitorUsuarios = () => {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-  
+
     if (name === "numero") {
       if (value && !/^9\d{0,8}$/.test(value)) {
         toast.error("El número debe empezar con 9 y ser de 9 dígitos.");
-        return; 
+        return;
       }
     }
-  
+
     setEditFormData({ ...editFormData, [name]: value });
   };
-  
+
 
   const handleGuardar = async () => {
     try {
@@ -125,36 +144,30 @@ export const MonitorUsuarios = () => {
 
   const getDatosMonitores = () => {
     if (!monitores || monitores.length === 0) return [];
-  
+
     return monitores.map((monitor, index) => {
       const esEdicion = editingId === monitor.id;
-  
+
       return [
         index + (page - 1) * limit + 1,
         monitor.className || "-",
-        <EditableCell
-          editable={esEdicion && "nombres" !== "correo"}  
-          name="nombres"
-          value={esEdicion ? editFormData.nombres : monitor.firstName}
-          onChange={handleEditChange}
-        />,
-        <EditableCell
-          editable={esEdicion && "apellidos" !== "correo"} 
-          name="apellidos"
-          value={esEdicion ? editFormData.apellidos : monitor.lastName}
-          onChange={handleEditChange}
-        />,
-        <EditableCell
-          editable={false}  
-          name="correo"
-          value={monitor.email}
-        />,
-        <EditableCell
-          editable={esEdicion && "numero" !== "correo"} 
-          name="numero"
-          value={esEdicion ? editFormData.numero : monitor.phone}
-          onChange={handleEditChange}
-        />,
+        esEdicion ? (
+          <Input type="text" name="nombres" value={editFormData.nombres} onChange={handleEditChange} />
+        ) : (
+          monitor.firstName || "-"
+        ),
+        esEdicion ? (
+          <Input type="text" name="apellidos" value={editFormData.apellidos} onChange={handleEditChange} />
+        ) : (
+          monitor.lastName || "-"
+        ),
+        monitor.email,
+        esEdicion ? (
+          <Input type="text" name="numero" value={editFormData.numero} onChange={handleEditChange} />
+        ) : (
+          monitor.phone || "-"
+        ),
+        monitor?.shift,
         esEdicion ? (
           <div className="flex gap-2 justify-center">
             <Button onClick={() => handleGuardar(monitor.id)}>Guardar</Button>
@@ -168,7 +181,7 @@ export const MonitorUsuarios = () => {
         )
       ];
     });
-  };  
+  };
 
   if (vista === VISTA.FORMULARIO) {
     return (
@@ -191,7 +204,7 @@ export const MonitorUsuarios = () => {
         <h2 className="text-2xl font-bold">GESTIÓN DE MONITORES</h2>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :
-        <Tabla encabezado={encabezado} datos={getDatosMonitores()} />
+        <Tabla encabezado={encabezado} datos={getDatosMonitores()} filtroDic={filtro} />
       }
       <div className="flex justify-between mt-4">
         <Button onClick={handlePrev} disabled={page === 1} >  {/* disabled cambiar estilos */}

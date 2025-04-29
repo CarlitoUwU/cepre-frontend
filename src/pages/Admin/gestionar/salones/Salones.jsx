@@ -27,7 +27,7 @@ const ESTADOS_SALON = {
 export const Salones = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const vistaClase = useMemo(() => searchParams.get("salon") || "", [searchParams]);
-  
+
   const {
     clases,
     isLoading: isLoadingClases,
@@ -45,9 +45,9 @@ export const Salones = () => {
   const filtro = useMemo(() => {
     if (!areas?.length || !turnos?.length) return {};
     return {
-      1: areas.map((a) => a.name),
-      2: turnos.map((t) => t.name),
-      3: ["Listo", "Falta Docentes"]
+      1: { options: areas.map((a) => a.name) },
+      2: { options: turnos.map((t) => t.name) },
+      3: { options: ["Listo", "Falta Docentes"] }
     };
   }, [areas, turnos]);
 
@@ -146,7 +146,7 @@ export const Salones = () => {
       ) : (
         <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
       )}
-      <div className="mb-4"></div> 
+      <div className="mb-4"></div>
     </div>
   );
 };

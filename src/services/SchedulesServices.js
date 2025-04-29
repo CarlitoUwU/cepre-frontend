@@ -86,8 +86,9 @@ export const SchedulesService = {
     return request("post", "/schedules/load-with-courses");
   },
 
-  async getClasesDisponibles({ idDocente, idCurso, horario, page = 1, pageSize = 10 }) {
+  async getClasesDisponibles({ idDocente, idCurso, horario, page = 1, pageSize = 10, area_id = null, shift_id = null }) {
     const horarioParam = encodeURIComponent(JSON.stringify(horario));
-    return request("get", '/schedules/salones/disponibles?course_id=' + idCurso + '&horario=' + horarioParam + '&teacher_id=' + idDocente + '&page=' + page + '&pageSize=' + pageSize)
+    const url = `/schedules/salones/disponibles?course_id=${idCurso}&horario=${horarioParam}&teacher_id=${idDocente}&page=${page}&pageSize=${pageSize}${area_id ? `&area_id=${area_id}` : ""}${shift_id ? `&shift_id=${shift_id}` : ""}`;
+    return request("get", url);
   }
 };

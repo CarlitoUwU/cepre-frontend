@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { Tabla } from "@/components/ui/Tabla";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { Button } from "@/components/ui/Button";
 import { useMonitoresSupervisores } from "@/hooks/useMonitoresSupervisores";
 import { toast } from "react-toastify";
+import { useAreas } from "@/hooks/useAreas";
 
 // Constantes
 const AREAS = {
@@ -15,15 +16,11 @@ const AREAS = {
 
 const encabezado = ["N°", "Salón", "Monitor", "Área", "Acciones"];
 
-const filtro = {
-  3: ["Biomédicas", "Ingenierías", "Sociales"],
-};
-
 export const AsignarSalonSup = ({ supervisor, regresar }) => {
   // Estados
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-
+  const [area_id, setAreaId] = useState(null);
   const {
     monitoresAsignados,
     monitoresDisponibles,
@@ -32,7 +29,8 @@ export const AsignarSalonSup = ({ supervisor, regresar }) => {
     isLoadingDisponibles,
     asignarMonitorMutation,
     quitarMonitorMutation
-  } = useMonitoresSupervisores({ supervisorId: supervisor?.id, shiftId: supervisor?.shiftId, page, limit })
+  } = useMonitoresSupervisores({ supervisorId: supervisor?.id, shiftId: supervisor?.shiftId, page, limit, area_id })
+  const { areas } = useAreas();
   const [asignandoId, setAsignandoId] = useState(null);
   const [quitandoId, setQuitandoId] = useState(null);
   const [error, setError] = useState(null);
@@ -40,6 +38,22 @@ export const AsignarSalonSup = ({ supervisor, regresar }) => {
   const handleNext = () => setPage((prev) => prev + 1);
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
   const handleLimitChange = (e) => setLimit(e.target.value);
+
+  const filtro = useMemo(() => {
+    if (!areas?.length) return {};
+
+    return {
+      3: {
+        options: areas.map((a) => a.name),
+        onChange: (area_name) => {
+          setTimeout(() => {
+            const area = areas.find((a) => a.name === area_name[0]);
+            setAreaId(area?.id || null);
+          }, 0);
+        }
+      },
+    };
+  }, [areas]);
 
   const handleAsignarMonitor = async (monitorId) => {
     setAsignandoId(monitorId);

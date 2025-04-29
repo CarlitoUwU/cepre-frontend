@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 export const Tabla = ({ encabezado = [], datos = [], index_key = null, filtroDic = {} }) => {
-  const [filtroActivo, setFiltroActivo] = useState(null);
+  const [filtroActivo, setFiltroActivo] = useState(false);
   const [filtroPosicion, setFiltroPosicion] = useState({});
   const [seleccionados, setSeleccionados] = useState({});
 
@@ -12,11 +12,27 @@ export const Tabla = ({ encabezado = [], datos = [], index_key = null, filtroDic
     setFiltroActivo((prev) => (prev === index ? null : index));
   };
 
-  const manejarCheckbox = (index, valor) => (event) => {
+  const manejarCheckbox = (index, valor, onChange) => (event) => {
+    const checked = event.target.checked;
+
     setSeleccionados((prev) => {
-      const valores = new Set(prev[index] || []);
-      event.target.checked ? valores.add(valor) : valores.delete(valor);
-      return { ...prev, [index]: Array.from(valores) };
+      const prevValores = prev[index] || [];
+      let nuevoValores;
+
+      if (checked) {
+        nuevoValores = [...prevValores, valor];
+      } else {
+        nuevoValores = prevValores.filter((v) => v !== valor);
+      }
+
+      if (onChange) {
+        onChange(nuevoValores);
+      }
+
+      return {
+        ...prev,
+        [index]: nuevoValores,
+      };
     });
   };
 
@@ -44,20 +60,20 @@ export const Tabla = ({ encabezado = [], datos = [], index_key = null, filtroDic
                 {filtroDic[index] ? (
                   <div className="inline-flex items-center gap-2 relative">
                     <p>{item}</p>
-                    <button className="cursor-pointer" onClick={(e) => toggleFiltro(index, e)}>
-                      <img className="w-3 h-3" src={filtroActivo === index ? "/flecha-arriba.png" : "/flecha-abajo.png"} alt="" />
+                    <button className="cursor-pointer w-[12px] h-[12px]" onClick={(e) => toggleFiltro(index, e)}>
+                      <img className="w-[12px] h-[12px]" src={filtroActivo === index ? "/flecha-arriba.png" : "/flecha-abajo.png"} alt="" />
                     </button>
                     {filtroActivo === index && (
                       <div
                         className="fixed bg-white border border-gray-300 p-2 shadow-lg z-50 min-w-[150px] rounded-md filtro-dropdown"
                         style={filtroPosicion}
                       >
-                        {filtroDic[index].map((valor, i) => (
+                        {filtroDic[index]?.options.map((valor, i) => (
                           <label key={i} className="flex items-center gap-2 text-black px-2 py-1 hover:bg-gray-100 cursor-pointer">
                             <input
                               type="checkbox"
-                              checked={seleccionados[index]?.includes(valor) || false}
-                              onChange={manejarCheckbox(index, valor)}
+                              checked={!!seleccionados[index]?.includes(valor)}
+                              onChange={manejarCheckbox(index, valor, filtroDic[index].onChange)}
                             />
                             {valor}
                           </label>
