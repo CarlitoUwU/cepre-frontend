@@ -81,8 +81,8 @@ export const EditarSalon = ({ idSalon, regresar }) => {
   return (
     <div className="p-2 space-y-2 flex flex-col items-center justify-center max-w-4xl mx-auto">
       <div className="text-center">
-        <h2 className="text-2xl font-bold">Modificación de Aula: {salon?.name}</h2>
-        <h3 className="text-xl font-semibold">Turno del Aula: {turno?.name}</h3>
+        <h2 className="text-2xl font-bold mb-1">Modificación de Aula: {salon?.name}</h2>
+        <h3 className="text-xl font-semibold mb-1">Turno del Aula: {turno?.name}</h3>
         {rango && <p>Horario: {rango.inicio} - {rango.fin}</p>}
       </div>
 
@@ -98,7 +98,7 @@ export const EditarSalon = ({ idSalon, regresar }) => {
       )}
 
       {/* Tabla de cursos*/}
-      <div className="mt-1 overflow-x-auto w-full">
+      <div className="overflow-x-auto w-full">
         {vistaActual == VISTAS.EDITAR ? (
           loading ? <SkeletonTabla numRows={15} numColums={4} /> : (
             <TablaCursos docentes={teachers} buscarProfesor={handleBuscarProfesor} />
@@ -111,7 +111,7 @@ export const EditarSalon = ({ idSalon, regresar }) => {
         }
       </div>
 
-      <div className="mt-4 flex justify-center">
+      <div className="mt-4 mb-2 flex justify-center">
         <ButtonNegative onClick={vistaActual == VISTAS.BUSCAR ? handleRegresar : regresar}>Atrás</ButtonNegative>
       </div>
     </div>
