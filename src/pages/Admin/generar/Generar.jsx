@@ -1,9 +1,9 @@
 import React from 'react';
 
-export const Publicar = () => {
+export const Generar = () => {
   return (
     <div>
-      <h1>Publicar archivos</h1>
+      <h1>Generar proceso</h1>
     </div>
   )
 }

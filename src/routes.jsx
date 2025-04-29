@@ -5,7 +5,7 @@ import { LoginPanel } from "./pages/Login/LoginPanel";
 import { AdminPanel } from "./pages/Admin/AdminPanel";
 import { Importar } from "./pages/Admin/importar/Importar";
 import { Gestionar } from "./pages/Admin/gestionar/Gestionar";
-import { Publicar } from "./pages/Admin/publicar/Publicar";
+import { Generar } from "./pages/Admin/generar/Generar";
 import { Home } from "./pages/Admin/Home";
 import { DocentePanel } from "./pages/Docente/DocentePanel";
 import { MonitorPanel } from "./pages/Monitor/MonitorPanel";
@@ -33,7 +33,7 @@ export const router = createBrowserRouter([
               { index: true, element: <Home /> },
               { path: "importar", element: <Importar /> },
               { path: "gestionar", element: <Gestionar /> },              
-              { path: "publicar", element: <Publicar /> },
+              { path: "generar", element: <Generar /> },
             ],
           },
           { path: "docente", element: <DocentePanel /> },
