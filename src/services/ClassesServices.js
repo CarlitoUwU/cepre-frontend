@@ -79,4 +79,16 @@ export const ClassesServices = {
     if (!classId) throw new Error("ID de clase inválido");
     return request("get", `/classes/${classId}/teachers`);
   },
+
+  async setLinkMeet({ classId, urlMeet }) {
+    console.log({ classId, urlMeet });
+    if (!classId || !urlMeet) throw new Error("ID de clase o URL de Meet inválidos");
+    return request("patch", `/classes/${classId}/meet-link`, { urlMeet });
+  },
+
+  async setLinkClassroom({ classId, urlClassroom }) {
+    console.log({ classId, urlClassroom });
+    if (!classId || !urlClassroom) throw new Error("ID de clase o URL de Classroom inválidos");
+    return request("patch", `/classes/${classId}/classroom-link`, { urlClassroom });
+  }
 };
