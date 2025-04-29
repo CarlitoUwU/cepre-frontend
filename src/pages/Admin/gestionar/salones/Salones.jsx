@@ -19,6 +19,11 @@ const VISTAS = {
   EDITAR: "editar"
 };
 
+const ESTADOS_SALON = {
+  COMPLETO: "Listo",
+  FALTAN_DOCENTES: "Falta Docentes"
+}
+
 export const Salones = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const vistaClase = useMemo(() => searchParams.get("salon") || "", [searchParams]);
@@ -113,7 +118,7 @@ export const Salones = () => {
       aula.name || "Sin nombre",
       aula.area?.name || "Sin área",
       aula.shift?.name || "Sin turno",
-      aula.estado || "Sin estado",
+      ESTADOS_SALON[aula?.status] || "Sin estado",
       getAcciones(aula),
     ]);
   };
@@ -141,6 +146,7 @@ export const Salones = () => {
       ) : (
         <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
       )}
+      <div className="mb-4"></div> 
     </div>
   );
 };

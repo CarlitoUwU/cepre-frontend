@@ -78,6 +78,16 @@ export const EditarSalon = ({ idSalon, regresar }) => {
     });
   }
 
+  const handleDesasignar = (name) => {
+    setCursosConDocente((prev) => {
+      if (prev.includes(name)) {
+        return prev.filter((curso) => curso !== name);
+      } else {
+        return prev;
+      }
+    });
+  }
+
   return (
     <div className="p-2 space-y-2 flex flex-col items-center justify-center max-w-4xl mx-auto">
       <div className="text-center">
@@ -104,7 +114,7 @@ export const EditarSalon = ({ idSalon, regresar }) => {
             <TablaCursos docentes={teachers} buscarProfesor={handleBuscarProfesor} />
           )
         ) : (
-          <BuscarProfesor idSalon={idSalon} curso={curso} profesor={profesor} setAsignar={handleAsignar} horario={horariosSalon.filter((hora) => {
+          <BuscarProfesor idSalon={idSalon} curso={curso} profesor={profesor} setAsignar={handleAsignar} setDesasignar={handleDesasignar} horario={horariosSalon.filter((hora) => {
             return hora.curso == curso.name
           })} />
         )

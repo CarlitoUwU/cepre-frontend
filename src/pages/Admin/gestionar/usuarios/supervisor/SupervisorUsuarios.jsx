@@ -17,7 +17,7 @@ const VISTA = {
   ASIGNAR_SALON: "asignarSalonSup",
 }
 
-export const SupervisorUsuarios = ({ setMostrarCabecera }) => {
+export const SupervisorUsuarios = () => {
   const [vista, setVista] = useState(VISTA.TABLA);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -77,7 +77,20 @@ export const SupervisorUsuarios = ({ setMostrarCabecera }) => {
   };
 
   const handleEditChange = (e) => {
-    setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+  
+    if (name === "numero") {
+      const soloNumeros = value.replace(/[^0-9]/g, "");
+      
+      const primerDigito = soloNumeros.charAt(0);
+      const numeroValido = primerDigito === "9" || primerDigito === "" 
+        ? soloNumeros.slice(0, 9)  // Corta a 9 dígitos
+        : "9" + soloNumeros.slice(0, 8);  // Fuerza "9" al inicio
+  
+      setEditFormData({ ...editFormData, [name]: numeroValido });
+    } else {
+      setEditFormData({ ...editFormData, [name]: value });
+    }
   };
 
   const handleGuardar = async () => {
@@ -133,14 +146,12 @@ export const SupervisorUsuarios = ({ setMostrarCabecera }) => {
   const handleAsignarSalonSup = (id) => {
     setEditingId(id);
     setVista(VISTA.ASIGNAR_SALON);
-    setMostrarCabecera(false); // OCULTAR
-  };  
+  }
 
   const handleRegresar = () => {
     setEditingId(null);
     setVista(VISTA.TABLA);
-    setMostrarCabecera(true); // MOSTRAR
-  };  
+  }
 
   const getDatosSupervisores = () => {
     if (!supervisores || supervisores.length === 0) return [];
@@ -199,7 +210,7 @@ export const SupervisorUsuarios = ({ setMostrarCabecera }) => {
   console.log("Filtro", filtro);
 
   return (
-    <div className="overflow-x-auto w-full text-center mb-3">
+    <div className="overflow-x-auto w-full text-center">
       <div className="relative flex justify-center items-center py-2">
         <Button onClick={refetch}>
           <FaSyncAlt />

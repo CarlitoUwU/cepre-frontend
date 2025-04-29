@@ -71,11 +71,11 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
   }, [docente]);
 
   return (
-    <div className="overflow-x-auto w-full text-center p-2">
+    <div className="overflow-x-auto w-full text-center p-2 max-w-4xl mx-auto">
       {mostrarHorarioCompleto ? (
         <HorarioCompleto idDocente={docente?.id} setMostrarHorarioCompleto={setMostrarHorarioCompleto} docente={docente} />
       ) : (
-        <div className="flex flex-col items-center space-y-6">
+        <div className="flex flex-col items-center space-y-2">
           <h2 className="text-2xl font-bold">
             Asignación de Salones Docente - {docente?.firstName} {docente?.lastName} ({docente?.phone})
           </h2>

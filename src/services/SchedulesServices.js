@@ -72,11 +72,11 @@ export const SchedulesService = {
 
   async asignarSchedulesByTeacherClass({ teacherId, classId }) {
     if (!teacherId || !classId) throw new Error("Faltan datos");
-    return request("patch", "/schedules/asignar/profesor", { classroomIds: [classId], teacherId: teacherId });
+    return request("patch", "/schedules/asignar/profesor", { classroomIds: [classId], teacherId });
   },
 
   async desasignarSchedulesByTeacherClass({ teacherId, classId }) {
-    return request("patch", "/schedules/desasignar/profesor", { classroomIds: [classId], teacherId: teacherId });
+    return request("patch", "/schedules/desasignar/profesor", { classroomIds: [classId], teacherId });
   },
 
   /**

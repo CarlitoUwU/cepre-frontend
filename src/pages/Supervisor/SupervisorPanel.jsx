@@ -2,12 +2,16 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { SupervisorsServices } from "@/services/SupervisorsServices";
 import { DetallesMonitor } from "./DetallesMonitor";
+import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { Button } from "@/components/ui/Button";
+import { toast } from "react-toastify";
 
 const ESTADO = {
   "INDEX": "INDEX",
   "DETALLES": "DETALLES",
 }
+
+const encabezado = ["N°", "Aula", "Monitor", "Enlace Meet", "Enlace Classroom", "Acciones"];
 
 export const SupervisorPanel = () => {
   const [aulasData, setAulasData] = useState([]);
@@ -16,8 +20,8 @@ export const SupervisorPanel = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const cambiarVistaHorario = useCallback(() => setEstado(ESTADO.HORARIO), []);
-  const cambiarVistaDirectorio = useCallback(() => setEstado(ESTADO.DIRECTORIO), []);
+  // const cambiarVistaHorario = useCallback(() => setEstado(ESTADO.HORARIO), []);
+  // const cambiarVistaDirectorio = useCallback(() => setEstado(ESTADO.DIRECTORIO), []);
   const volverAlIndex = useCallback(() => setEstado(ESTADO.INDEX), []);
 
   const fetchMonitorData = async () => {
@@ -34,7 +38,8 @@ export const SupervisorPanel = () => {
         id: clase?.user_id || "Sin ID",
         aula: clase?.classes?.name || "Sin clase",
         monitor: `${clase?.profile?.firstName || "Desconocido"} ${clase?.profile?.lastName || ""}`.trim(),
-        enlace: clase?.classes?.urlMeet || "",
+        urlMeet: clase?.classes?.urlMeet || "",
+        urlClassroom: clase?.classes?.urlClassroom || "",
       }));
 
       setAulasData(data);
@@ -55,38 +60,54 @@ export const SupervisorPanel = () => {
       index + 1,
       aula.aula,
       aula.monitor,
-      <a
-        href={aula.enlace}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-blue-500 underline hover:text-blue-700"
-      >
-        {aula.enlace}
-      </a>,
+      aula?.urlMeet ? (
+        <a
+          href={aula.urlMeet}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 underline hover:text-blue-700"
+        >
+          {aula.urlMeet}
+        </a>
+      ) : (
+        <span className="text-gray-500">Sin enlace</span>
+      ),
+      aula?.urlClassroom ? (
+        <a
+          href={aula.urlClassroom}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 underline hover:text-blue-700"
+        >
+          {aula.urlClassroom}
+        </a>
+      ) : (
+        <span className="text-gray-500">Sin enlace</span>
+      ),
       <div className="inline-flex gap-4">
         <Button onClick={() => { setSelectedSalon(aula); setEstado(ESTADO.DETALLE); }}>
           <span className="block sm:hidden">Ver Detalles</span> {/* Texto para celular */}
-          <span className="hidden sm:block">Ver Detalles del Salón</span> {/* Texto para pantallas más grandes */}
+          <span className="hidden sm:block">Ver Detalles del Salón</span> {/* Texto para pantallas grandes */}
         </Button>
-    </div>
+      </div>
     ]);
   }, [aulasData]);
 
-  if (loading) return <p className="text-center text-gray-500">Cargando datos...</p>;
-  if (error) return <p className="text-center text-red-600">{error}</p>;
+  if (error) {
+    toast.error("Error al cargar los datos de los monitores");
+  }
 
   return (
     <div className="p-0 sm:p-5 text-sm sm:text-base">
       <div className="bg-gray-100 p-3 sm:p-5 rounded-none sm:rounded-md shadow-md overflow-x-auto text-center">
-      <h1 className="text-2xl font-bold text-center mb-6">
-        {estado === ESTADO.DETALLE && selectedSalon
-          ? `Aula ${selectedSalon.aula || "Desconocida"}`
-          : "Panel de Supervisor"}
-      </h1>
+        <h1 className="text-2xl font-bold text-center mb-6">
+          {estado === ESTADO.DETALLE && selectedSalon
+            ? `Aula ${selectedSalon.aula || "Desconocida"}`
+            : "Panel de Supervisor"}
+        </h1>
 
-  
         {estado === ESTADO.INDEX && (
-          <Tabla encabezado={["N°", "Aula", "Monitor", "Enlace", "Acciones"]} datos={datosAulas} index_key={0} />
+          loading ? <SkeletonTabla numColums={encabezado.length} numRows={10} /> : <Tabla encabezado={encabezado} datos={datosAulas} index_key={0} />
         )}
 
         {estado === ESTADO.DETALLE && (
@@ -95,5 +116,5 @@ export const SupervisorPanel = () => {
       </div>
     </div>
   );
-  
+
 };
