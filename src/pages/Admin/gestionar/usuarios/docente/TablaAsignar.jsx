@@ -6,6 +6,7 @@ import { useAreas } from "@/hooks/useAreas";
 import { useTurnos } from "@/hooks/useTurnos";
 import { useListaSalonesDisponibles } from "@/hooks/useListaSalonesDisponibles";
 import { toast } from "react-toastify";
+import { FaSyncAlt } from "react-icons/fa";
 
 const encabezado = ["Nº", "Aula Disponible", "Área", "Turno", "Acciones"];
 
@@ -24,7 +25,8 @@ export const TablaAsignar = ({
     totalPages,
     isLoading: loadingSalones,
     enabled: enabledSalones,
-    asignarSalonMutation
+    asignarSalonMutation,
+    refetch
   } = useListaSalonesDisponibles({
     objApi, page, limit, area_id, shift_id
   })
@@ -102,9 +104,14 @@ export const TablaAsignar = ({
 
   return (
     <div className="overflow-x-auto w-full mt-6">
-      <h2 className="text-2xl font-bold">
-        Salones Disponibles en el curso de {teacher?.courseName}:
-      </h2>
+      <div className="flex justify-between items-center ">
+        <Button onClick={refetch}>
+          <FaSyncAlt />
+        </Button>
+        <h2 className="text-2xl font-bold">
+          Salones Disponibles en el curso de {teacher?.courseName}:
+        </h2>
+      </div>
       <div className="mt-6 w-full text-center">
         {loadingAreas || loadingTurnos || loadingSalones || !enabledSalones ? (<SkeletonTabla />)
           : (<Tabla encabezado={encabezado} datos={datos()} filtroDic={filtro} />)}
