@@ -241,11 +241,11 @@ export const DocenteUsuarios = () => {
 
   return (
     <div className="overflow-x-auto w-full text-center">
-      <div className="relative flex justify-center items-center py-2">
+      <div className="flex justify-between items-center mt-1 mb-6 px-4">
         <Button onClick={refetch}>
           <FaSyncAlt />
         </Button>
-        <h2 className="text-2xl font-bold">GESTIÓN DE DOCENTES</h2>
+        <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE DOCENTES</h2>
         <Button onClick={handleAgregar}>Agregar Docente</Button>
       </div>
       {isLoading ? <SkeletonTabla numRows={6} /> :
