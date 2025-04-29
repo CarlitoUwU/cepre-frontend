@@ -33,7 +33,6 @@ export const useProfesoresDisponibles = ({ courseId, hourSessions, page = 1, lim
         classId,
       }),
     onSuccess: async () => {
-      // Invalidar la query de profesores disponibles para que se actualice
       await queryClient.invalidateQueries({
         queryKey: ["profesoresDisponibles", courseId, hourSessions, page, limit],
       });
@@ -43,29 +42,20 @@ export const useProfesoresDisponibles = ({ courseId, hourSessions, page = 1, lim
     },
   });
 
-  const desasignarClaseMutation = useMutation({ // Actualizar con refetch
+  const desasignarClaseMutation = useMutation({
     mutationFn: ({ teacherId, classId }) =>
       SchedulesService.desasignarSchedulesByTeacherClass({
         teacherId,
         classId,
       }),
-    onSuccess: (_, { teacherId }) => {
-      // Actualizar cache y eliminar el profesor asignado
-      queryClient.setQueryData(
-        ["profesoresDisponibles", courseId, hourSessions, page, limit],
-        (oldData) => {
-          if (!oldData) return oldData;
-          return {
-            ...oldData,
-            data: [...oldData.data, { id: teacherId }], // Agregar el profesor de nuevo a la lista
-          };
-        }
-      );
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(["profesoresDisponibles", courseId, hourSessions, page, limit]);
     },
     onError: (error) => {
       console.error("Error al desasignar profesor:", error);
     },
   });
+
 
   const profesores = data?.data || [];
   const total = data?.total || 0;

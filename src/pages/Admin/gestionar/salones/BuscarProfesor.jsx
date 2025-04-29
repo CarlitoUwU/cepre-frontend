@@ -8,7 +8,7 @@ import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 
 const encabezado = ["N°", "Docente", "Correo", "Teléfono", "Acciones"];
 
-export const BuscarProfesor = ({ curso: { id: courseId, name }, profesor, horario, idSalon, setAsignar }) => {
+export const BuscarProfesor = ({ curso: { id: courseId, name }, profesor, horario, idSalon, setAsignar, setDesasignar }) => {
   const [profesorAsignado, setProfesorAsignado] = useState(profesor);
   const [wasAssigned, setWasAssigned] = useState(false);
   const { mapearABloques } = useHorasABloques();
@@ -72,7 +72,7 @@ export const BuscarProfesor = ({ curso: { id: courseId, name }, profesor, horari
         setProfesorAsignado(null);
         toast.success("Profesor desasignado correctamente");
         setWasAssigned(false);
-        setAsignar(null);
+        setDesasignar(name);
         refetch();
       }
     } catch (error) {
@@ -99,17 +99,17 @@ export const BuscarProfesor = ({ curso: { id: courseId, name }, profesor, horari
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-      <div className="text-center mb-4">
-        <h2 className="text-center text-lg font-bold mb-0">Docente Asignado - {name}</h2>
-        
-              <p>{getNombreCompleto(profesorAsignado)}</p>
-              <p>{profesorAsignado?.email}</p>
-            </div>
+        <div className="text-center mb-4">
+          <h2 className="text-center text-lg font-bold mb-0">Docente Asignado - {name}</h2>
+
+          <p>{getNombreCompleto(profesorAsignado)}</p>
+          <p>{profesorAsignado?.email}</p>
+        </div>
 
         {profesorAsignado && (
           <>
-            
-            
+
+
 
             <Button onClick={() => { handleEliminarAsignacion(profesorAsignado.id) }} >
               Eliminar Docente
