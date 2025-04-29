@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
 import { EditableCell } from "@/components/ui/EditableCell";
+import { Input } from "@/components/ui/Input";
 import { AsignarSalonSup } from "./AsignarSalonSup";
 import { useSupervisores } from "@/hooks/useSupervisores";
 import { toast } from "react-toastify";
@@ -20,7 +21,6 @@ export const SupervisorUsuarios = ({ setMostrarCabecera }) => {
   const [vista, setVista] = useState(VISTA.TABLA);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [turnoFiltro, setTurnoFiltro] = useState("todos"); // Nuevo estado para el filtro
   const {
     supervisores,
     totalPages,
@@ -43,6 +43,15 @@ export const SupervisorUsuarios = ({ setMostrarCabecera }) => {
     const turno = turnos.find((t) => t.id === shiftId);
     return turno ? turno.name : "-";
   };
+
+  const filtro = useMemo(() => {
+    if (!turnos?.length) return {};
+    return {
+      5 : turnos.map((t) => t.name), // índice 5 corresponde a la columna "Turno"
+    };
+  }, [turnos]);
+
+  console.log("turnos", turnos);
 
   const handleNext = () => setPage((prev) => prev + 1);
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
@@ -136,41 +145,32 @@ export const SupervisorUsuarios = ({ setMostrarCabecera }) => {
   const getDatosSupervisores = () => {
     if (!supervisores || supervisores.length === 0) return [];
 
-    const supervisoresFiltrados = turnoFiltro === "todos"
-    ? supervisores
-    : supervisores.filter((s) => s.shiftId === Number(turnoFiltro));
-
-    return supervisoresFiltrados.map((supervisor, index) => {
+    return supervisores.map((supervisor, index) => {
       const esEdicion = editingId === supervisor.id;
 
       return [
         index + (page - 1) * limit + 1,
-        <EditableCell
-          editable={esEdicion}
-          name="nombres"
-          value={esEdicion ? editFormData.nombres : supervisor.firstName}
-          onChange={handleEditChange}
-        />,
-        <EditableCell
-          editable={esEdicion}
-          name="apellidos"
-          value={esEdicion ? editFormData.apellidos : supervisor.lastName}
-          onChange={handleEditChange}
-        />,
-        <EditableCell
-          editable={esEdicion}
-          name="correo"
-          value={esEdicion ? editFormData.correo : supervisor.email}
-          onChange={handleEditChange}
-          type="email"
-        />,
-        <EditableCell
-          editable={esEdicion}
-          name="numero"
-          value={esEdicion ? editFormData.numero : supervisor.phone}
-          onChange={handleEditChange}
-        />,
-        <span>{getNombreTurno(supervisor.shiftId)}</span>,
+        esEdicion ? (
+          <Input type="text" name="nombres" value={editFormData.nombres} onChange={handleEditChange} />
+        ) : (
+          supervisor.firstName || "-"
+        ),
+        esEdicion ? (
+          <Input type="text" name="apellidos" value={editFormData.apellidos} onChange={handleEditChange} />
+        ) : (
+          supervisor.lastName || "-"
+        ),
+        esEdicion ? (
+          <Input type="email" name="correo" value={editFormData.correo} onChange={handleEditChange} />
+        ) : (
+          supervisor.email || "-"
+        ),
+        esEdicion ? (
+          <Input type="text" name="numero" value={editFormData.numero} onChange={handleEditChange} />
+        ) : (
+          supervisor.phone || "-"
+        ),
+        supervisor.shiftId ? getNombreTurno(supervisor.shiftId) : "-",
         esEdicion ? (
           <div className="flex gap-2 justify-center">
             <Button onClick={() => handleGuardar(supervisor.id)}>Guardar</Button>
@@ -195,6 +195,8 @@ export const SupervisorUsuarios = ({ setMostrarCabecera }) => {
       />
     )
   }
+  console.log("supervisores", getDatosSupervisores());
+  console.log("Filtro", filtro);
 
   return (
     <div className="overflow-x-auto w-full text-center mb-3">
@@ -204,30 +206,9 @@ export const SupervisorUsuarios = ({ setMostrarCabecera }) => {
         </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE SUPERVISORES</h2>
       </div>
-
-      {/* Filtro de turno */}
-      <div className="flex justify-between py-2 items-center">
-        <label htmlFor="turnoFiltro" className="text-xl font-semibold">Filtrar por Turno:</label>
-        <select
-          id="turnoFiltro"
-          value={turnoFiltro}
-          onChange={(e) => {
-            const value = e.target.value;
-            setTurnoFiltro(value === "todos" ? "todos" : Number(value));
-          }}
-          className="border border-gray-300 rounded p-2"
-        >
-          <option value="todos">Todos</option>
-          {turnos.map((turno) => (
-            <option key={turno.id} value={turno.id}>
-              {turno.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
+      
       {isLoading ? <SkeletonTabla numRows={6} /> :
-        <Tabla encabezado={encabezado} datos={getDatosSupervisores()} />
+        <Tabla encabezado={encabezado} datos={getDatosSupervisores()}  filtroDic={filtro}/>
       }
 
       <div className="flex justify-between mt-4">
