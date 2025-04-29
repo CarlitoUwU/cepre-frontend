@@ -35,14 +35,17 @@ const agruparHoras = (horas) => {
   return grupos;
 };
 
-export const TablaHorarioDocente = ({
+export const HorarioDocenteCompleto = ({
   horarios = [],
-  setClaseSeleccionada = () => { }
+  setClaseSeleccionada = () => { },
+  idDocente = null,
+  estadoEliminar = false,
 }) => {
   const isMobile = useIsMobile(1024);
 
   // Procesar los datos del horario
   const clasesProcesadas = horarios.map((item) => ({
+    id: item.id,
     aula: item.clase || 'Sin aula',
     area: item.area || 'Sin área',
     dia: item.dia,
@@ -51,7 +54,6 @@ export const TablaHorarioDocente = ({
   }));
 
   const horasAgrupadas = agruparHoras(clasesProcesadas);
-  console.log('Clases procesadas:', horasAgrupadas);
 
   // Obtener rango de horas
   const horasDisponibles = horasAgrupadas.flatMap(c => [c.hora_ini, c.hora_fin]);
@@ -121,11 +123,11 @@ export const TablaHorarioDocente = ({
             enlace: clase.enlace,
           }}
           nombre={clase.aula}
-          backgroundColor={AREA_COLORS[clase.area] || "#f4351c"}
+          backgroundColor={estadoEliminar ? "#e3242b" : AREA_COLORS[clase.area] || "#f4351c"}  //rojo eliminar
           gridColumn={getColumn(clase.dia)}
           gridRow={getRow(clase.hora_ini)}
           gridSpan={getRowSpan(clase.hora_ini, clase.hora_fin)}
-          setClaseSeleccionada={setClaseSeleccionada}
+          setClaseSeleccionada={() => setClaseSeleccionada({ idDocente, idClase: clase.id })}
         />
       ))}
     </div>

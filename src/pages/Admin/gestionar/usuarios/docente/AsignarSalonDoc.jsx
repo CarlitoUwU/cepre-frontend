@@ -17,8 +17,6 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
   const { mapearABloques, isReady } = useHorasABloques();
   const { horario: horarioAsignado, refetch } = useHorarioAsignadoDocente({ idDocente: docente?.id });
 
-  
-
   // Carga inicial del docente, disponibilidad y horario asignado
   useEffect(() => {
     const cargarDataInicial = async () => {

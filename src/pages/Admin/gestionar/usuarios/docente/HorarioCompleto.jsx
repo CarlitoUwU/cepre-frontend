@@ -1,10 +1,21 @@
 import React from "react";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { TablaHorarioDocente } from "@/components/Horarios/TablaHorarioDocente";
+import { HorarioDocenteCompleto } from "@/components/Horarios/HorarioDocenteCompleto";
 import { useHorarioAsignadoDocente } from "@/hooks/useHorarioAsignadoDocente";
+import { Button } from "@/components/ui/Button";
 
 export const HorarioCompleto = ({ setMostrarHorarioCompleto, docente }) => {
-  const { horario, loading } = useHorarioAsignadoDocente({ idDocente: docente?.id });
+  const { horario, loading, desasignarClaseMutation } = useHorarioAsignadoDocente({ idDocente: docente?.id });
+  const [estadoEliminar, setEstadoEliminar] = React.useState(false);
+
+  const handleClaseSeleccionada = (clase) => {
+    if (!estadoEliminar) return;
+    // preguntar si desea eliminar la clase
+    if (!clase) return;
+    if (window.confirm(`¿Está seguro de que desea eliminar la clase ${clase?.clase}?`)) {
+      desasignarClaseMutation({ teacherId: clase?.idDocente, classId: clase?.idClase });
+    }
+  };
 
   return (
     <div className="flex flex-col items-center justify-center p-10 space-y-6">
@@ -13,15 +24,21 @@ export const HorarioCompleto = ({ setMostrarHorarioCompleto, docente }) => {
       {loading ? (
         <p>Cargando horario...</p>
       ) : (
-        <TablaHorarioDocente
+        <HorarioDocenteCompleto
           horarios={horario || []}
-          setClaseSeleccionada={() => { }}
+          setClaseSeleccionada={handleClaseSeleccionada}
+          idDocente={docente?.id}
+          estadoEliminar={estadoEliminar}
         />
       )}
-
-      <ButtonNegative onClick={() => setMostrarHorarioCompleto(false)}>
-        Atrás
-      </ButtonNegative>
+      <div className="flex justify-center items-center space-x-4 mt-4">
+        <ButtonNegative onClick={() => setMostrarHorarioCompleto(false)}>
+          Atrás
+        </ButtonNegative>
+        <Button onClick={() => { setEstadoEliminar(!estadoEliminar) }}>
+          {estadoEliminar ? "Eliminando Clase" : "Eliminar Clase"}
+        </Button>
+      </div>
     </div>
   );
 };

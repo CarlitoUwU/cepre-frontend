@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { DIAS_DIC } from "@/constants/dias";
 import { TeachersServices } from "@/services/TeachersServices";
 import { formatTimeToHHMM } from "@/utils/formatTime";
+import { SchedulesService } from "@/services/SchedulesServices";
 
 export const useHorarioAsignadoDocente = ({ idDocente }) => {
   const [horario, setHorario] = useState([]);
@@ -17,16 +18,17 @@ export const useHorarioAsignadoDocente = ({ idDocente }) => {
 
       const horarioFormateado = Array.isArray(data)
         ? data.flatMap((clase) =>
-            Array.isArray(clase.schedules)
-              ? clase.schedules.map((item) => ({
-                  area: clase.areaName || "Sin área",
-                  dia: DIAS_DIC[item.weekday] || item.weekday || "Día desconocido",
-                  hora_ini: formatTimeToHHMM(item.hourSession?.startTime),
-                  hora_fin: formatTimeToHHMM(item.hourSession?.endTime),
-                  clase: clase.className || "ASIGNADO",
-                }))
-              : []
-          )
+          Array.isArray(clase.schedules)
+            ? clase.schedules.map((item) => ({
+              id: clase.classId,
+              area: clase.areaName || "Sin área",
+              dia: DIAS_DIC[item.weekday] || item.weekday || "Día desconocido",
+              hora_ini: formatTimeToHHMM(item.hourSession?.startTime),
+              hora_fin: formatTimeToHHMM(item.hourSession?.endTime),
+              clase: clase.className || "ASIGNADO",
+            }))
+            : []
+        )
         : [];
 
       setHorario(horarioFormateado);
@@ -38,6 +40,23 @@ export const useHorarioAsignadoDocente = ({ idDocente }) => {
     }
   }, [idDocente]);
 
+
+  const desasignarClaseMutation = async ({ teacherId, classId }) => {
+
+    const request = await SchedulesService.desasignarSchedulesByTeacherClass({ teacherId, classId })
+    if (request) {
+      console.log({ horario })
+      horario.forEach((clase) => {
+        if (clase.id === classId) {
+          setHorario((prevHorario) =>
+            prevHorario.filter((item) => item.id !== classId)
+          );
+        }
+      });
+    }
+
+  };
+
   // Llama automáticamente cuando el idDocente cambia
   useEffect(() => {
     refetch();
@@ -47,6 +66,7 @@ export const useHorarioAsignadoDocente = ({ idDocente }) => {
     horario,
     loading,
     error,
+    desasignarClaseMutation,
     refetch, // Agrega refetch al retorno
   };
 };
