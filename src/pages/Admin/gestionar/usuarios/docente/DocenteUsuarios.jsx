@@ -240,7 +240,7 @@ export const DocenteUsuarios = () => {
   }
 
   return (
-    <div className="overflow-x-auto w-full text-center">
+    <div className="overflow-x-auto w-full text-center mb-3">
       <div className="flex justify-between items-center mt-1 mb-6 px-4">
         <Button onClick={refetch}>
           <FaSyncAlt />
