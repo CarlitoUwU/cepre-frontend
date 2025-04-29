@@ -82,7 +82,7 @@ export const MonitorsServices = {
    * @returns {Promise<Array<Object>>}
    */
   async getMonitoresFiltroAsignados(shiftId, hasSupervisor = false, page = 1, limit = 200, area_id = null) {
-    const url = `/monitors/filtered?shiftId=${shiftId}&has_supervisor=${hasSupervisor}&page=${page}&limit=${limit}${area_id ? `&area_id=${area_id}` : ""}`;
+    const url = `/monitors/filtered?shiftId=${shiftId}&has_supervisor=${hasSupervisor}&page=${page}&limit=${limit}${area_id ? `&areaId=${area_id}` : ""}`;
     return request("get", url);
   },
 
