@@ -42,10 +42,11 @@ export const useSupervisores = ({ page = 1, limit = 20 } = {}) => {
     onSuccess: (supervisorActualizado) => {
       queryClient.setQueryData(["supervisores", page, limit], (prev) => {
         if (!prev) return;
+
         return {
           ...prev,
           data: prev.data.map((s) =>
-            s.id === supervisorActualizado.id ? supervisorActualizado : s
+            s.id === supervisorActualizado.id ? { ...supervisorActualizado, shiftId: s.shiftId } : s
           ),
         };
       });
