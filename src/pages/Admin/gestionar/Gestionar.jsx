@@ -52,8 +52,8 @@ export const Gestionar = () => {
       {/* Espacio para desktop */}
       <div className="hidden md:block mx-3"></div>
 
-      {/* Contenido principal con pequeño margen interno en móvil */}
-      <div className="w-full md:w-5/6 flex-grow flex overflow-auto bg-gray-200 md:shadow-md md:rounded-lg px-2 md:p-4 pb-16 md:pb-4">
+      {/* Contenido principal con margen inferior en móvil */}
+      <div className="w-full md:w-5/6 flex-grow flex overflow-auto bg-gray-200 md:shadow-md md:rounded-lg px-2 md:p-4 pb-16 md:pb-4 mb-17 md:mb-0"> {/* Aquí se agregó mb-5 */}
         <div className="w-full"> {/* Contenedor interno para el margen */}
           {componentes[vistaActual]}
         </div>
