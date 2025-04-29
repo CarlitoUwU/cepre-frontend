@@ -53,15 +53,24 @@ export const Gestionar = () => {
       <div className="hidden md:block mx-3"></div>
 
       {/* Contenido principal con margen inferior en móvil */}
-      <div className="w-full md:w-5/6 flex-grow flex overflow-auto bg-gray-200 md:shadow-md md:rounded-lg px-2 md:p-4 pb-16 md:pb-4 mb-17 md:mb-0"> {/* Aquí se agregó mb-5 */}
-        <div className="w-full"> {/* Contenedor interno para el margen */}
+      <div className="w-full md:w-5/6 flex-grow flex overflow-auto bg-gray-200 md:shadow-md md:rounded-lg px-2 md:p-4 pb-16 md:pb-4 mb-17 md:mb-0">
+        <div className="w-full">
+          {/* Contenedor interno para el margen */}
           {componentes[vistaActual]}
         </div>
       </div>
 
       {/* Menú inferior móvil (pegado pero con pequeño margen interno) */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-300">
-        <div className="flex px-1"> {/* Pequeño margen horizontal */}
+        <div className="flex px-1">
+          {/* Botón de Menú Principal */}
+          <button
+            onClick={() => navigate("..")}
+            className="flex-1 flex flex-col items-center py-3 mx-0.5 rounded-t-lg bg-white hover:bg-gray-200"
+          >
+            <span className="text-xs mt-1">Menú Principal</span>
+          </button>
+          {/* Secciones de navegación */}
           {secciones.map(({ id, nombre, icono }) => (
             <button
               key={id}
