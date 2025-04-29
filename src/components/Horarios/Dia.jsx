@@ -2,7 +2,7 @@ import React from 'react';
 
 export const Dia = ({ nombre, isCurrent = false, onClick, clickable = false }) => {
   const styleCurrent = isCurrent ? 'bg-blue-500 text-white' : 'bg-[#F4F4F4]';
-  const styleClickable = clickable ? 'cursor-pointer hover:bg-blue-100 transition-colors' : '';
+  const styleClickable = clickable ? 'cursor-pointer hover:bg-blue-100 transition-colors' : 'cursor-default';
 
   return (
     <div

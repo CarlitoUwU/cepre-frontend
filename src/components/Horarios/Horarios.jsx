@@ -94,15 +94,15 @@ const TablaTurno = ({
     <div className="grid grid-cols-7 gap-1 bg-white shadow-md rounded-lg p-4 relative w-full">
       <div></div>
       {DIAS.map((dia, index) => (
-        <Dia key={index} nombre={dia} onClick={() => handleClickDia?.(dia)} />
+        <Dia key={index} nombre={dia} onClick={handleClickDia ? () => handleClickDia(dia) : null} clickable={handleClickDia ? true : false} />
       ))}
 
       {HORAS_INI.slice(minIndex, maxIndex + 1).map((hora, index) => (
         <Hora
           key={index}
           hora={`${hora} - ${HORAS_FIN[minIndex + index]}`}
-          onClick={() =>
-            handleClickHora?.(hora, HORAS_FIN[minIndex + index])
+          onClick={handleClickHora ? () =>
+            handleClickHora?.(hora, HORAS_FIN[minIndex + index]) : null
           }
         />
       ))}
