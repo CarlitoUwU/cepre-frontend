@@ -47,11 +47,9 @@ export const SupervisorUsuarios = () => {
   const filtro = useMemo(() => {
     if (!turnos?.length) return {};
     return {
-      5 : turnos.map((t) => t.name), // índice 5 corresponde a la columna "Turno"
+      5: { options: turnos.map((t) => t.name) },
     };
   }, [turnos]);
-
-  console.log("turnos", turnos);
 
   const handleNext = () => setPage((prev) => prev + 1);
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
@@ -78,15 +76,15 @@ export const SupervisorUsuarios = () => {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-  
+
     if (name === "numero") {
       const soloNumeros = value.replace(/[^0-9]/g, "");
-      
+
       const primerDigito = soloNumeros.charAt(0);
-      const numeroValido = primerDigito === "9" || primerDigito === "" 
+      const numeroValido = primerDigito === "9" || primerDigito === ""
         ? soloNumeros.slice(0, 9)  // Corta a 9 dígitos
         : "9" + soloNumeros.slice(0, 8);  // Fuerza "9" al inicio
-  
+
       setEditFormData({ ...editFormData, [name]: numeroValido });
     } else {
       setEditFormData({ ...editFormData, [name]: value });
@@ -206,20 +204,19 @@ export const SupervisorUsuarios = () => {
       />
     )
   }
-  console.log("supervisores", getDatosSupervisores());
-  console.log("Filtro", filtro);
-
+  
   return (
     <div className="overflow-x-auto w-full text-center">
-      <div className="relative flex justify-center items-center py-2">
+      <div className="flex justify-between items-center mt-1 mb-6 px-4">
         <Button onClick={refetch}>
           <FaSyncAlt />
         </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE SUPERVISORES</h2>
+        <p></p>
       </div>
-      
+
       {isLoading ? <SkeletonTabla numRows={6} /> :
-        <Tabla encabezado={encabezado} datos={getDatosSupervisores()}  filtroDic={filtro}/>
+        <Tabla encabezado={encabezado} datos={getDatosSupervisores()} filtroDic={filtro} />
       }
 
       <div className="flex justify-between mt-4">
