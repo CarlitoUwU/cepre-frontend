@@ -99,17 +99,22 @@ export const BuscarProfesor = ({ curso: { id: courseId, name }, profesor, horari
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-center text-lg font-bold mb-4">Seleccionar Profesor - {name}</h2>
-        {profesorAsignado && (
-          <>
-            <Button onClick={() => { handleEliminarAsignacion(profesorAsignado.id) }} >
-              Eliminar Asignación
-            </Button>
-            <div className="text-center mb-4">
-              <h3 className="text-lg font-semibold">Profesor Asignado:</h3>
+      <div className="text-center mb-4">
+        <h2 className="text-center text-lg font-bold mb-0">Docente Asignado - {name}</h2>
+        
               <p>{getNombreCompleto(profesorAsignado)}</p>
               <p>{profesorAsignado?.email}</p>
             </div>
+
+        {profesorAsignado && (
+          <>
+            
+            
+
+            <Button onClick={() => { handleEliminarAsignacion(profesorAsignado.id) }} >
+              Eliminar Docente
+            </Button>
+
           </>
         )}
       </div>
