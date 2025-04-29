@@ -122,7 +122,7 @@ export const Cursos = () => {
   }
 
   return (
-    <div className="overflow-x-auto w-full text-center">
+    <div className="overflow-x-auto w-full text-center text-xs sm:text-sm">
       {/* Contenedor del título y el botón */}
       <div className="flex justify-between items-center mt-1 mb-6 px-4">
         <Button onClick={refetch}>
@@ -130,7 +130,7 @@ export const Cursos = () => {
         </Button>
         <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE CURSOS</h2>
         <Button onClick={() => setVistaActual("agregar")}>Agregar Curso</Button>
-      </div>
+      </div>  
       {isLoading ? <SkeletonTabla /> : (
         <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
       )}

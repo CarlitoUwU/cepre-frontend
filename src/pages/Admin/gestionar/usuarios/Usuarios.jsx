@@ -16,7 +16,7 @@ export const Usuarios = () => {
   const handleClick = (nuevoRol) => setRol(nuevoRol);
 
   return (
-    <div className="overflow-x-auto w-full text-center">
+    <div className="overflow-x-auto w-full text-center text-xs sm:text-sm">
       <div className="flex w-80 justify-between mx-auto mb-4">
         {Object.values(ROLES).map((tipoRol) => (
           <ButtonCabecera key={tipoRol} text={tipoRol} handleClick={() => handleClick(tipoRol)} className={`${rol === tipoRol ? "bg-gray-300 font-bold" : "bg-white"} px-4 py-2 rounded shadow`} />

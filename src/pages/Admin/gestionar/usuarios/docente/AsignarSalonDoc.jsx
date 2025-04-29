@@ -15,9 +15,9 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
   const [mostrarHorarioCompleto, setMostrarHorarioCompleto] = useState(false);
   const [objApi, setObjApi] = useState({})
   const { mapearABloques, isReady } = useHorasABloques();
-  const {
-    horario: horarioAsignado,
-  } = useHorarioAsignadoDocente({ idDocente: docente?.id });
+  const { horario: horarioAsignado, refetch } = useHorarioAsignadoDocente({ idDocente: docente?.id });
+
+  
 
   // Carga inicial del docente, disponibilidad y horario asignado
   useEffect(() => {
@@ -101,6 +101,9 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
           <TablaAsignar
             teacher={docente}
             objApi={objApi}
+            onSalonAsignado={async () => {
+              await refetch(); // recarga el horario después de asignar
+            }}
           />
 
           <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
