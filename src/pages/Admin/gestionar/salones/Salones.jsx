@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
@@ -10,6 +10,7 @@ import { useTurnos } from "@/hooks/useTurnos";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { EditarSalon } from "./EditarSalon";
 import { FaSyncAlt } from "react-icons/fa";
+import { useSearchParams } from "react-router-dom";
 
 const encabezadoCursos = ["N° de Aula", "Área", "Turno", "Estado", "Acciones"];
 const VISTAS = {
@@ -19,6 +20,9 @@ const VISTAS = {
 };
 
 export const Salones = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const vistaClase = useMemo(() => searchParams.get("salon") || "", [searchParams]);
+  
   const {
     clases,
     isLoading: isLoadingClases,
@@ -67,13 +71,32 @@ export const Salones = () => {
     setVistaActual(VISTAS.AGREGAR);
   };
 
-  const handleEditar = (aula) => {
+  const handleEditar = useCallback((aula) => {
     setSalonAEditar(aula?.id);
     setVistaActual(VISTAS.EDITAR);
-  };
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.set('salon', aula?.name || '');
+      return newParams;
+    });
+  }, [setSalonAEditar, setVistaActual, setSearchParams]);
+
+  useEffect(() => {
+    if (vistaClase && clases.length) {
+      const aula = clases.find((aula) => aula.name === vistaClase);
+      if (aula) {
+        handleEditar(aula);
+      }
+    }
+  }, [vistaClase, clases, handleEditar]);
 
   const handleRegresar = () => {
     setVistaActual(VISTAS.LISTA);
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+      newParams.delete('salon'); // (opcionalmente usa .delete en lugar de .remove, más estándar)
+      return newParams;
+    }, { replace: true });
   };
 
   const getAcciones = (aula) => (

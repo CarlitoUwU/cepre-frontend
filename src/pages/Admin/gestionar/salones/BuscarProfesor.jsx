@@ -21,7 +21,9 @@ export const BuscarProfesor = ({ curso: { id: courseId, name }, profesor, horari
     isLoading,
     isError,
     error,
-    asignarClaseMutation
+    asignarClaseMutation,
+    desasignarClaseMutation,
+    refetch
   } = useProfesoresDisponibles({
     courseId,
     hourSessions: horarioApi
@@ -53,10 +55,29 @@ export const BuscarProfesor = ({ curso: { id: courseId, name }, profesor, horari
         setWasAssigned(true);
         setAsignar(name);
       }
-
     } catch (error) {
       toast.error("Error al asignar el profesor");
       console.error("Asignación fallida:", error);
+    }
+  }
+
+  const handleEliminarAsignacion = async (idProfesor) => {
+    console.log({ idProfesor, idSalon });
+    try {
+      const response = await desasignarClaseMutation.mutateAsync({
+        teacherId: idProfesor,
+        classId: idSalon
+      });
+      if (response) {
+        setProfesorAsignado(null);
+        toast.success("Profesor desasignado correctamente");
+        setWasAssigned(false);
+        setAsignar(null);
+        refetch();
+      }
+    } catch (error) {
+      toast.error("Error al eliminar la asignación del profesor");
+      console.error("Desasignación fallida:", error);
     }
   }
 
@@ -80,11 +101,16 @@ export const BuscarProfesor = ({ curso: { id: courseId, name }, profesor, horari
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-center text-lg font-bold mb-4">Seleccionar Profesor - {name}</h2>
         {profesorAsignado && (
-          <div className="text-center mb-4">
-            <h3 className="text-lg font-semibold">Profesor Asignado:</h3>
-            <p>{getNombreCompleto(profesorAsignado)}</p>
-            <p>{profesorAsignado?.email}</p>
-          </div>
+          <>
+            <Button onClick={() => { handleEliminarAsignacion(profesorAsignado.id) }} >
+              Eliminar Asignación
+            </Button>
+            <div className="text-center mb-4">
+              <h3 className="text-lg font-semibold">Profesor Asignado:</h3>
+              <p>{getNombreCompleto(profesorAsignado)}</p>
+              <p>{profesorAsignado?.email}</p>
+            </div>
+          </>
         )}
       </div>
       {isLoading || data === undefined ? (<SkeletonTabla />) :

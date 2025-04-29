@@ -32,6 +32,23 @@ export const useProfesoresDisponibles = ({ courseId, hourSessions, page = 1, lim
         teacherId,
         classId,
       }),
+    onSuccess: async () => {
+      // Invalidar la query de profesores disponibles para que se actualice
+      await queryClient.invalidateQueries({
+        queryKey: ["profesoresDisponibles", courseId, hourSessions, page, limit],
+      });
+    },
+    onError: (error) => {
+      console.error("Error al desasignar profesor:", error);
+    },
+  });
+
+  const desasignarClaseMutation = useMutation({ // Actualizar con refetch
+    mutationFn: ({ teacherId, classId }) =>
+      SchedulesService.desasignarSchedulesByTeacherClass({
+        teacherId,
+        classId,
+      }),
     onSuccess: (_, { teacherId }) => {
       // Actualizar cache y eliminar el profesor asignado
       queryClient.setQueryData(
@@ -40,13 +57,13 @@ export const useProfesoresDisponibles = ({ courseId, hourSessions, page = 1, lim
           if (!oldData) return oldData;
           return {
             ...oldData,
-            data: oldData.data?.filter((prof) => prof.id !== teacherId),
+            data: [...oldData.data, { id: teacherId }], // Agregar el profesor de nuevo a la lista
           };
         }
       );
     },
     onError: (error) => {
-      console.error("Error al asignar profesor:", error);
+      console.error("Error al desasignar profesor:", error);
     },
   });
 
@@ -63,6 +80,7 @@ export const useProfesoresDisponibles = ({ courseId, hourSessions, page = 1, lim
     isError,
     error,
     asignarClaseMutation,
+    desasignarClaseMutation,
     refetch,
     isFetching,
   };
