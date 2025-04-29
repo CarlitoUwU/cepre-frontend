@@ -83,7 +83,7 @@ export const AsignarSalonSup = ({ supervisor, regresar }) => {
         monitor.areaName || 'Sin área',
         <button
           key={`remove-${monitor?.monitorId}`}
-          className={`bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700 ${quitandoId === monitor?.monitorId ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-700 transition cursor-pointer select-none ${quitandoId === monitor?.monitorId ? 'opacity-50 cursor-not-allowed' : ''}`}
           onClick={() => handleQuitarMonitor(monitor?.monitorId)}
           disabled={quitandoId === monitor?.monitorId}
         >
@@ -111,7 +111,7 @@ export const AsignarSalonSup = ({ supervisor, regresar }) => {
         monitor.areaName || 'Sin área',
         <button
           key={`assign-${monitor?.monitorId}`}
-          className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 ${asignandoId === monitor?.monitorId ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`bg-[#78211E] text-white px-3 py-2 rounded hover:bg-[rgb(90,24,21)] cursor-pointer select-none ${asignandoId === monitor?.monitorId ? 'opacity-50 cursor-not-allowed' : ''}`}
           onClick={() => handleAsignarMonitor(monitor?.monitorId)}
           disabled={asignandoId === monitor?.monitorId}
         >
