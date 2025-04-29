@@ -75,7 +75,7 @@ export const TablaAsignar = ({
       <h2 className="text-2xl font-bold">
         Salones Disponibles en el curso de {teacher?.courseName}:
       </h2>
-      <div className="w-full text-center">
+      <div className="mt-6 w-full text-center">
         {loadingAreas || loadingSalones || !enabledSalones ? (<SkeletonTabla />)
           : (<Tabla encabezado={encabezado} datos={datos()} />)}
       </div>

@@ -79,7 +79,7 @@ export const EditarSalon = ({ idSalon, regresar }) => {
   }
 
   return (
-    <div className="p-4 space-y-2 flex flex-col items-center justify-center max-w-4xl mx-auto">
+    <div className="p-2 space-y-2 flex flex-col items-center justify-center max-w-4xl mx-auto">
       <div className="text-center">
         <h2 className="text-2xl font-bold">Modificación de Aula: {salon?.name}</h2>
         <h3 className="text-xl font-semibold">Turno del Aula: {turno?.name}</h3>
