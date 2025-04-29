@@ -22,18 +22,36 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
     const cargarDataInicial = async () => {
       try {
         const data = localStorage.getItem(`disponibilidad-${docente?.id}`);
-        const parsed = data ? JSON.parse(data) : [];
-        setDisponibilidad(Array.isArray(parsed) ? parsed : []);
+        let parsed = data ? JSON.parse(data) : [];
+  
+        if (!Array.isArray(parsed)) parsed = [];
+  
+        // Limpiar bloques ya asignados del horario
+        if (horarioAsignado && horarioAsignado.length > 0) {
+          const bloquesAsignados = new Set(
+            horarioAsignado.flatMap((dia) =>
+              (dia.bloques || []).map((b) => `${dia.dia}-${b}`)
+            )
+          );
+  
+          parsed = parsed.filter(
+            (bloque) => !bloquesAsignados.has(`${bloque.dia}-${bloque.bloque}`)
+          );
+        }
+  
+        setDisponibilidad(parsed);
+        localStorage.setItem(`disponibilidad-${docente?.id}`, JSON.stringify(parsed));
       } catch (error) {
         console.warn("Error cargando datos iniciales", error);
         localStorage.removeItem(`disponibilidad-${docente?.id}`);
       }
     };
-
+  
     if (docente?.id) {
       cargarDataInicial();
     }
-  }, [docente]);
+  }, [docente, horarioAsignado]);
+  
 
   // Carga salones disponibles
   useEffect(() => {
@@ -58,10 +76,32 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
       };
 
       setObjApi(objApi);
+      console.log("objApi", objApi);
     };
 
     cargarSalones();
   }, [cursos, disponibilidad, docente, isReady, mapearABloques]);
+
+  // Sincroniza la disponibilidad eliminando bloques ya asignados
+useEffect(() => {
+  if (!docente?.id || horarioAsignado.length === 0 || disponibilidad.length === 0) return;
+
+  const nuevaDisponibilidad = disponibilidad.filter((d) =>
+    !horarioAsignado.some(
+      (h) =>
+        h.dia === d.dia &&
+        h.hora_ini === d.hora_ini &&
+        h.hora_fin === d.hora_fin
+    )
+  );
+
+  // Solo actualiza si hubo cambios reales
+  if (nuevaDisponibilidad.length !== disponibilidad.length) {
+    setDisponibilidad(nuevaDisponibilidad);
+    localStorage.setItem(`disponibilidad-${docente?.id}`, JSON.stringify(nuevaDisponibilidad));
+  }
+}, [horarioAsignado, disponibilidad, docente?.id]);
+
 
   const handleDisponibilidadChange = useCallback((nuevaDisponibilidad) => {
     setDisponibilidad(nuevaDisponibilidad);
