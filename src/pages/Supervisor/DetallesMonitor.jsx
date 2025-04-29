@@ -64,9 +64,9 @@ export const DetallesMonitor = ({ aula = {}, volver = () => {} }) => {
     <div className="grid grid-cols-1 md:grid-cols-5 text-sm">
 
       {/* Directorio del Aula (Izquierda - menos ancho) */}
-      <div className="md:col-span-2 flex flex-col items-center">
-        <h2 className="text-base font-semibold text-center mb-1">
-          {`Directorio del Aula ${aula.aula || "Desconocida"}`}
+      <div className="md:col-span-2 flex flex-col items-center mb-4 md:mb-0">
+      <h2 className="text-lg font-semibold text-center mb-4">
+          {`Directorio`}
         </h2>
         <div className="w-full max-w-[100%]">
           <Tabla encabezado={["N°", "Curso", "Nombre", "Correo", "Número"]} datos={docentes} />
@@ -75,8 +75,8 @@ export const DetallesMonitor = ({ aula = {}, volver = () => {} }) => {
 
       {/* Horario del Aula (Derecha - más ancho) */}
       <div className="md:col-span-3 flex flex-col items-center">
-        <h2 className="text-base font-semibold text-center mb-1">
-          {`Horario del Aula ${aula.aula || "Desconocida"}`}
+      <h2 className="text-lg font-semibold text-center mb-4">
+          {`Horario`}
         </h2>
         <div className="w-full max-w-[95%]">
           <TablaHorarioMonitor horas={horariosRender} />
