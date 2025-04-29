@@ -1,37 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { Login } from "./Login";
-import backgroundDesktop from "@/assets/ceprunsa_v1.webp";
-import backgroundMobile from "@/assets/ceprunsa_v2.webp";
+import background from "@/assets/cepr-background.jpg"; 
 
 export const LoginPanel = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
+  const [imageLoaded, setImageLoaded] = useState(false);
+  
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    // Verificar al montar
-    checkMobile();
-    
-    // Escuchar cambios de tamaño
-    window.addEventListener('resize', checkMobile);
-    
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
+    const img = new Image();
+    img.src = background;
+    img.onload = () => setImageLoaded(true);
   }, []);
 
   return (
-    <div
-      className="h-screen w-full bg-cover bg-center bg-no-repeat"
-      style={{ 
-        backgroundImage: `url(${isMobile ? backgroundMobile : backgroundDesktop})` 
-      }}
-    >
-      <Login />
+    <div className="relative h-screen w-full overflow-hidden">
+      {/* Fondo degradado siempre visible */}
+      <div 
+        className="absolute inset-0"
+        style={{
+          backgroundImage: 'radial-gradient(circle,rgba(254, 252, 245, 1) 0%, rgba(119, 224, 200, 1) 60%, rgba(240, 247, 230, 1) 100%)',
+          filter: 'blur(3px)',
+          transform: 'scale(1.05)',
+        }}
+      />
+
+      {/* Capa con la imagen de fondo que aparece cuando se carga */}
+      {imageLoaded && (
+        <>
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500 opacity-100"
+            style={{ 
+              backgroundImage: `url(${background})`,
+              filter: 'blur(3px)',
+              transform: 'scale(1.05)'
+            }}
+          />
+          {/* Componente Login */}
+          <div className="relative z-10">
+            <Login />
+          </div>
+        </>
+      )}
     </div>
   );
 };
-
-export default LoginPanel;
