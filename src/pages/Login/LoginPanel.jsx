@@ -12,7 +12,7 @@ export const LoginPanel = () => {
   }, []);
 
   return (
-    <div className="relative h-screen w-full overflow-hidden">
+    <div className="relative h-screen w-full overflow-hidden select-none">
       {/* Fondo degradado siempre visible */}
       <div 
         className="absolute inset-0"
