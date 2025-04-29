@@ -17,7 +17,7 @@ const VISTA = {
   ASIGNAR_SALON: "asignarSalonDoc"
 };
 
-export const DocenteUsuarios = () => {
+  export const DocenteUsuarios = ({ setMostrarCabecera }) => {
   const [vista, setVista] = useState(VISTA.TABLA);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -50,6 +50,12 @@ export const DocenteUsuarios = () => {
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
   const handleLimitChange = (e) => setLimit(e.target.value);
 
+  const esNumeroValido = (numero) => {
+    const regex = /^9\d{8}$/;  // Empieza en 9 y luego 8 dígitos (total 9 dígitos)
+    return regex.test(numero);
+  };
+  
+
   const handleModificar = (id) => {
     const profesor = profesores.find((profesor) => profesor.id === id);
     if (profesor) {
@@ -65,22 +71,40 @@ export const DocenteUsuarios = () => {
   };
 
   const handleEditChange = (e) => {
-    setEditFormData({ ...editFormData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+
+    if (name === "numero") {
+      // Solo permitir números
+      if (!/^\d*$/.test(value)) {
+        return; // no actualiza si no es número
+      }
+      // Limitar máximo 9 dígitos
+      if (value.length > 9) {
+        return;
+      }
+    }
+
+    setEditFormData({ ...editFormData, [name]: value });
   };
+
 
   const handleGuardar = async () => {
     try {
-      const profesor =
-      {
+      if (!esNumeroValido(editFormData.numero)) {
+        toast.error("El número debe comenzar con 9 y tener exactamente 9 dígitos.");
+        return;
+      }
+  
+      const profesor = {
         userId: editingId,
         firstName: editFormData.nombres,
         lastName: editFormData.apellidos,
         email: editFormData.correo,
-        phone: editFormData.numero
-      }
-
+        phone: editFormData.numero,
+      };
+  
       const profeActualizado = await actualizarProfesorMutation.mutateAsync(profesor);
-
+  
       if (profeActualizado) {
         toast.success(`Profesor "${profeActualizado.firstName}" actualizado correctamente`);
         setEditingId(null);
@@ -92,7 +116,7 @@ export const DocenteUsuarios = () => {
           extra: "",
         });
       }
-    } catch (error) {
+    }  catch (error) {
       if (error.response?.status === 409) {
         toast.error("El correo ya está en uso por otro usuario");
       } else if (error.response?.status === 400) {
@@ -124,6 +148,7 @@ export const DocenteUsuarios = () => {
   const handleAgregar = () => {
     setEditFormData({ nombres: "", apellidos: "", correo: "", numero: "", extra: "" });
     setVista(VISTA.FORMULARIO);
+    setMostrarCabecera(false); // OCULTAR
   };
 
   const handleNuevoUsuario = async (formData) => {
@@ -161,12 +186,14 @@ export const DocenteUsuarios = () => {
   const handleAsignarSalon = (id) => {
     setEditingId(id);
     setVista(VISTA.ASIGNAR_SALON);
+    setMostrarCabecera(false); // OCULTAR
   };
 
   const handleRegresar = () => {
     setEditingId(null);
-    setVista(VISTA.TABLA)
-  }
+    setVista(VISTA.TABLA);
+    setMostrarCabecera(true); // MOSTRAR
+  };  
 
   const getDatosProfesor = () => {
     if (!profesores || profesores.length === 0) return [];
@@ -240,7 +267,7 @@ export const DocenteUsuarios = () => {
   }
 
   return (
-    <div className="overflow-x-auto w-full text-center">
+    <div className="overflow-x-auto w-full text-center mb-3">
       <div className="flex justify-between items-center mt-1 mb-6 px-4">
         <Button onClick={refetch}>
           <FaSyncAlt />

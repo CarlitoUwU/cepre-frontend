@@ -16,7 +16,7 @@ const VISTA = {
   ASIGNAR_SALON: "asignarSalonSup",
 }
 
-export const SupervisorUsuarios = () => {
+export const SupervisorUsuarios = ({ setMostrarCabecera }) => {
   const [vista, setVista] = useState(VISTA.TABLA);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -124,12 +124,14 @@ export const SupervisorUsuarios = () => {
   const handleAsignarSalonSup = (id) => {
     setEditingId(id);
     setVista(VISTA.ASIGNAR_SALON);
-  }
+    setMostrarCabecera(false); // OCULTAR
+  };  
 
   const handleRegresar = () => {
     setEditingId(null);
     setVista(VISTA.TABLA);
-  }
+    setMostrarCabecera(true); // MOSTRAR
+  };  
 
   const getDatosSupervisores = () => {
     if (!supervisores || supervisores.length === 0) return [];
@@ -195,7 +197,7 @@ export const SupervisorUsuarios = () => {
   }
 
   return (
-    <div className="overflow-x-auto w-full text-center">
+    <div className="overflow-x-auto w-full text-center mb-3">
       <div className="relative flex justify-center items-center py-2">
         <Button onClick={refetch}>
           <FaSyncAlt />

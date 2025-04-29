@@ -46,7 +46,7 @@ export const TablaCursos = ({ docentes = [], buscarProfesor }) => {
   });
 
   return (
-    <div className="overflow-x-auto w-full mt-3">
+    <div className="overflow-x-auto w-full">
       <div className="w-full text-center">
         <Tabla encabezado={encabezado} datos={datos} />
       </div>

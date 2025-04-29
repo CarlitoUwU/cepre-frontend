@@ -39,7 +39,7 @@ export const AgregarSalon = ({ onAgregarSalon, regresar, areas, turnos }) => {
   };
 
   return (
-    <div className="bg-gray-200 w-screen flex items-center justify-center">
+    <div className="bg-gray-200 overflow-x-auto flex items-center justify-center mt-40 mb-40">
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
         <h2 className="text-2xl font-bold mb-4 text-center">Agregar Nuevo Salón</h2>
 
