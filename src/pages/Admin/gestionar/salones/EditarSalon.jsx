@@ -21,6 +21,11 @@ const VISTAS = {
 }
 
 export const EditarSalon = ({ idSalon, regresar }) => {
+  // obtener el nombreSalon de la url
+  
+
+
+
   const { clases } = useClases();
   const { schedules: infoClases, teachers, loading, refetch } = useInfoClases(idSalon);
 

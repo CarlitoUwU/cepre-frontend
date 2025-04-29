@@ -24,6 +24,7 @@ export const TablaCursos = ({ docentes = [], buscarProfesor }) => {
     if (docente.teacherId !== "no asignado") {
       const cursoId = docente.courseName;
       docentesPorCurso[cursoId] = {
+        id: docente.teacherId,
         firstName: docente.firstName,
         lastName: docente.lastName,
         email: docente.email,
