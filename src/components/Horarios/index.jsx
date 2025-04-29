@@ -7,6 +7,33 @@ import { AREA_COLORS } from '@/constants/areaColors';
 import { HORAS_INI, HORAS_FIN } from '@/constants/horas';
 import { DIAS } from "@/constants/dias";
 
+const agruparHoras = (horas) => {
+  const horasOrdenadas = [...horas].sort((a, b) => {
+    if (a.dia !== b.dia) return DIAS.indexOf(a.dia) - DIAS.indexOf(b.dia);
+    return HORAS_INI.indexOf(a.hora_ini) - HORAS_INI.indexOf(b.hora_ini);
+  });
+
+  const grupos = [];
+  let grupoActual = null;
+
+  horasOrdenadas.forEach((hora) => {
+    if (
+      grupoActual &&
+      grupoActual.dia === hora.dia &&
+      HORAS_FIN.indexOf(grupoActual.hora_fin) + 1 === HORAS_INI.indexOf(hora.hora_ini)
+    ) {
+      // Agrupar si es misma asignatura y hora consecutiva
+      grupoActual.hora_fin = hora.hora_fin;
+    } else {
+      if (grupoActual) grupos.push(grupoActual);
+      grupoActual = { ...hora };
+    }
+  });
+
+  if (grupoActual) grupos.push(grupoActual);
+  return grupos;
+};
+
 export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => { } }) => {
   const isMobile = useIsMobile(1024);
 
@@ -15,6 +42,13 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
 
   // Obtener rango de horas basado en las clases disponibles
   const horas = listaSalones.flatMap(salon => salon.horas);
+  const listaSalonesAgrupada = listaSalones.map(salon => {
+    const horas_salon = agruparHoras(salon.horas);
+    return {
+      ...salon,
+      horas: horas_salon
+    }
+  });
   const horaMinima = horas.length ? horas.map(h => h.hora_ini).sort()[0] : "07:00";
   const horaMaxima = horas.length ? horas.map(h => h.hora_fin).sort().at(-1) : "12:10";
 
@@ -58,7 +92,7 @@ export const TablaHorario = ({ listaSalones = [], setClaseSeleccionada = () => {
       )}
 
       {/* Clases asignadas */}
-      {listaSalones.flatMap(salon =>
+      {listaSalonesAgrupada.flatMap(salon =>
         salon.horas.map(hora => {
           return <Curso
             key={`${salon.aula}-${hora.dia}-${hora.hora_ini}`}
