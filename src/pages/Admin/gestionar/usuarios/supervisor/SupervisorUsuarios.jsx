@@ -8,8 +8,9 @@ import { useSupervisores } from "@/hooks/useSupervisores";
 import { toast } from "react-toastify";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { FaSyncAlt } from "react-icons/fa";
+import { useTurnos } from "@/hooks/useTurnos";
 
-const encabezado = ["N°", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
+const encabezado = ["N°", "Nombres", "Apellidos", "Correo", "Número", "Turno", "Acciones"];
 const VISTA = {
   TABLA: "tabla",
   ASIGNAR_SALON: "asignarSalonSup",
@@ -19,6 +20,7 @@ export const SupervisorUsuarios = () => {
   const [vista, setVista] = useState(VISTA.TABLA);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [turnoFiltro, setTurnoFiltro] = useState("todos"); // Nuevo estado para el filtro
   const {
     supervisores,
     totalPages,
@@ -28,6 +30,7 @@ export const SupervisorUsuarios = () => {
     eliminarSupervisorMutation,
     refetch,
   } = useSupervisores({ page, limit });
+  const { turnos } = useTurnos();
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({
     nombres: "",
@@ -35,6 +38,11 @@ export const SupervisorUsuarios = () => {
     correo: "",
     numero: "",
   });
+
+  const getNombreTurno = (shiftId) => {
+    const turno = turnos.find((t) => t.id === shiftId);
+    return turno ? turno.name : "-";
+  };
 
   const handleNext = () => setPage((prev) => prev + 1);
   const handlePrev = () => setPage((prev) => Math.max(prev - 1, 1));
@@ -126,7 +134,11 @@ export const SupervisorUsuarios = () => {
   const getDatosSupervisores = () => {
     if (!supervisores || supervisores.length === 0) return [];
 
-    return supervisores.map((supervisor, index) => {
+    const supervisoresFiltrados = turnoFiltro === "todos"
+    ? supervisores
+    : supervisores.filter((s) => s.shiftId === Number(turnoFiltro));
+
+    return supervisoresFiltrados.map((supervisor, index) => {
       const esEdicion = editingId === supervisor.id;
 
       return [
@@ -156,6 +168,7 @@ export const SupervisorUsuarios = () => {
           value={esEdicion ? editFormData.numero : supervisor.phone}
           onChange={handleEditChange}
         />,
+        <span>{getNombreTurno(supervisor.shiftId)}</span>,
         esEdicion ? (
           <div className="flex gap-2 justify-center">
             <Button onClick={() => handleGuardar(supervisor.id)}>Guardar</Button>
@@ -189,14 +202,37 @@ export const SupervisorUsuarios = () => {
         </Button>
         <h2 className="text-2xl font-bold">GESTIÓN DE SUPERVISORES</h2>
       </div>
+
+      {/* Filtro de turno */}
+      <div className="flex justify-between py-2 items-center">
+        <label htmlFor="turnoFiltro" className="text-xl font-semibold">Filtrar por Turno:</label>
+        <select
+          id="turnoFiltro"
+          value={turnoFiltro}
+          onChange={(e) => {
+            const value = e.target.value;
+            setTurnoFiltro(value === "todos" ? "todos" : Number(value));
+          }}
+          className="border border-gray-300 rounded p-2"
+        >
+          <option value="todos">Todos</option>
+          {turnos.map((turno) => (
+            <option key={turno.id} value={turno.id}>
+              {turno.name}
+            </option>
+          ))}
+        </select>
+      </div>
+
       {isLoading ? <SkeletonTabla numRows={6} /> :
         <Tabla encabezado={encabezado} datos={getDatosSupervisores()} />
       }
+
       <div className="flex justify-between mt-4">
-        <Button onClick={handlePrev} disabled={page === 1} >  {/* disabled cambiar estilos */}
+        <Button onClick={handlePrev} disabled={page === 1}>
           Anterior
         </Button>
-        <Button onClick={handleNext} disabled={page >= totalPages} >  {/* disabled cambiar estilos */}
+        <Button onClick={handleNext} disabled={page >= totalPages}>
           Siguiente
         </Button>
         <select value={limit} onChange={handleLimitChange} className="border border-gray-300 rounded p-2">
