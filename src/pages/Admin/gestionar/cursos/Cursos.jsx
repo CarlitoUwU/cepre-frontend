@@ -134,6 +134,7 @@ export const Cursos = () => {
       {isLoading ? <SkeletonTabla /> : (
         <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
       )}
+      <div className="mb-4"></div> 
     </div>
   );
 };
