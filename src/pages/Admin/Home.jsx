@@ -27,7 +27,7 @@ export const Home = () => {
 
   return (
     <div className="md:m-5 select-none">
-      <div className="w-full min-h-screen md:min-h-[83vh] flex flex-col items-center justify-center bg-[#F4F4F4] md:rounded-lg">  
+      <div className="w-full min-h-screen md:min-h-[82vh] flex flex-col items-center justify-center bg-[#F4F4F4] md:rounded-lg">  
         <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-x-16 gap-y-8 p-4 w-full ">
           {options.map((option, index) => (
             <div key={index} className="sm:mx-2 flex justify-center"> {/* Added flex justify-center for mobile */}

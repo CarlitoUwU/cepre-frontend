@@ -72,7 +72,7 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
   };
 
   return (
-    <div className="bg-gray-200 w-screen flex items-center justify-center">
+    <div className="bg-gray-200 overflow-x-auto flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-2xl">
         <h2 className="text-2xl font-bold mb-4 text-center">Agregar Nuevo {rol}</h2>
 

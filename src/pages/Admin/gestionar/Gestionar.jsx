@@ -27,7 +27,7 @@ export const Gestionar = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen md:h-[83vh] md:m-5">
+    <div className="flex flex-col md:flex-row h-screen md:h-[82vh] md:m-5">
       {/* Barra lateral (solo desktop) */}
       <div className="hidden md:flex md:w-1/6 bg-gray-200 p-6 flex-col gap-6 items-center justify-start rounded-lg h-full overflow-auto select-none">
         <div className="w-full text-center">
