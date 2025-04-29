@@ -17,7 +17,7 @@ const VISTA = {
   ASIGNAR_SALON: "asignarSalonDoc"
 };
 
-export const DocenteUsuarios = () => {
+  export const DocenteUsuarios = ({ setMostrarCabecera }) => {
   const [vista, setVista] = useState(VISTA.TABLA);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -124,6 +124,7 @@ export const DocenteUsuarios = () => {
   const handleAgregar = () => {
     setEditFormData({ nombres: "", apellidos: "", correo: "", numero: "", extra: "" });
     setVista(VISTA.FORMULARIO);
+    setMostrarCabecera(false); // OCULTAR
   };
 
   const handleNuevoUsuario = async (formData) => {
@@ -161,12 +162,14 @@ export const DocenteUsuarios = () => {
   const handleAsignarSalon = (id) => {
     setEditingId(id);
     setVista(VISTA.ASIGNAR_SALON);
+    setMostrarCabecera(false); // OCULTAR
   };
 
   const handleRegresar = () => {
     setEditingId(null);
-    setVista(VISTA.TABLA)
-  }
+    setVista(VISTA.TABLA);
+    setMostrarCabecera(true); // MOSTRAR
+  };  
 
   const getDatosProfesor = () => {
     if (!profesores || profesores.length === 0) return [];
