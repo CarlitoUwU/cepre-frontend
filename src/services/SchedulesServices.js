@@ -75,6 +75,10 @@ export const SchedulesService = {
     return request("patch", "/schedules/asignar/profesor", { classroomIds: [classId], teacherId: teacherId });
   },
 
+  async desasignarSchedulesByTeacherClass({ teacherId, classId }) {
+    return request("patch", "/schedules/desasignar/profesor", { classroomIds: [classId], teacherId: teacherId });
+  },
+
   /**
    * Carga horarios con cursos
    */
