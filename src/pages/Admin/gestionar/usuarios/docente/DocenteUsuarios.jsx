@@ -72,20 +72,22 @@ const VISTA = {
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
-
+  
     if (name === "numero") {
-      // Solo permitir números
       if (!/^\d*$/.test(value)) {
-        return; // no actualiza si no es número
+        return; 
       }
-      // Limitar máximo 9 dígitos
       if (value.length > 9) {
         return;
+      }
+      if (value.length === 1 && value !== "9") {
+        return; 
       }
     }
 
     setEditFormData({ ...editFormData, [name]: value });
   };
+  
 
 
   const handleGuardar = async () => {

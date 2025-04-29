@@ -146,6 +146,7 @@ export const Salones = () => {
       ) : (
         <Tabla encabezado={encabezadoCursos} datos={getDatosAulas()} filtroDic={filtro} />
       )}
+      <div className="mb-4"></div> 
     </div>
   );
 };
