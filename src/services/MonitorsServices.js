@@ -30,9 +30,9 @@ export const MonitorsServices = {
    * Actualiza los datos de un monitor desde un rol administrador.
    * @param {Object} data - Contiene: id, firstName, lastName, personalEmail, phone, className, classId.
    */
-  async updateMonitor({ userId, firstName, lastName, email, phone }) {
+  async updateMonitor({ userId, firstName, lastName, personalEmail, phone }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/monitors/${userId}`, { firstName, lastName, email, phone });
+    return request("put", `/monitors/${userId}`, { firstName, lastName, personalEmail, phone });
   },
 
   /**
