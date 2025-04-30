@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Button} from '@/components/ui/Button';
+import { useNavigate } from 'react-router-dom';	
 
 export const Generar = () => {
   const [procesoSeleccionado, setProcesoSeleccionado] = useState('');
@@ -12,6 +14,7 @@ export const Generar = () => {
   const [turnosSeleccionados, setTurnosSeleccionados] = useState([]);
   const [salonesPorTurno, setSalonesPorTurno] = useState({});
 
+  const navigate = useNavigate();
   const procesos = ['Ciclo Quintos', 'Ordinario Primera Fase', 'Ordinario Segunda Fase', 'Nuevo proceso'];
   const dominios = ['@unsa.edu.pe', '@cepr.unsa.pe', 'nuevo dominio'];
   const turnos = [
@@ -193,7 +196,14 @@ export const Generar = () => {
         >
           Registrar proceso
         </button>
+        <div className="mt-5 w-full text-center">
+                  <Button onClick={() => navigate("..")}>
+                    Menú Principal
+                  </Button>
+                </div>
       </div>
+
+      
     </div>
   );
 };
