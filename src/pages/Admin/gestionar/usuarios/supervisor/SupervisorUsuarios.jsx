@@ -68,7 +68,7 @@ export const SupervisorUsuarios = () => {
       setEditFormData({
         nombres: supervisor.firstName || "-",
         apellidos: supervisor.lastName || "-",
-        correo: supervisor.email || "-",
+        correo: supervisor.personalEmail || "-",
         numero: supervisor.phone || "-",
       });
     }
@@ -97,7 +97,7 @@ export const SupervisorUsuarios = () => {
         id: editingId,
         firstName: editFormData.nombres,
         lastName: editFormData.apellidos,
-        email: editFormData.correo,
+        personalEmail: editFormData.correo,
         phone: editFormData.numero,
       };
 

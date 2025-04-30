@@ -72,7 +72,7 @@ export const MonitorUsuarios = () => {
       setEditFormData({
         nombres: monitor.firstName || "-",
         apellidos: monitor.lastName || "-",
-        correo: monitor.email || "-",
+        correo: monitor.personalEmail || "-",
         numero: monitor.phone || "-",
       });
     }
@@ -98,7 +98,7 @@ export const MonitorUsuarios = () => {
         userId: editingId,
         firstName: editFormData.nombres,
         lastName: editFormData.apellidos,
-        email: editFormData.correo,
+        personalEmail: editFormData.correo,
         phone: editFormData.numero,
       };
 
@@ -161,7 +161,11 @@ export const MonitorUsuarios = () => {
         ) : (
           monitor.lastName || "-"
         ),
-        monitor.email,
+        esEdicion ? (
+          <Input type="text" name="apellidos" value={editFormData.correo} onChange={handleEditChange} />
+        ) : (
+          monitor.email || "-"
+        ),
         esEdicion ? (
           <Input type="text" name="numero" value={editFormData.numero} onChange={handleEditChange} />
         ) : (
