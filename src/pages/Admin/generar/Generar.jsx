@@ -89,7 +89,7 @@ export const Generar = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row h-screen md:h-[82vh] md:m-5 items-center justify-center">
+    <div className="flex flex-col md:flex-row mt-20 h-screen md:h-[82vh] md:m-5 items-center justify-center">
       <div className="w-full max-w-3xl bg-white shadow-md p-6 rounded">
         <h1 className="text-center text-2xl font-bold mb-4">Crear proceso de Admisión</h1>
 
