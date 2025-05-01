@@ -3,7 +3,7 @@ import { AulaInfo } from "@/components/AulaInfo";
 import { ListaSalones } from "@/components/ListaSalones";
 import { TablaHorario } from "@/components/Horarios";
 import { ClassesServices } from "@/services/ClassesServices";
-import { DIAS_DIC} from "@/constants/dias";
+import { DIAS_DIC } from "@/constants/dias";
 import { formatTimeToHHMM } from "@/utils/formatTime";
 
 const AREAS = {
@@ -21,7 +21,7 @@ const fetchHorarioData = async () => {
       monitor: clase.monitor?.user
         ? `${clase.monitor.user.firstName} ${clase.monitor.user.lastName}`
         : "No asignado",
-      enlace: clase.urlMeet || "Sin enlace",
+      enlace: clase.urlMeet,
       area: AREAS[clase.name.charAt(0)] || "Desconocido",
       horas: clase.schedules?.map((hora) => ({
         dia: DIAS_DIC[hora.weekday] || "Día desconocido",
@@ -37,13 +37,21 @@ const fetchHorarioData = async () => {
 
 export const DocentePanel = () => {
   const [horario, setHorario] = useState([]);
+  const [numHoras, setNumHoras] = useState(0);
   const [claseSeleccionada, setClaseSeleccionada] = useState(null);
 
   useEffect(() => {
     const loadHorario = async () => {
       try {
         const data = await fetchHorarioData();
+        let numHoras = 0;
+        data.forEach((clase) => {
+          clase?.horas?.forEach(() => {
+            numHoras += 1;
+          });
+        });
         setHorario(data);
+        setNumHoras(numHoras);
       } catch (error) {
         console.error("Error cargando el horario", error);
       }

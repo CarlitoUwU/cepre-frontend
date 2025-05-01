@@ -24,14 +24,18 @@ export const AulaInfo = ({ aula, monitor, area, numHoras = null, enlace }) => {
         </p>
       )}
       <p className="text-lg sm:text-2xl p-2">
-        <strong>Enlace Meet:</strong>{" "}
-        <a
-          href={enlace}
-          target="_blank"
-          className="text-blue-600 hover:underline break-all"
-        >
-          {enlace}
-        </a>
+        <strong>Enlace Meet:</strong>{' '}
+        {enlace ? (
+          <a
+            href={enlace}
+            target="_blank"
+            className="text-blue-600 hover:underline break-all"
+          >
+            {enlace}
+          </a>
+        ) : (
+          <span className="text-gray-500">Sin enlace</span>
+        )}
       </p>
     </div>
 
