@@ -2,7 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { SupervisorsServices } from "@/services/SupervisorsServices";
 import { MonitorsServices } from "@/services/MonitorsServices";
 
-export const useMonitoresSupervisores = ({ supervisorId, shiftId, page = 1, limit = 10 , area_id = null}) => {
+export const useMonitoresSupervisores = ({ supervisorId, shiftId, page = 1, limit = 10, area_id = null }) => {
   const queryClient = useQueryClient();
 
   // Obtener monitores asignados al supervisor
@@ -57,11 +57,11 @@ export const useMonitoresSupervisores = ({ supervisorId, shiftId, page = 1, limi
 
     onSuccess: (_, { monitorId }) => {
       const monitorAsignado = queryClient
-        .getQueryData(["monitoresDisponibles", shiftId, page, limit])
+        .getQueryData(["monitoresDisponibles", shiftId, page, limit, area_id])
         ?.data?.find((m) => m.monitorId === monitorId);
 
       // Eliminar de disponibles
-      queryClient.setQueryData(["monitoresDisponibles", shiftId, page, limit], (old) => {
+      queryClient.setQueryData(["monitoresDisponibles", shiftId, page, limit, area_id], (old) => {
         if (!old?.data) return old;
         const nuevosDisponibles = old.data.filter((monitor) => monitor.monitorId !== monitorId);
         return {
@@ -109,7 +109,7 @@ export const useMonitoresSupervisores = ({ supervisorId, shiftId, page = 1, limi
 
       // Agregar a disponibles
       if (monitorQuitado) {
-        queryClient.setQueryData(["monitoresDisponibles", shiftId, page, limit], (old = {}) => {
+        queryClient.setQueryData(["monitoresDisponibles", shiftId, page, limit, area_id], (old = {}) => {
           const nuevosDisponibles = [...(old.data || []), monitorQuitado];
           return {
             ...old,
@@ -119,7 +119,6 @@ export const useMonitoresSupervisores = ({ supervisorId, shiftId, page = 1, limi
       }
     },
   });
-
 
   const monitoresAsignados = ordenarByClassName(dataAsignados?.monitores_asignados || []);
   const monitoresDisponibles = ordenarByClassName(dataDisponibles?.data || []);

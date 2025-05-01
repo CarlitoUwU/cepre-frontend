@@ -40,7 +40,7 @@ export const useListaSalonesDisponibles = ({ objApi, page = 1, limit = 10, area_
     onSuccess: (_, { classId }) => {
       // Actualizar cache y eliminar el salón asignado
       queryClient.setQueryData(
-        ["salonesDisponibles", objApi],
+        ["salonesDisponibles", objApi, page, limit, area_id, shift_id],
         (oldData) => {
           if (!oldData) return oldData;
           return oldData?.filter((salon) => salon.id !== classId);
