@@ -23,6 +23,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [curso_id, setCursoId] = useState(null);
+  const [selected, setSelected] = useState({});
   const {
     profesores,
     totalPages,
@@ -70,6 +71,8 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         onChange: (curso_name) => {
           setTimeout(() => {
             const curso = cursos.find((c) => c.name === curso_name[0]);
+            const index = cursos.indexOf(curso);
+            setSelected({ 1: index });
             setCursoId(curso?.id || null);
           }, 0);
         }
@@ -291,8 +294,8 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE DOCENTES</h2>
         <Button onClick={handleAgregar}>Agregar Docente</Button>
       </div>
-      {isLoading ? <SkeletonTabla numRows={6} /> :
-        <Tabla encabezado={encabezado} datos={getDatosProfesor()} filtroDic={filtro} />
+      {isLoading ? <SkeletonTabla numRows={limit} numColumns={encabezado.length} /> :
+        <Tabla encabezado={encabezado} datos={getDatosProfesor()} filtroDic={filtro} selected={selected} filtrar={false} />
       }
       <div className="flex justify-between mt-4">
         <Button onClick={handlePrev} disabled={page === 1} >  {/* disabled cambiar estilos */}

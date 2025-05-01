@@ -21,6 +21,7 @@ export const MonitorUsuarios = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [shift_id, setShiftId] = useState(null); // Estado para el ID del turno seleccionado
+  const [selected, setSelected] = useState({});
   const {
     monitores,
     totalPages,
@@ -58,6 +59,8 @@ export const MonitorUsuarios = () => {
         onChange: (turno_name) => {
           setTimeout(() => {
             const turno = turnos.find((c) => c.name === turno_name[0]);
+            const index = turnos.indexOf(turno);
+            setSelected({ 6: index });
             setShiftId(turno?.id || null);
           }, 0);
         }
@@ -208,8 +211,8 @@ export const MonitorUsuarios = () => {
         <h2 className="text-2xl font-bold">GESTIÓN DE MONITORES</h2>
         <p></p>
       </div>
-      {isLoading ? <SkeletonTabla numRows={6} /> :
-        <Tabla encabezado={encabezado} datos={getDatosMonitores()} filtroDic={filtro} />
+      {isLoading ? <SkeletonTabla numRows={limit} numColums={encabezado.length} /> :
+        <Tabla encabezado={encabezado} datos={getDatosMonitores()} filtroDic={filtro} selected={selected} filtrar={false} />
       }
       <div className="flex justify-between mt-4">
         <Button onClick={handlePrev} disabled={page === 1} >  {/* disabled cambiar estilos */}

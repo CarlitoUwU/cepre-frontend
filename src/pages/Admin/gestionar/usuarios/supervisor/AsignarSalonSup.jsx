@@ -21,6 +21,7 @@ export const AsignarSalonSup = ({ supervisor, regresar }) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [area_id, setAreaId] = useState(null);
+  const [selected, setSelected] = useState({});
   const {
     monitoresAsignados,
     monitoresDisponibles,
@@ -48,6 +49,8 @@ export const AsignarSalonSup = ({ supervisor, regresar }) => {
         onChange: (area_name) => {
           setTimeout(() => {
             const area = areas.find((a) => a.name === area_name[0]);
+            const index = areas.indexOf(area);
+            setSelected({ 3: index });
             setAreaId(area?.id || null);
           }, 0);
         }
@@ -156,23 +159,16 @@ export const AsignarSalonSup = ({ supervisor, regresar }) => {
       {/* Tabla de monitores asignados */}
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Monitores asignados</h3>
-        {isLoadingAsignados ? (<SkeletonTabla numRows={6} />) : (
-          <Tabla
-            encabezado={encabezado}
-            datos={filasAsignados()}
-          />
+        {isLoadingAsignados ? (<SkeletonTabla numRows={6} numColums={encabezado.length} />) : (
+          <Tabla encabezado={encabezado} datos={filasAsignados()} />
         )}
       </div>
 
       {/* Tabla de monitores disponibles */}
       <div className="mb-8">
         <h3 className="text-xl font-semibold mb-4">Monitores disponibles</h3>
-        {isLoadingDisponibles ? (<SkeletonTabla numRows={6} />) : (
-          <Tabla
-            encabezado={encabezado}
-            datos={filasDisponibles()}
-            filtroDic={filtro}
-          />
+        {isLoadingDisponibles ? (<SkeletonTabla numRows={6} numColums={encabezado.length} />) : (
+          <Tabla encabezado={encabezado} datos={filasDisponibles()} filtroDic={filtro} selected={selected} filtrar={false} />
         )}
         <div className="flex justify-between mt-4">
           <Button onClick={handlePrev} disabled={page === 1} >  {/* disabled cambiar estilos */}
