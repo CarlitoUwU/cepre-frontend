@@ -44,7 +44,11 @@ export const Cursos = () => {
         setFormData({ name: "", color: "" });
       }
     } catch (error) {
-      toast.error("Error al actualizar el curso");
+      if (error.response?.status === 404) {
+        toast.error("Curso no encontrado");
+      } else {
+        toast.error("Error al actualizar el curso");
+      }
       console.error("Error al actualizar el curso:", error);
     }
   };
@@ -61,7 +65,11 @@ export const Cursos = () => {
         toast.success(`Curso eliminado correctamente`);
       }
     } catch (error) {
-      toast.error("Error al eliminar el curso");
+      if (error.response?.status === 404) {
+        toast.error("Curso no encontrado");
+      } else {
+        toast.error("Error al eliminar el curso");
+      }
       console.error("Error al eliminar el curso:", error);
     }
   };
@@ -75,7 +83,11 @@ export const Cursos = () => {
         setVistaActual("lista");
       }
     } catch (error) {
-      toast.error("Error al crear el curso");
+      if (error.response?.status === 400) {
+        toast.error("Datos inválidos. Por favor, verifica el nombre y el color del curso.");
+      } else {
+        toast.error("Error al crear el curso");
+      }
       console.error("Error al agregar el curso:", error);
     }
   };
@@ -130,11 +142,11 @@ export const Cursos = () => {
         </Button>
         <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE CURSOS</h2>
         <Button onClick={() => setVistaActual("agregar")}>Agregar Curso</Button>
-      </div>  
+      </div>
       {isLoading ? <SkeletonTabla /> : (
         <Tabla encabezado={encabezadoCursos} datos={getDatosCursos()} />
       )}
-      <div className="mb-4"></div> 
+      <div className="mb-4"></div>
     </div>
   );
 };
