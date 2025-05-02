@@ -47,9 +47,7 @@ export const useListaSalonesDisponibles = ({ objApi, page = 1, limit = 10, area_
         }
       );
     },
-    onError: (error) => {
-      console.error("Error al asignar salón:", error);
-    },
+    onError: () => { },
   });
 
   return {

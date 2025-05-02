@@ -76,7 +76,6 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
       };
 
       setObjApi(objApi);
-      console.log("objApi", objApi);
     };
 
     cargarSalones();
