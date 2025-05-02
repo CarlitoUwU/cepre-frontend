@@ -70,7 +70,9 @@ export const DocentePanel = () => {
         </div>
 
         {/* Información del Aula */}
-        <div className="col-span-1 bg-gray-100 p-4 rounded-lg shadow-md flex justify-center items-center">
+
+        <div className="col-span-1 bg-gray-100 p-4 rounded-lg shadow-md flex justify-center items-center flex-col">
+          <h1 className="text-xl font-bold mb-4">Total de horas Académicas: {numHoras}</h1>
           <AulaInfo {...(claseSeleccionada || {})} />
         </div>
 
