@@ -64,7 +64,7 @@ export const Salones = () => {
   const handleAgregarSalon = async (nuevoSalon) => {
     try {
       const claseCreada = await crearClaseMutation.mutateAsync(nuevoSalon);
-      toast.success(`Curso "${claseCreada.name}" creado correctamente`);
+      toast.success(`Salon "${claseCreada.name}" creado correctamente`);
       setVistaActual(VISTAS.LISTA);
     } catch (error) {
       console.error("Error al agregar el curso:", error);

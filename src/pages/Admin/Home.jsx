@@ -16,9 +16,10 @@ const Button = ({ path, title, img, handleClick }) => {
 export const Home = () => {
   const navigate = useNavigate();
   const options = [
-    { path: 'importar', title: 'Importar Archivos', img: 'importar.png' },
+    { path: 'generar', title: 'Generar Proceso', img: 'validar.png' },
     { path: 'gestionar', title: 'Gestionar Datos', img: 'gestionar.png' },
-    { path: 'publicar', title: 'Publicar Horarios', img: 'publicar.png' }
+    { path: 'importar', title: 'Importar Archivos', img: 'importar.png' }   
+    
   ];
 
   const handleClick = (path) => {

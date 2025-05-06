@@ -6,7 +6,7 @@ export const TeachersServices = {
    * @returns {Promise<{ data: Array, total: number, page: number, limit: number }>}
    */
   async getTeachers(page = 1, limit = 20, curso_id = null) {
-    const url = `/teachers?page=${page}&limit=${limit}${curso_id ? `&id_curso=${curso_id}` : ''}`;
+    const url = `/teachers?page=${page}&limit=${limit}${curso_id ? `&courseId=${curso_id}` : ''}`;
     return request("get", url, null, true);
   },  
 
@@ -63,9 +63,9 @@ export const TeachersServices = {
    * @param {Object} teacherData - Datos del teacher a actualizar.
    * @returns {Promise<Object>}
    */
-  async updateTeacher({ userId, firstName, lastName, email, phone }) {
+  async updateTeacher({ userId, firstName, lastName, email, phone, maxHours }) {
     if (!userId) throw new Error("ID inválido");
-    return request("put", `/teachers/${userId}`, { firstName, lastName, email, phone });
+    return request("put", `/teachers/${userId}`, { firstName, lastName, email, phone, maxHours });
   },
 
   /**

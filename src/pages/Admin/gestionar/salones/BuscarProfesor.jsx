@@ -56,7 +56,13 @@ export const BuscarProfesor = ({ curso: { id: courseId, name }, profesor, horari
         setAsignar(name);
       }
     } catch (error) {
-      toast.error("Error al asignar el profesor");
+      if (error?.response?.status === 400) {
+        toast.error(error.response?.data?.message || error.message || "Error al asignar el profesor");
+      } else if (error?.response?.status === 500) {
+        toast.error("Error interno del servidor. Por favor, inténtelo más tarde.");
+      } else {
+        toast.error("Error desconocido. Por favor, inténtelo más tarde.");
+      }
       console.error("Asignación fallida:", error);
     }
   }

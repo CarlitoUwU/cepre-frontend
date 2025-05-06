@@ -8,10 +8,11 @@ import { useProfesores } from "@/hooks/useProfesores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { AsignarSalonDoc } from "./AsignarSalonDoc";
 import { toast } from "react-toastify";
-import { FaSyncAlt } from "react-icons/fa";
+import { FaSyncAlt, FaUserEdit, FaUserMinus } from "react-icons/fa";
+import { MdAssignmentAdd } from "react-icons/md";
 import { useCursos } from "@/hooks/useCursos";
 
-const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
+const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Máx. Horas", "Acciones"];
 const VISTA = {
   TABLA: "tabla",
   FORMULARIO: "formulario",
@@ -23,6 +24,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [curso_id, setCursoId] = useState(null);
+  const [selected, setSelected] = useState({});
   const {
     profesores,
     totalPages,
@@ -43,6 +45,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
     apellidos: "",
     correo: "",
     numero: "",
+    horas: "",
     extra: "",
   });
 
@@ -70,6 +73,8 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         onChange: (curso_name) => {
           setTimeout(() => {
             const curso = cursos.find((c) => c.name === curso_name[0]);
+            const index = cursos.indexOf(curso);
+            setSelected({ 1: index });
             setCursoId(curso?.id || null);
           }, 0);
         }
@@ -86,6 +91,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         apellidos: profesor.lastName || "-",
         correo: profesor.email || "-",
         numero: profesor.phone || "-",
+        horas: profesor.maxHours || "-",
         extra: profesor.courseName || "-",
       });
     }
@@ -122,6 +128,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         lastName: editFormData.apellidos,
         email: editFormData.correo,
         phone: editFormData.numero,
+        maxHours: parseInt(editFormData.horas, 10),
       };
 
       const profeActualizado = await actualizarProfesorMutation.mutateAsync(profesor);
@@ -134,6 +141,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
           apellidos: "",
           correo: "",
           numero: "",
+          horas: "",
           extra: "",
         });
       }
@@ -246,15 +254,20 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
           profesor.phone || "-"
         ),
         esEdicion ? (
-          <div className="flex gap-2 justify-center min-w-[300px]">
+          <Input type="number" name="horas" value={editFormData.horas} onChange={handleEditChange} />
+        ) : (
+          profesor.maxHours || "-"
+        ),
+        esEdicion ? (
+          <div className="flex gap-2 justify-center min-w-[190px]">
             <Button onClick={() => handleGuardar(profesor.id)}>Guardar</Button>
             <ButtonNegative onClick={() => setEditingId(null)}>Cancelar</ButtonNegative>
           </div>
         ) : (
-          <div className="flex gap-2 justify-center min-w-[300px]">
-            <Button onClick={() => handleAsignarSalon(profesor.id)}>Asignar Salón</Button>
-            <Button onClick={() => handleModificar(profesor.id)}>Editar</Button>
-            <ButtonNegative onClick={() => handleBorrar(profesor.id)}>Borrar</ButtonNegative>
+          <div className="flex gap-2 justify-center min-w-[190px]">
+            <Button onClick={() => handleAsignarSalon(profesor.id)} tittle="Asignar Salón"><MdAssignmentAdd size="20" /></Button>
+            <Button onClick={() => handleModificar(profesor.id)} tittle="Editar Docente" ><FaUserEdit size="20" /></Button>
+            <ButtonNegative onClick={() => handleBorrar(profesor.id)} tittle="Borrar Docented"><FaUserMinus size="20" /></ButtonNegative>
           </div>
         )
       ];
@@ -291,8 +304,8 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE DOCENTES</h2>
         <Button onClick={handleAgregar}>Agregar Docente</Button>
       </div>
-      {isLoading ? <SkeletonTabla numRows={6} /> :
-        <Tabla encabezado={encabezado} datos={getDatosProfesor()} filtroDic={filtro} />
+      {isLoading ? <SkeletonTabla numRows={limit} numColumns={encabezado.length} /> :
+        <Tabla encabezado={encabezado} datos={getDatosProfesor()} filtroDic={filtro} selected={selected} filtrar={false} />
       }
       <div className="flex justify-between mt-4">
         <Button onClick={handlePrev} disabled={page === 1} >  {/* disabled cambiar estilos */}

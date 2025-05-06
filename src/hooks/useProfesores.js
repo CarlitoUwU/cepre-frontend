@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { TeachersServices } from "@/services/TeachersServices.js";
 
-export const useProfesores = ({ page = 1, limit = 20, curso_id = null} = {}) => {
+export const useProfesores = ({ page = 1, limit = 20, curso_id = null } = {}) => {
   const queryClient = useQueryClient();
 
   // Obtener los profesores con useQuery
@@ -50,7 +50,7 @@ export const useProfesores = ({ page = 1, limit = 20, curso_id = null} = {}) => 
   const actualizarProfesorMutation = useMutation({
     mutationFn: TeachersServices.updateTeacher,
     onSuccess: (profesorActualizado) => {
-      queryClient.setQueryData(["profesores", page, limit], (prev) => {
+      queryClient.setQueryData(["profesores", page, limit, curso_id], (prev) => {
         if (!prev) return;
         return {
           ...prev,
@@ -61,6 +61,7 @@ export const useProfesores = ({ page = 1, limit = 20, curso_id = null} = {}) => 
               lastName: profesorActualizado.lastName || "-",
               email: profesorActualizado.email || "-",
               phone: profesorActualizado.phone || "-",
+              maxHours: profesorActualizado.maxHours || "-",
             } : p
           ),
         };
@@ -72,7 +73,7 @@ export const useProfesores = ({ page = 1, limit = 20, curso_id = null} = {}) => 
   const eliminarProfesorMutation = useMutation({
     mutationFn: TeachersServices.deactivate,
     onSuccess: (_, idEliminado) => {
-      queryClient.setQueryData(["profesores", page, limit], (prev) => {
+      queryClient.setQueryData(["profesores", page, limit, curso_id], (prev) => {
         if (!prev) return;
         return {
           ...prev,

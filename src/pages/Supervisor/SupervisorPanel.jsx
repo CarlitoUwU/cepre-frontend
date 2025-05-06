@@ -44,7 +44,11 @@ export const SupervisorPanel = () => {
 
       setAulasData(data);
     } catch (err) {
-      console.error("Error al obtener monitores:", err);
+      if (err.response?.status === 404) {
+        toast.error("No se encontraron monitores asignados.");
+      } else {
+        console.error("Error al obtener monitores:", err);
+      }
       setError("No se pudieron cargar los datos.");
     } finally {
       setLoading(false);

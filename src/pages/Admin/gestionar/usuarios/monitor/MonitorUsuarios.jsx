@@ -7,7 +7,7 @@ import { AgregarUsuarios } from "../AgregarUsuarios";
 import { useMonitores } from "@/hooks/useMonitores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { toast } from "react-toastify";
-import { FaSyncAlt } from "react-icons/fa";
+import { FaSyncAlt, FaUserEdit, FaUserMinus } from "react-icons/fa";
 import { useTurnos } from "@/hooks/useTurnos";
 
 const encabezado = ["N°", "Salón", "Nombres", "Apellidos", "Correo", "Número", "Turno", "Acciones"];
@@ -21,6 +21,7 @@ export const MonitorUsuarios = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [shift_id, setShiftId] = useState(null); // Estado para el ID del turno seleccionado
+  const [selected, setSelected] = useState({});
   const {
     monitores,
     totalPages,
@@ -58,6 +59,8 @@ export const MonitorUsuarios = () => {
         onChange: (turno_name) => {
           setTimeout(() => {
             const turno = turnos.find((c) => c.name === turno_name[0]);
+            const index = turnos.indexOf(turno);
+            setSelected({ 6: index });
             setShiftId(turno?.id || null);
           }, 0);
         }
@@ -72,7 +75,7 @@ export const MonitorUsuarios = () => {
       setEditFormData({
         nombres: monitor.firstName || "-",
         apellidos: monitor.lastName || "-",
-        correo: monitor.email || "-",
+        correo: monitor.personalEmail || "-",
         numero: monitor.phone || "-",
       });
     }
@@ -98,7 +101,7 @@ export const MonitorUsuarios = () => {
         userId: editingId,
         firstName: editFormData.nombres,
         lastName: editFormData.apellidos,
-        email: editFormData.correo,
+        personalEmail: editFormData.correo,
         phone: editFormData.numero,
       };
 
@@ -161,7 +164,11 @@ export const MonitorUsuarios = () => {
         ) : (
           monitor.lastName || "-"
         ),
-        monitor.email,
+        esEdicion ? (
+          <Input type="text" name="apellidos" value={editFormData.correo} onChange={handleEditChange} />
+        ) : (
+          monitor.email || "-"
+        ),
         esEdicion ? (
           <Input type="text" name="numero" value={editFormData.numero} onChange={handleEditChange} />
         ) : (
@@ -175,8 +182,9 @@ export const MonitorUsuarios = () => {
           </div>
         ) : (
           <div className="flex gap-2 justify-center">
-            <Button onClick={() => handleModificar(monitor.id)}>Editar</Button>
-            <ButtonNegative onClick={() => handleBorrar(monitor.id)}>Borrar</ButtonNegative>
+            <Button onClick={() => handleModificar(monitor.id)} tittle="Editar Monitor"><FaUserEdit size="20"/>
+            </Button>
+            <ButtonNegative onClick={() => handleBorrar(monitor.id)} tittle="Borrar Monitor"><FaUserMinus size="20"/></ButtonNegative>
           </div>
         )
       ];
@@ -204,8 +212,8 @@ export const MonitorUsuarios = () => {
         <h2 className="text-2xl font-bold">GESTIÓN DE MONITORES</h2>
         <p></p>
       </div>
-      {isLoading ? <SkeletonTabla numRows={6} /> :
-        <Tabla encabezado={encabezado} datos={getDatosMonitores()} filtroDic={filtro} />
+      {isLoading ? <SkeletonTabla numRows={limit} numColums={encabezado.length} /> :
+        <Tabla encabezado={encabezado} datos={getDatosMonitores()} filtroDic={filtro} selected={selected} filtrar={false} />
       }
       <div className="flex justify-between mt-4">
         <Button onClick={handlePrev} disabled={page === 1} >  {/* disabled cambiar estilos */}

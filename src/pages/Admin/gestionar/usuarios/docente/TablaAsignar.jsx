@@ -21,6 +21,7 @@ export const TablaAsignar = ({
   const [limit, setLimit] = useState(10);
   const [area_id, setAreaId] = useState(null);
   const [shift_id, setShiftId] = useState(null);
+  const [selected, setSelected] = useState({});
   const { salones,
     totalPages,
     isLoading: loadingSalones,
@@ -45,6 +46,8 @@ export const TablaAsignar = ({
         onChange: (area_name) => {
           setTimeout(() => {
             const area = areas.find((a) => a.name === area_name[0]);
+            const index = areas.indexOf(area);
+            setSelected({ ...selected, 2: index });
             setAreaId(area?.id || null);
           }, 0);
         }
@@ -54,14 +57,14 @@ export const TablaAsignar = ({
         onChange: (turno_name) => {
           setTimeout(() => {
             const turno = turnos.find((a) => a.name === turno_name[0]);
+            const index = turnos.indexOf(turno);
+            setSelected({ ...selected, 3: index });
             setShiftId(turno?.id || null);
           }, 0);
         }
       },
     };
-  }, [areas, turnos]);
-
-
+  }, [areas, turnos, selected]);
 
   const handleAsignar = async (idProfesor, idSalon) => {
     try {
@@ -79,7 +82,13 @@ export const TablaAsignar = ({
       }
 
     } catch (error) {
-      toast.error("Error al asignar el profesor");
+      if (error?.response?.status === 400) {
+        toast.error(error.response?.data?.message || error.message || "Error al asignar el profesor");
+      } else if (error?.response?.status === 500) {
+        toast.error("Error interno del servidor. Por favor, inténtelo más tarde.");
+      } else {
+        toast.error("Error desconocido. Por favor, inténtelo más tarde.");
+      }
       console.error("Asignación fallida:", error);
     }
   }
@@ -113,8 +122,9 @@ export const TablaAsignar = ({
         </h2>
       </div>
       <div className="mt-6 w-full text-center">
-        {loadingAreas || loadingTurnos || loadingSalones || !enabledSalones ? (<SkeletonTabla />)
-          : (<Tabla encabezado={encabezado} datos={datos()} filtroDic={filtro} />)}
+        {loadingAreas || loadingTurnos || loadingSalones || !enabledSalones
+          ? (<SkeletonTabla numRows={limit} numColums={encabezado.length} />)
+          : (<Tabla encabezado={encabezado} datos={datos()} filtroDic={filtro} selected={selected} filtrar={false} />)}
       </div>
       <div className="flex justify-between mt-4">
         <Button onClick={handlePrev} disabled={page === 1}>

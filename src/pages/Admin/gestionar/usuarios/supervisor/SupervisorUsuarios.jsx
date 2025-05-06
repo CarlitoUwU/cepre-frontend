@@ -2,13 +2,13 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Tabla } from "@/components/ui/Tabla";
 import { Button } from "@/components/ui/Button";
 import { ButtonNegative } from "@/components/ui/ButtonNegative";
-import { EditableCell } from "@/components/ui/EditableCell";
 import { Input } from "@/components/ui/Input";
 import { AsignarSalonSup } from "./AsignarSalonSup";
 import { useSupervisores } from "@/hooks/useSupervisores";
 import { toast } from "react-toastify";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
-import { FaSyncAlt } from "react-icons/fa";
+import { FaSyncAlt, FaUserEdit, FaUserMinus } from "react-icons/fa";
+import { MdAssignmentAdd } from "react-icons/md";
 import { useTurnos } from "@/hooks/useTurnos";
 
 const encabezado = ["N°", "Nombres", "Apellidos", "Correo", "Número", "Turno", "Acciones"];
@@ -68,7 +68,7 @@ export const SupervisorUsuarios = () => {
       setEditFormData({
         nombres: supervisor.firstName || "-",
         apellidos: supervisor.lastName || "-",
-        correo: supervisor.email || "-",
+        correo: supervisor.personalEmail || "-",
         numero: supervisor.phone || "-",
       });
     }
@@ -97,7 +97,7 @@ export const SupervisorUsuarios = () => {
         id: editingId,
         firstName: editFormData.nombres,
         lastName: editFormData.apellidos,
-        email: editFormData.correo,
+        personalEmail: editFormData.correo,
         phone: editFormData.numero,
       };
 
@@ -187,9 +187,9 @@ export const SupervisorUsuarios = () => {
           </div>
         ) : (
           <div className="flex gap-2 justify-center">
-            <Button onClick={() => handleAsignarSalonSup(supervisor.id)}>Asignar Salón</Button>
-            <Button onClick={() => handleModificar(supervisor.id)}>Modificar</Button>
-            <ButtonNegative onClick={() => handleBorrar(supervisor.id)}>Borrar</ButtonNegative>
+            <Button onClick={() => handleAsignarSalonSup(supervisor.id)} tittle="Asignar Salón"><MdAssignmentAdd size="20"/></Button>
+            <Button onClick={() => handleModificar(supervisor.id)} tittle="Editar Supervisor" ><FaUserEdit size="20"/></Button>
+            <ButtonNegative onClick={() => handleBorrar(supervisor.id)} tittle="Borrar Supervisor"><FaUserMinus size="20"/></ButtonNegative>
           </div>
         )
       ];

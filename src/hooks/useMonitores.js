@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { MonitorsServices } from "@/services/MonitorsServices.js";
 
-export const useMonitores = ({ page = 1, limit = 20, shift_id = null} = {}) => {
+export const useMonitores = ({ page = 1, limit = 20, shift_id = null } = {}) => {
   const queryClient = useQueryClient();
 
   // Obtener los monitores
@@ -25,7 +25,7 @@ export const useMonitores = ({ page = 1, limit = 20, shift_id = null} = {}) => {
   const crearMonitorMutation = useMutation({
     mutationFn: MonitorsServices.createMonitor,
     onSuccess: (nuevoMonitor) => {
-      queryClient.setQueryData(["monitores", page, limit], (prev) => {
+      queryClient.setQueryData(["monitores", page, limit, shift_id], (prev) => {
         if (!prev) return;
         return {
           ...prev,
@@ -40,7 +40,7 @@ export const useMonitores = ({ page = 1, limit = 20, shift_id = null} = {}) => {
   const actualizarMonitorMutation = useMutation({
     mutationFn: MonitorsServices.updateMonitor,
     onSuccess: (monitorActualizado) => {
-      queryClient.setQueryData(["monitores", page, limit], (prev) => {
+      queryClient.setQueryData(["monitores", page, limit, shift_id], (prev) => {
         if (!prev) return;
         return {
           ...prev,
@@ -56,7 +56,7 @@ export const useMonitores = ({ page = 1, limit = 20, shift_id = null} = {}) => {
   const eliminarMonitorMutation = useMutation({
     mutationFn: MonitorsServices.deactivate,
     onSuccess: (_, idEliminado) => {
-      queryClient.setQueryData(["monitores", page, limit], (prev) => {
+      queryClient.setQueryData(["monitores", page, limit, shift_id], (prev) => {
         if (!prev) return;
         return {
           ...prev,

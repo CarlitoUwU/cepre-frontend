@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export const Tabla = ({ encabezado = [], datos = [], index_key = null, filtroDic = {} }) => {
+export const Tabla = ({ encabezado = [], datos = [], index_key = null, filtroDic = {}, selected = null, filtrar = true }) => {
   const [filtroActivo, setFiltroActivo] = useState(false);
   const [filtroPosicion, setFiltroPosicion] = useState({});
   const [seleccionados, setSeleccionados] = useState({});
@@ -16,14 +16,7 @@ export const Tabla = ({ encabezado = [], datos = [], index_key = null, filtroDic
     const checked = event.target.checked;
 
     setSeleccionados((prev) => {
-      const prevValores = prev[index] || [];
-      let nuevoValores;
-
-      if (checked) {
-        nuevoValores = [...prevValores, valor];
-      } else {
-        nuevoValores = prevValores.filter((v) => v !== valor);
-      }
+      const nuevoValores = checked ? [valor] : [];
 
       if (onChange) {
         onChange(nuevoValores);
@@ -37,6 +30,19 @@ export const Tabla = ({ encabezado = [], datos = [], index_key = null, filtroDic
   };
 
   useEffect(() => {
+    if (!selected) return;
+    const inicial = {};
+    for (const [colIndex, optionIndex] of Object.entries(selected)) {
+      const idx = parseInt(colIndex);
+      const opcion = filtroDic[idx]?.options?.[optionIndex];
+      if (opcion !== undefined) {
+        inicial[idx] = [opcion];
+      }
+    }
+    setSeleccionados(inicial);
+  }, [selected, filtroDic]);
+
+  useEffect(() => {
     const cerrarFiltros = (event) => {
       if (!event.target.closest(".filtro-dropdown")) setFiltroActivo(null);
     };
@@ -44,11 +50,11 @@ export const Tabla = ({ encabezado = [], datos = [], index_key = null, filtroDic
     return () => document.removeEventListener("click", cerrarFiltros);
   }, []);
 
-  const datosFiltrados = datos.filter((fila) =>
+  const datosFiltrados = filtrar ? datos.filter((fila) =>
     Object.entries(seleccionados).every(([index, valores]) =>
       valores.length ? valores.includes(fila[index]) : true
     )
-  );
+  ) : datos;
 
   return (
     <div className="overflow-x-auto relative rounded-xl">

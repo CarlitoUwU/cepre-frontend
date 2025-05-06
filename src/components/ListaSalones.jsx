@@ -9,9 +9,10 @@ export const ListaSalones = ({ items }) => {
     index + 1,
     item.monitor,
     item.aula,
-    <a href={item.enlace} target='_blank' className="text-blue-500 underline hover:text-blue-700">{item.enlace}</a>
+    item?.enlace ?
+      <a href={item.enlace} target='_blank' className="text-blue-500 underline hover:text-blue-700">{item.enlace}</a> :
+      <span className="text-gray-500">Sin enlace</span>
   ]);
-
 
   return (
     <Tabla encabezado={encabezado} datos={datos} />
