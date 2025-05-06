@@ -23,9 +23,9 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
       try {
         const data = localStorage.getItem(`disponibilidad-${docente?.id}`);
         let parsed = data ? JSON.parse(data) : [];
-  
+
         if (!Array.isArray(parsed)) parsed = [];
-  
+
         // Limpiar bloques ya asignados del horario
         if (horarioAsignado && horarioAsignado.length > 0) {
           const bloquesAsignados = new Set(
@@ -33,12 +33,12 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
               (dia.bloques || []).map((b) => `${dia.dia}-${b}`)
             )
           );
-  
+
           parsed = parsed.filter(
             (bloque) => !bloquesAsignados.has(`${bloque.dia}-${bloque.bloque}`)
           );
         }
-  
+
         setDisponibilidad(parsed);
         localStorage.setItem(`disponibilidad-${docente?.id}`, JSON.stringify(parsed));
       } catch (error) {
@@ -46,12 +46,12 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
         localStorage.removeItem(`disponibilidad-${docente?.id}`);
       }
     };
-  
+
     if (docente?.id) {
       cargarDataInicial();
     }
   }, [docente, horarioAsignado]);
-  
+
 
   // Carga salones disponibles
   useEffect(() => {
@@ -82,25 +82,24 @@ export const AsignarSalonDoc = ({ docente, regresar }) => {
   }, [cursos, disponibilidad, docente, isReady, mapearABloques]);
 
   // Sincroniza la disponibilidad eliminando bloques ya asignados
-useEffect(() => {
-  if (!docente?.id || horarioAsignado.length === 0 || disponibilidad.length === 0) return;
+  useEffect(() => {
+    if (!docente?.id || horarioAsignado.length === 0 || disponibilidad.length === 0) return;
 
-  const nuevaDisponibilidad = disponibilidad.filter((d) =>
-    !horarioAsignado.some(
-      (h) =>
-        h.dia === d.dia &&
-        h.hora_ini === d.hora_ini &&
-        h.hora_fin === d.hora_fin
-    )
-  );
+    const nuevaDisponibilidad = disponibilidad.filter((d) =>
+      !horarioAsignado.some(
+        (h) =>
+          h.dia === d.dia &&
+          h.hora_ini === d.hora_ini &&
+          h.hora_fin === d.hora_fin
+      )
+    );
 
-  // Solo actualiza si hubo cambios reales
-  if (nuevaDisponibilidad.length !== disponibilidad.length) {
-    setDisponibilidad(nuevaDisponibilidad);
-    localStorage.setItem(`disponibilidad-${docente?.id}`, JSON.stringify(nuevaDisponibilidad));
-  }
-}, [horarioAsignado, disponibilidad, docente?.id]);
-
+    // Solo actualiza si hubo cambios reales
+    if (nuevaDisponibilidad.length !== disponibilidad.length) {
+      setDisponibilidad(nuevaDisponibilidad);
+      localStorage.setItem(`disponibilidad-${docente?.id}`, JSON.stringify(nuevaDisponibilidad));
+    }
+  }, [horarioAsignado, disponibilidad, docente?.id]);
 
   const handleDisponibilidadChange = useCallback((nuevaDisponibilidad) => {
     setDisponibilidad(nuevaDisponibilidad);
@@ -125,6 +124,11 @@ useEffect(() => {
             horarioAsignado={horarioAsignado}
           />
 
+          <div className="flex justify-end gap-4 w-full font-bold">
+            <p>Horas Asignadas: {horarioAsignado?.length || 0}</p>
+            <p>Max Horas: {docente?.maxHours}</p>
+          </div>
+
           <div className="flex space-x-4">
             <Button onClick={() => setMostrarHorarioCompleto(true)}>
               Ver horario completo
@@ -135,13 +139,10 @@ useEffect(() => {
             </Button>
           </div>
 
-          <TablaAsignar
-            teacher={docente}
-            objApi={objApi}
-            onSalonAsignado={async () => {
-              await refetch(); // recarga el horario después de asignar
-            }}
-          />
+          {horarioAsignado?.length < docente?.maxHours ?
+            <TablaAsignar teacher={docente} objApi={objApi} onSalonAsignado={async () => { await refetch(); }} />
+            : null
+          }
 
           <ButtonNegative onClick={regresar}>Atrás</ButtonNegative>
         </div>
