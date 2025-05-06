@@ -38,46 +38,55 @@ export const useHorasABloques = () => {
     (disponibilidad = []) => {
       if (!Array.isArray(disponibilidad) || !isReady) return [];
 
-      return disponibilidad
-        .map((item) => {
-          // Ya viene en formato correcto (por ejemplo desde localStorage)
-          if (item.id_hour_session && item.weekday && !item.hora_ini && !item.hora_fin) {
-            const valid = hourSessions.some(h => h.id === Number(item.id_hour_session));
-            if (!valid) return null;
+      const bloques = [];
 
-            return {
-              id_hour_session: Number(item.id_hour_session),
-              weekday: capitalizar(item.weekday),
-            };
-          }
+      disponibilidad.forEach((item) => {
+        // Ya viene en formato correcto
+        if (item.id_hour_session && item.weekday && !item.hora_ini && !item.hora_fin) {
+          const valid = hourSessions.some(h => h.id === Number(item.id_hour_session));
+          if (!valid) return;
 
-          const { dia, hora_ini, hora_fin } = item;
+          bloques.push({
+            id_hour_session: Number(item.id_hour_session),
+            weekday: capitalizar(item.weekday),
+          });
+          return;
+        }
 
-          if (!dia || !hora_ini || !hora_fin) return null;
+        const { dia, hora_ini, hora_fin } = item;
 
-          const formattedHoraIni = formatHora(hora_ini);
-          const formattedHoraFin = formatHora(hora_fin);
+        if (!dia || !hora_ini || !hora_fin) return;
 
-          const match = hourSessions.find(
-            (sesion) =>
-              normalizarHora(sesion.startTime) === formattedHoraIni &&
-              normalizarHora(sesion.endTime) === formattedHoraFin
-          );
+        const formattedHoraIni = formatHora(hora_ini);
+        const formattedHoraFin = formatHora(hora_fin);
 
-          if (!match) {
-            console.warn("No se encontro bloque para:", formattedHoraIni, formattedHoraFin, dia);
-            return null;
-          }
+        const match = hourSessions.find(
+          (sesion) =>
+            normalizarHora(sesion.startTime) === formattedHoraIni &&
+            normalizarHora(sesion.endTime) === formattedHoraFin
+        );
 
-          return {
-            id_hour_session: match.id,
-            weekday: capitalizar(dia),
-          };
-        })
-        .filter(Boolean);
+        if (!match) {
+          console.warn("No se encontró bloque para:", formattedHoraIni, formattedHoraFin, dia);
+          return;
+        }
+
+        const base = {
+          weekday: capitalizar(dia),
+        };
+
+        bloques.push({ id_hour_session: match.id, ...base });
+
+        if (match.id === 7 || match.id === 14) {
+          bloques.push({ id_hour_session: match.id + 1, ...base });
+        }
+      });
+
+      return bloques;
     },
     [hourSessions, formatHora, isReady]
   );
+
 
   useEffect(() => {
     let isMounted = true;
@@ -85,6 +94,7 @@ export const useHorasABloques = () => {
     const cargarSesiones = async () => {
       try {
         const data = await HourSessionsServices.getHourSessions();
+
         if (isMounted) {
           setHourSessions(data);
           setIsReady(true);
