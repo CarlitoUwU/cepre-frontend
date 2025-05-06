@@ -12,7 +12,7 @@ import { FaSyncAlt, FaUserEdit, FaUserMinus } from "react-icons/fa";
 import { MdAssignmentAdd } from "react-icons/md";
 import { useCursos } from "@/hooks/useCursos";
 
-const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
+const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Máx. Horas", "Acciones"];
 const VISTA = {
   TABLA: "tabla",
   FORMULARIO: "formulario",
@@ -45,7 +45,8 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
     apellidos: "",
     correo: "",
     numero: "",
-    extra: "",
+    horas: "",
+    extra: "",    
   });
 
   useEffect(() => {
@@ -90,6 +91,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         apellidos: profesor.lastName || "-",
         correo: profesor.email || "-",
         numero: profesor.phone || "-",
+        horas: profesor.maxHours || "-",
         extra: profesor.courseName || "-",
       });
     }
@@ -126,6 +128,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         lastName: editFormData.apellidos,
         email: editFormData.correo,
         phone: editFormData.numero,
+        maxHours: parseInt(editFormData.horas, 10),
       };
 
       const profeActualizado = await actualizarProfesorMutation.mutateAsync(profesor);
@@ -138,6 +141,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
           apellidos: "",
           correo: "",
           numero: "",
+          horas: "",
           extra: "",
         });
       }
@@ -250,6 +254,11 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
           profesor.phone || "-"
         ),
         esEdicion ? (
+          <Input type="number" name="horas" value={editFormData.horas} onChange={handleEditChange} />
+        ) : (
+          profesor.maxHours || "-"
+        ),
+        esEdicion ? (
           <div className="flex gap-2 justify-center min-w-[300px]">
             <Button onClick={() => handleGuardar(profesor.id)}>Guardar</Button>
             <ButtonNegative onClick={() => setEditingId(null)}>Cancelar</ButtonNegative>
@@ -258,7 +267,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
           <div className="flex gap-2 justify-center min-w-[300px]">
             <Button onClick={() => handleAsignarSalon(profesor.id)} tittle="Asignar Salón"><MdAssignmentAdd size="20"/></Button>
             <Button onClick={() => handleModificar(profesor.id)} tittle="Editar Docente" ><FaUserEdit size="20"/></Button>
-            <ButtonNegative onClick={() => handleBorrar(profesor.id)} tittle="Borrar Docente"><FaUserMinus size="20"/></ButtonNegative>
+            <ButtonNegative onClick={() => handleBorrar(profesor.id)} tittle="Borrar Docented"><FaUserMinus size="20"/></ButtonNegative>
           </div>
         )
       ];
