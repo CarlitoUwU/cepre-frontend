@@ -8,12 +8,12 @@ export const HorarioCompleto = ({ setMostrarHorarioCompleto, docente }) => {
   const { horario, loading, desasignarClaseMutation, refetch } = useHorarioAsignadoDocente({ idDocente: docente?.id });
   const [estadoEliminar, setEstadoEliminar] = React.useState(false);
 
-  const handleClaseSeleccionada = (clase) => {
+  const handleClaseSeleccionada = async (clase) => {
     if (!estadoEliminar) return;
     // preguntar si desea eliminar la clase
     if (!clase) return;
     if (window.confirm(`¿Está seguro de que desea eliminar la clase ${clase?.clase}?`)) {
-      desasignarClaseMutation({ teacherId: clase?.idDocente, classId: clase?.idClase });
+      await desasignarClaseMutation({ teacherId: clase?.idDocente, classId: clase?.idClase });
       refetch();
     }
   };
