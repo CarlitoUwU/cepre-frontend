@@ -33,7 +33,12 @@ export const HorarioCompleto = ({ setMostrarHorarioCompleto, docente }) => {
         />
       )}
       <div className="flex justify-center items-center space-x-4 mt-4">
-        <ButtonNegative onClick={() => setMostrarHorarioCompleto(false)}>
+      <ButtonNegative
+        onClick={() => {
+          refetch(); // Vuelve a cargar los datos antes de salir
+          setMostrarHorarioCompleto(false); // Oculta la vista
+        }}
+      >
           Atrás
         </ButtonNegative>
         <Button onClick={() => { setEstadoEliminar(!estadoEliminar) }}>
