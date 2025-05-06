@@ -8,7 +8,8 @@ import { useProfesores } from "@/hooks/useProfesores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { AsignarSalonDoc } from "./AsignarSalonDoc";
 import { toast } from "react-toastify";
-import { FaSyncAlt } from "react-icons/fa";
+import { FaSyncAlt, FaUserEdit, FaUserMinus } from "react-icons/fa";
+import { MdAssignmentAdd } from "react-icons/md";
 import { useCursos } from "@/hooks/useCursos";
 
 const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Acciones"];
@@ -255,9 +256,9 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
           </div>
         ) : (
           <div className="flex gap-2 justify-center min-w-[300px]">
-            <Button onClick={() => handleAsignarSalon(profesor.id)}>Asignar Salón</Button>
-            <Button onClick={() => handleModificar(profesor.id)}>Editar</Button>
-            <ButtonNegative onClick={() => handleBorrar(profesor.id)}>Borrar</ButtonNegative>
+            <Button onClick={() => handleAsignarSalon(profesor.id)} tittle="Asignar Salón"><MdAssignmentAdd size="20"/></Button>
+            <Button onClick={() => handleModificar(profesor.id)} tittle="Editar Docente" ><FaUserEdit size="20"/></Button>
+            <ButtonNegative onClick={() => handleBorrar(profesor.id)} tittle="Borrar Docente"><FaUserMinus size="20"/></ButtonNegative>
           </div>
         )
       ];

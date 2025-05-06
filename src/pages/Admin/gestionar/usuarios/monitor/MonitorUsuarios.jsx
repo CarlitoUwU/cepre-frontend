@@ -7,7 +7,7 @@ import { AgregarUsuarios } from "../AgregarUsuarios";
 import { useMonitores } from "@/hooks/useMonitores";
 import { SkeletonTabla } from "@/components/skeletons/SkeletonTabla";
 import { toast } from "react-toastify";
-import { FaSyncAlt } from "react-icons/fa";
+import { FaSyncAlt, FaUserEdit, FaUserMinus } from "react-icons/fa";
 import { useTurnos } from "@/hooks/useTurnos";
 
 const encabezado = ["N°", "Salón", "Nombres", "Apellidos", "Correo", "Número", "Turno", "Acciones"];
@@ -182,8 +182,9 @@ export const MonitorUsuarios = () => {
           </div>
         ) : (
           <div className="flex gap-2 justify-center">
-            <Button onClick={() => handleModificar(monitor.id)}>Editar</Button>
-            <ButtonNegative onClick={() => handleBorrar(monitor.id)}>Borrar</ButtonNegative>
+            <Button onClick={() => handleModificar(monitor.id)} tittle="Editar Monitor"><FaUserEdit size="20"/>
+            </Button>
+            <ButtonNegative onClick={() => handleBorrar(monitor.id)} tittle="Borrar Monitor"><FaUserMinus size="20"/></ButtonNegative>
           </div>
         )
       ];
