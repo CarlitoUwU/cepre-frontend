@@ -61,6 +61,7 @@ export const useProfesores = ({ page = 1, limit = 20, curso_id = null } = {}) =>
               lastName: profesorActualizado.lastName || "-",
               email: profesorActualizado.email || "-",
               phone: profesorActualizado.phone || "-",
+              maxHours: profesorActualizado.maxHours || "-",
             } : p
           ),
         };
