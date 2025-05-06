@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Button} from '@/components/ui/Button';
-import { useNavigate } from 'react-router-dom';	
+import { Button } from '@/components/ui/Button';
+import { useNavigate } from 'react-router-dom';
+import { AdmissionsServices } from '@/services/AdmissionsServices';
+import { toast } from 'react-toastify';
 
 export const Generar = () => {
   const [procesoSeleccionado, setProcesoSeleccionado] = useState('');
@@ -33,7 +35,7 @@ export const Generar = () => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (procesoSeleccionado === 'Nuevo proceso' && nuevoProceso.trim() === '') {
       alert('Por favor ingresa un nombre para el nuevo proceso.');
       return;
@@ -77,6 +79,18 @@ export const Generar = () => {
 
     //localStorage.setItem('procesoAdmision', JSON.stringify(objeto));
     console.log('Datos a enviar:', objeto);
+    try {
+      const response = await AdmissionsServices.crearAdmission(objeto)
+      console.log('Respuesta del servidor:', response);
+      if (response.status === 200) {
+        toast.success('Proceso de admisión creado exitosamente.');
+      } else {
+        toast.error('Error al crear el proceso de admisión. Por favor, inténtalo de nuevo.');
+      }
+    } catch (error) {
+      console.error('Error al crear el proceso de admisión:', error);
+      toast.error('Error al crear el proceso de admisión. Por favor, inténtalo de nuevo.');
+    }
   };
 
   const toggleTurnoSeleccionado = (turno) => {
@@ -197,13 +211,11 @@ export const Generar = () => {
           Registrar proceso
         </button>
         <div className="mt-5 w-full text-center">
-                  <Button onClick={() => navigate("..")}>
-                    Menú Principal
-                  </Button>
-                </div>
+          <Button onClick={() => navigate("..")}>
+            Menú Principal
+          </Button>
+        </div>
       </div>
-
-      
     </div>
   );
 };
