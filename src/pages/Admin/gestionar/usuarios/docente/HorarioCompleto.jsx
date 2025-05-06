@@ -5,7 +5,7 @@ import { useHorarioAsignadoDocente } from "@/hooks/useHorarioAsignadoDocente";
 import { Button } from "@/components/ui/Button";
 
 export const HorarioCompleto = ({ setMostrarHorarioCompleto, docente }) => {
-  const { horario, loading, desasignarClaseMutation } = useHorarioAsignadoDocente({ idDocente: docente?.id });
+  const { horario, loading, desasignarClaseMutation, refetch } = useHorarioAsignadoDocente({ idDocente: docente?.id });
   const [estadoEliminar, setEstadoEliminar] = React.useState(false);
 
   const handleClaseSeleccionada = (clase) => {
@@ -14,6 +14,7 @@ export const HorarioCompleto = ({ setMostrarHorarioCompleto, docente }) => {
     if (!clase) return;
     if (window.confirm(`¿Está seguro de que desea eliminar la clase ${clase?.clase}?`)) {
       desasignarClaseMutation({ teacherId: clase?.idDocente, classId: clase?.idClase });
+      refetch();
     }
   };
 
