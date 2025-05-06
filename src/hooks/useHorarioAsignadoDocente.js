@@ -10,7 +10,7 @@ export const useHorarioAsignadoDocente = ({ idDocente }) => {
   const [error, setError] = useState(null);
 
   // Función para recargar el horario
-  const refetch = async () => {
+  const refetch = useCallback(async () => {
     if (!idDocente) return;
     try {
       setLoading(true);
@@ -38,7 +38,8 @@ export const useHorarioAsignadoDocente = ({ idDocente }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [idDocente]);
+
 
   const desasignarClaseMutation = async ({ teacherId, classId }) => {
 
