@@ -152,7 +152,7 @@ export const TurnosSelector = ({
   };  
 
   return (
-    <div className="p-4 space-y-10">
+    <div className="">
       <div className="flex w-full mb-4 gap-2 flex-row justify-center">
         {Object.entries(turnos).map(([turno, horario]) => (
           <button

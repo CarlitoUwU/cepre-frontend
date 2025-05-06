@@ -46,7 +46,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
     correo: "",
     numero: "",
     horas: "",
-    extra: "",    
+    extra: "",
   });
 
   useEffect(() => {
@@ -259,15 +259,15 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
           profesor.maxHours || "-"
         ),
         esEdicion ? (
-          <div className="flex gap-2 justify-center min-w-[300px]">
+          <div className="flex gap-2 justify-center min-w-[190px]">
             <Button onClick={() => handleGuardar(profesor.id)}>Guardar</Button>
             <ButtonNegative onClick={() => setEditingId(null)}>Cancelar</ButtonNegative>
           </div>
         ) : (
-          <div className="flex gap-2 justify-center min-w-[300px]">
-            <Button onClick={() => handleAsignarSalon(profesor.id)} tittle="Asignar Salón"><MdAssignmentAdd size="20"/></Button>
-            <Button onClick={() => handleModificar(profesor.id)} tittle="Editar Docente" ><FaUserEdit size="20"/></Button>
-            <ButtonNegative onClick={() => handleBorrar(profesor.id)} tittle="Borrar Docented"><FaUserMinus size="20"/></ButtonNegative>
+          <div className="flex gap-2 justify-center min-w-[190px]">
+            <Button onClick={() => handleAsignarSalon(profesor.id)} tittle="Asignar Salón"><MdAssignmentAdd size="20" /></Button>
+            <Button onClick={() => handleModificar(profesor.id)} tittle="Editar Docente" ><FaUserEdit size="20" /></Button>
+            <ButtonNegative onClick={() => handleBorrar(profesor.id)} tittle="Borrar Docented"><FaUserMinus size="20" /></ButtonNegative>
           </div>
         )
       ];

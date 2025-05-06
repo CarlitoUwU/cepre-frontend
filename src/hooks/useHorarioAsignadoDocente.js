@@ -42,19 +42,14 @@ export const useHorarioAsignadoDocente = ({ idDocente }) => {
 
 
   const desasignarClaseMutation = async ({ teacherId, classId }) => {
-
-    const request = await SchedulesService.desasignarSchedulesByTeacherClass({ teacherId, classId })
-    if (request) {
-      console.log({ horario })
-      horario.forEach((clase) => {
-        if (clase.id === classId) {
-          setHorario((prevHorario) =>
-            prevHorario.filter((item) => item.id !== classId)
-          );
-        }
-      });
+    try {
+      const request = await SchedulesService.desasignarSchedulesByTeacherClass({ teacherId, classId });
+      if (request) {
+        await refetch(); // Actualiza el horario desde el servidor
+      }
+    } catch (err) {
+      console.error("Error al desasignar clase:", err);
     }
-
   };
 
   // Llama automáticamente cuando el idDocente cambia
