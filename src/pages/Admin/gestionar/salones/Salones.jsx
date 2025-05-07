@@ -67,8 +67,8 @@ export const Salones = () => {
       toast.success(`Salon "${claseCreada.name}" creado correctamente`);
       setVistaActual(VISTAS.LISTA);
     } catch (error) {
-      console.error("Error al agregar el curso:", error);
-      toast.error("Error al crear el curso");
+      console.error("Error al agregar el salon:", error);
+      toast.error("Error al crear el salon");
     }
   };
 

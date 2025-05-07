@@ -24,12 +24,12 @@ export const ClassesServices = {
    * @param {Object} newClass - Datos de la clase a crear.
    * @returns {Promise<Object>}
    */
-  async createClass({ name, idSede, areaId, shiftId, capacity, urlMeet, urlClassroom, monitorId }) {
-    if (!name || !idSede || !areaId || !shiftId || !capacity) {
+  async createClass({ area_id, shift_id }) {
+    if (!area_id || !shift_id) {
       throw new Error("Datos incompletos para crear la clase");
     }
 
-    return request("post", "/classes", { name, idSede, areaId, shiftId, capacity, urlMeet, urlClassroom, monitorId });
+    return request("post", "/classes", { area_id, shift_id });
   },
 
   /**
