@@ -217,7 +217,7 @@ export const MonitorUsuarios = () => {
           />
         </div>
 
-        <h2 className="absolute inset-x-0 text-center text-2xl font-bold">
+        <h2 className="absolute inset-x-0 text-center text-2xl font-bold pointer-events-none">
           GESTIÓN DE MONITORES
         </h2>
 

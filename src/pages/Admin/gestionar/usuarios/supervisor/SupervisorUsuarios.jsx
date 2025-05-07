@@ -218,7 +218,7 @@ export const SupervisorUsuarios = () => {
                   className="w-full border p-2 bg-white rounded"
                 />
               </div>
-        <h2 className="absolute inset-x-0 text-center text-2xl font-bold">GESTIÓN DE SUPERVISORES</h2>
+        <h2 className="absolute inset-x-0 text-center text-2xl font-bold pointer-events-none">GESTIÓN DE SUPERVISORES</h2>
       </div>
 
       {isLoading ? <SkeletonTabla numRows={6} /> :

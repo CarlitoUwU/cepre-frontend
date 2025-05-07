@@ -309,7 +309,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         />
       </div>
         
-        <h2 className="absolute inset-x-0 text-center text-2xl font-bold text-center flex-1">GESTIÓN DE DOCENTES</h2>
+        <h2 className="absolute inset-x-0 text-center text-2xl font-bold text-center flex-1 pointer-events-none">GESTIÓN DE DOCENTES</h2>
         <Button onClick={handleAgregar}>Agregar Docente</Button>
       </div>
       {isLoading ? <SkeletonTabla numRows={limit} numColumns={encabezado.length} /> :
