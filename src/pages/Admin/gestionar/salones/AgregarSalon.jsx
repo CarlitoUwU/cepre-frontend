@@ -6,7 +6,6 @@ import { Select } from "@/components/ui/Select";
 
 export const AgregarSalon = ({ onAgregarSalon, regresar, areas, turnos }) => {
   const [nuevoSalon, setNuevoSalon] = useState({
-    name: "",
     areaId: (areas && areas.length > 0) ? areas[0].id : 0,
     shiftId: (turnos && turnos.length > 0) ? turnos[0].id : 0,
   });
@@ -18,21 +17,11 @@ export const AgregarSalon = ({ onAgregarSalon, regresar, areas, turnos }) => {
   };
 
   const handleCrearSalon = async () => {
-    if (nuevoSalon.name.trim() === "") {
-      setError("El número de aula no puede estar vacío.");
-      return;
-    }
-
-    const area = areas.find((a) => a.id === parseInt(nuevoSalon.areaId));
-
     const dataSalon = {
-      ...nuevoSalon,
-      name: `${area.name[0]}-${nuevoSalon.name}`,
-      areaId: parseInt(nuevoSalon.areaId),
-      shiftId: parseInt(nuevoSalon.shiftId),
-      idSede: 1,
-      capacity: 100,
+      area_id: parseInt(nuevoSalon.areaId),
+      shift_id: parseInt(nuevoSalon.shiftId),
     };
+    console.log("Nuevo salón creado:", dataSalon);
 
     setError("");
     onAgregarSalon(dataSalon);
@@ -44,9 +33,6 @@ export const AgregarSalon = ({ onAgregarSalon, regresar, areas, turnos }) => {
         <h2 className="text-2xl font-bold mb-4 text-center">Agregar Nuevo Salón</h2>
 
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
-        <label className="block font-semibold">N° de Aula:</label>
-        <Input type="text" name="name" value={nuevoSalon.name} onChange={handleChange} />
 
         <label className="block font-semibold mt-3">Área:</label>
         <Select name="areaId" value={nuevoSalon.areaId} onChange={handleChange} options={areas ? areas : []} />
