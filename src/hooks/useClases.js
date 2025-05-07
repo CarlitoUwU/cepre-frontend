@@ -1,7 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ClassesServices } from "@/services/ClassesServices.js";
+import { useAreas } from "@/hooks/useAreas.js";
+import { useTurnos } from "@/hooks/useTurnos.js";
 
 export const useClases = () => {
+  // Obtener áreas y turnos
+  const { areas } = useAreas();
+  const { turnos } = useTurnos();
   const queryClient = useQueryClient();
 
   // Obtener los cursos con useQuery
@@ -27,7 +32,15 @@ export const useClases = () => {
     onSuccess: (newClass) => {
       queryClient.setQueryData(["class"], (preClasses = []) => [
         ...preClasses,
-        newClass,
+        {
+          ...newClass,
+          area: {
+            ...areas.find((area) => area.id === newClass.areaId)
+          },
+          shift: {
+            ...turnos.find((turno) => turno.id === newClass.shiftId)
+          }
+        },
       ]);
     },
   });
