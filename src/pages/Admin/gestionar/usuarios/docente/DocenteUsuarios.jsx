@@ -297,11 +297,19 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
 
   return (
     <div className="overflow-x-auto w-full text-center mb-3">
-      <div className="flex justify-between items-center mt-1 mb-6 px-4">
+      <div className="relative flex justify-between items-center mt-1 mb-6 px-4">
+      <div className="flex items-center gap-2">
         <Button onClick={refetch}>
           <FaSyncAlt />
         </Button>
-        <h2 className="text-2xl font-bold text-center flex-1">GESTIÓN DE DOCENTES</h2>
+        <input
+          type="text"
+          placeholder="🔍 Buscar Docente"
+          className="w-full border p-2 bg-white rounded"
+        />
+      </div>
+        
+        <h2 className="absolute inset-x-0 text-center text-2xl font-bold text-center flex-1">GESTIÓN DE DOCENTES</h2>
         <Button onClick={handleAgregar}>Agregar Docente</Button>
       </div>
       {isLoading ? <SkeletonTabla numRows={limit} numColumns={encabezado.length} /> :

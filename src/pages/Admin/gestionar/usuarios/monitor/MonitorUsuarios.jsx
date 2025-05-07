@@ -205,12 +205,22 @@ export const MonitorUsuarios = () => {
 
   return (
     <div className="overflow-x-auto w-full text-center mb-3">
-      <div className="flex justify-between items-center mt-1 mb-6 px-4">
-        <Button onClick={refetch}>
-          <FaSyncAlt />
-        </Button>
-        <h2 className="text-2xl font-bold">GESTIÓN DE MONITORES</h2>
-        <p></p>
+      <div className="relative flex justify-between items-center mt-1 mb-6 px-4">
+        <div className="flex items-center gap-2">
+          <Button onClick={refetch}>
+            <FaSyncAlt />
+          </Button>
+          <input
+            type="text"
+            placeholder="🔍 Buscar Monitor"
+            className="border p-2 bg-white rounded"
+          />
+        </div>
+
+        <h2 className="absolute inset-x-0 text-center text-2xl font-bold">
+          GESTIÓN DE MONITORES
+        </h2>
+
       </div>
       {isLoading ? <SkeletonTabla numRows={limit} numColums={encabezado.length} /> :
         <Tabla encabezado={encabezado} datos={getDatosMonitores()} filtroDic={filtro} selected={selected} filtrar={false} />
