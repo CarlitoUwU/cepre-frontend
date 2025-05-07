@@ -113,15 +113,19 @@ export const Salones = () => {
 
   const getDatosAulas = () => {
     if (!clases || !Array.isArray(clases)) return [];
-
-    return clases.map((aula) => [
+  
+    const clasesOrdenadas = [...clases].sort((a, b) =>
+      a.name?.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
+    );
+  
+    return clasesOrdenadas.map((aula) => [
       aula.name || "Sin nombre",
       aula.area?.name || "Sin área",
       aula.shift?.name || "Sin turno",
       ESTADOS_SALON[aula?.status] || "Sin estado",
       getAcciones(aula),
     ]);
-  };
+  }  
 
   if (vistaActual === VISTAS.AGREGAR) {
     return <AgregarSalon onAgregarSalon={handleAgregarSalon} regresar={handleRegresar} areas={areas} turnos={turnos} />;
