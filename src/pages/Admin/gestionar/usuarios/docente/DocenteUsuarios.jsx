@@ -12,7 +12,7 @@ import { FaSyncAlt, FaUserEdit, FaUserMinus } from "react-icons/fa";
 import { MdAssignmentAdd } from "react-icons/md";
 import { useCursos } from "@/hooks/useCursos";
 
-const encabezado = ["N°", "Curso", "Nombres", "Apellidos", "Correo", "Número", "Máx. Horas", "Acciones"];
+const encabezado = ["N°", "Curso", "Apellidos", "Nombres", "Correo", "Número", "Máx. Horas", "Acciones"];
 const VISTA = {
   TABLA: "tabla",
   FORMULARIO: "formulario",
@@ -235,15 +235,15 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         index + (page - 1) * limit + 1,
         profesor.courseName || "-",
         esEdicion ? (
-          <Input type="text" name="nombres" value={editFormData.nombres} onChange={handleEditChange} />
-        ) : (
-          profesor.firstName || "-"
-        ),
-        esEdicion ? (
           <Input type="text" name="apellidos" value={editFormData.apellidos} onChange={handleEditChange} />
         ) : (
           profesor.lastName || "-"
         ),
+        esEdicion ? (
+          <Input type="text" name="nombres" value={editFormData.nombres} onChange={handleEditChange} />
+        ) : (
+          profesor.firstName || "-"
+        ),        
         esEdicion ? (
           <Input type="email" name="correo" value={editFormData.correo} onChange={handleEditChange} />
         ) : (
