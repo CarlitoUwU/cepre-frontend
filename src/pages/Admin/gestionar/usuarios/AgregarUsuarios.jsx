@@ -6,7 +6,7 @@ import { LabelForm } from "@/components/ui/LabelForm";
 import { useCursos } from "@/hooks/useCursos";
 import { Select } from "@/components/ui/Select";
 
-export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuevoUsuario, setVista }) => {
+export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuevoUsuario, regresar }) => {
   const [error, setError] = useState("");
   const {
     cursos
@@ -68,7 +68,7 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
 
     setError("");
     handleGuardarNuevoUsuario(formData);
-    setVista("tabla");
+    regresar();
   };
 
   return (
@@ -139,7 +139,7 @@ export const AgregarUsuarios = ({ rol, formData, handleChange, handleGuardarNuev
         )}
 
         <div className="flex justify-between mt-5">
-          <ButtonNegative onClick={() => setVista("tabla")}>Atrás</ButtonNegative>
+          <ButtonNegative onClick={() => regresar()}>Atrás</ButtonNegative>
           <Button type="button" onClick={validarYGuardar}>Guardar</Button>
         </div>
       </div>

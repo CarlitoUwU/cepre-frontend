@@ -181,6 +181,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
   };
 
   const handleNuevoUsuario = async (formData) => {
+    setMostrarCabecera(true);
     try {
       const nuevoProfesor = {
         email: formData.correo,
@@ -290,7 +291,7 @@ export const DocenteUsuarios = ({ setMostrarCabecera }) => {
         formData={editFormData}
         handleChange={(e) => setEditFormData({ ...editFormData, [e.target.name]: e.target.value })}
         handleGuardarNuevoUsuario={handleNuevoUsuario}
-        setVista={setVista}
+        regresar={handleRegresar}
       />
     );
   }
