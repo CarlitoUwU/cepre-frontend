@@ -24,7 +24,7 @@ export const LoginPanel = () => {
 
       {/* Capa con la imagen de fondo que aparece cuando se carga */}
       {imageLoaded && (
-        <>
+        <div>
           <div 
             className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-opacity duration-500 opacity-100"
             style={{ 
@@ -41,7 +41,7 @@ export const LoginPanel = () => {
           <div className="relative z-10">
             <Login />
           </div>
-        </>
+        </div>
       )}
     </div>
   );
